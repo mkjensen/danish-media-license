@@ -17,13 +17,16 @@
   -->
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.github.mkjensen.dml">
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.github.mkjensen.dml"
+    tools:ignore="MissingLeanbackLauncher,MissingLeanbackSupport">
 
     <application
-        android:allowBackup="true"
+        android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Leanback" />
+        android:theme="@style/Theme.Leanback"
+        tools:ignore="GoogleAppIndexingWarning" />
 
 </manifest>
