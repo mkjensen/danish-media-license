@@ -16,9 +16,7 @@
 
 package com.github.mkjensen.dml.ondemand;
 
-import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.support.v17.leanback.app.BackgroundManager;
 import android.support.v17.leanback.app.DetailsSupportFragment;
 import android.support.v17.leanback.widget.Action;
 import android.support.v17.leanback.widget.ArrayObjectAdapter;
@@ -32,13 +30,9 @@ import android.support.v17.leanback.widget.Presenter;
 import android.support.v17.leanback.widget.Row;
 import android.support.v17.leanback.widget.RowPresenter;
 import android.support.v17.leanback.widget.SparseArrayObjectAdapter;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.animation.GlideAnimation;
-import com.bumptech.glide.request.target.SimpleTarget;
 import com.github.mkjensen.dml.R;
 
 /**
@@ -50,8 +44,6 @@ public class DetailsFragment extends DetailsSupportFragment {
   private static final int ACTION_PLAY = 0;
 
   private Video video;
-  private BackgroundManager backgroundManager;
-  private DisplayMetrics displayMetrics;
   private ArrayObjectAdapter adapter;
 
   @Override
@@ -59,17 +51,9 @@ public class DetailsFragment extends DetailsSupportFragment {
     Log.d(TAG, "onCreate");
     super.onCreate(savedInstanceState);
     video = getArguments().getParcelable(OnDemandActivity.VIDEO);
-    createBackgroundManager();
     createAdapter();
     createDetails();
     createListeners();
-  }
-
-  private void createBackgroundManager() {
-    backgroundManager = BackgroundManager.getInstance(getActivity());
-    backgroundManager.attach(getActivity().getWindow());
-    displayMetrics = new DisplayMetrics();
-    getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
   }
 
   private void createAdapter() {
@@ -84,17 +68,7 @@ public class DetailsFragment extends DetailsSupportFragment {
 
   private void createDetails() {
     final DetailsOverviewRow detailsRow = new DetailsOverviewRow(video);
-    Glide.with(this)
-        .load(video.getImageUrl())
-        .asBitmap()
-        .into(new SimpleTarget<Bitmap>(displayMetrics.widthPixels, displayMetrics.heightPixels) {
-
-          @Override
-          public void onResourceReady(Bitmap resource,
-                                      GlideAnimation<? super Bitmap> glideAnimation) {
-            backgroundManager.setBitmap(resource);
-          }
-        });
+    ((BackgroundHelper.Provider) getActivity()).getBackgroundHelper().set(video.getImageUrl());
     createActions(detailsRow);
     adapter.add(detailsRow);
   }
@@ -117,12 +91,5 @@ public class DetailsFragment extends DetailsSupportFragment {
             Toast.LENGTH_SHORT).show();
       }
     });
-  }
-
-  @Override
-  public void onStop() {
-    Log.d(TAG, "onStop");
-    backgroundManager.release();
-    super.onStop();
   }
 }

@@ -26,23 +26,45 @@ import com.github.mkjensen.dml.R;
  * Host activity for on-demand related fragments.
  */
 public class OnDemandActivity extends FragmentActivity
-    implements BrowseFragment.OnVideoSelectedListener {
+    implements BackgroundHelper.Provider, BrowseFragment.OnVideoSelectedListener {
 
   static final String VIDEO = "video";
 
   private static final String TAG = "OnDemandActivity";
+
+  private BackgroundHelper backgroundHelper;
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
     Log.d(TAG, "onCreate");
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_ondemand);
+    backgroundHelper = new BackgroundHelper(this);
     if (savedInstanceState == null) {
       getSupportFragmentManager()
           .beginTransaction()
           .add(R.id.ondemand_fragment_container, new BrowseFragment())
           .commit();
     }
+  }
+
+  @Override
+  protected void onStop() {
+    Log.d(TAG, "onStop");
+    backgroundHelper.stop();
+    super.onStop();
+  }
+
+  @Override
+  protected void onDestroy() {
+    Log.d(TAG, "onDestroy");
+    backgroundHelper.destroy();
+    super.onDestroy();
+  }
+
+  @Override
+  public BackgroundHelper getBackgroundHelper() {
+    return backgroundHelper;
   }
 
   @Override

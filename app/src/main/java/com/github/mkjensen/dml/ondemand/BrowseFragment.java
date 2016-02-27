@@ -24,6 +24,7 @@ import android.support.v17.leanback.widget.HeaderItem;
 import android.support.v17.leanback.widget.ListRow;
 import android.support.v17.leanback.widget.ListRowPresenter;
 import android.support.v17.leanback.widget.OnItemViewClickedListener;
+import android.support.v17.leanback.widget.OnItemViewSelectedListener;
 import android.support.v17.leanback.widget.Presenter;
 import android.support.v17.leanback.widget.Row;
 import android.support.v17.leanback.widget.RowPresenter;
@@ -57,6 +58,19 @@ public class BrowseFragment extends BrowseSupportFragment {
   }
 
   private void setupListeners() {
+    setOnItemViewSelectedListener(new OnItemViewSelectedListener() {
+
+      @Override
+      public void onItemSelected(Presenter.ViewHolder itemViewHolder, Object item,
+                                 RowPresenter.ViewHolder rowViewHolder, Row row) {
+        if (item instanceof Video) {
+          Video video = (Video) item;
+          ((BackgroundHelper.Provider) getActivity()).getBackgroundHelper()
+              .setDelayed(video.getImageUrl());
+        }
+      }
+    });
+
     setOnItemViewClickedListener(new OnItemViewClickedListener() {
 
       @Override
