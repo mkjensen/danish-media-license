@@ -19,5 +19,6 @@
 <resources>
 
     <string name="app_name">Danish Media License</string>
+    <string name="ondemand_details_action_play">Play</string>
 
 </resources>

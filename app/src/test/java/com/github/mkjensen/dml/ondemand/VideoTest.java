@@ -18,28 +18,53 @@ package com.github.mkjensen.dml.ondemand;
 
 import static org.junit.Assert.assertEquals;
 
+import org.junit.Before;
 import org.junit.Test;
 
 /**
- * Tests for {@link Video}.
+ * Unit tests for {@link Video}.
  */
 public class VideoTest {
 
+  private static final String TITLE = "myTitle";
+  private static final String IMAGE_URL = "myImageUrl";
+
+  private Video.Builder builder;
+  private Video video;
+
+  /**
+   * {@link #builder} and {@link #video} fields are shared.
+   */
+  @Before
+  public void setUp() {
+
+    // Given (shared)
+    builder = new Video.Builder()
+        .title(TITLE)
+        .imageUrl(IMAGE_URL);
+    video = builder.build();
+  }
+
   @Test
   public void testBuilder() {
-
-    // Given
-    String title = "My title";
-    String imageUrl = "My imageUrl";
-    Video.Builder builder = new Video.Builder()
-        .title(title)
-        .imageUrl(imageUrl);
 
     // When
     Video video = builder.build();
 
     // Then
-    assertEquals(title, video.getTitle());
-    assertEquals(imageUrl, video.getImageUrl());
+    assertEquals(TITLE, video.getTitle());
+    assertEquals(IMAGE_URL, video.getImageUrl());
+  }
+
+  @Test
+  public void testToString() {
+
+    // When
+    String videoToString = video.toString();
+
+    // Then
+    assertEquals(
+        String.format("title: [%s], imageUrl: [%s]", video.getTitle(), video.getImageUrl()),
+        videoToString);
   }
 }

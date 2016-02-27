@@ -16,15 +16,36 @@
 
 package com.github.mkjensen.dml.ondemand;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Metadata about an on-demand video. Create instances using {@link Builder}.
  */
-final class Video {
+final class Video implements Parcelable {
+
+  public static final Parcelable.Creator<Video> CREATOR = new ParcelableCreator();
 
   private String title;
   private String imageUrl;
 
   private Video() {
+  }
+
+  @Override
+  public String toString() {
+    return String.format("title: [%s], imageUrl: [%s]", title, imageUrl);
+  }
+
+  @Override
+  public int describeContents() {
+    return 0;
+  }
+
+  @Override
+  public void writeToParcel(Parcel dest, int flags) {
+    dest.writeString(title);
+    dest.writeString(imageUrl);
   }
 
   String getTitle() {
@@ -62,6 +83,22 @@ final class Video {
     Builder imageUrl(String imageUrl) {
       video.imageUrl = imageUrl;
       return this;
+    }
+  }
+
+  private static final class ParcelableCreator implements Parcelable.Creator<Video> {
+
+    @Override
+    public Video createFromParcel(Parcel source) {
+      Video video = new Video();
+      video.title = source.readString();
+      video.imageUrl = source.readString();
+      return video;
+    }
+
+    @Override
+    public Video[] newArray(int size) {
+      return new Video[size];
     }
   }
 }

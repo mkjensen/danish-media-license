@@ -14,8 +14,7 @@
   ~ limitations under the License.
   -->
 
-<fragment xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/ondemand_fragment"
-    android:name="com.github.mkjensen.dml.ondemand.OnDemandFragment"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ondemand_fragment_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent" />

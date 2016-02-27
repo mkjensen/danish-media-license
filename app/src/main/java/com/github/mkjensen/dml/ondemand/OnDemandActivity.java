@@ -23,9 +23,12 @@ import android.util.Log;
 import com.github.mkjensen.dml.R;
 
 /**
- * Host activity for {@link OnDemandFragment}.
+ * Host activity for on-demand related fragments.
  */
-public class OnDemandActivity extends FragmentActivity {
+public class OnDemandActivity extends FragmentActivity
+    implements BrowseFragment.OnVideoSelectedListener {
+
+  static final String VIDEO = "video";
 
   private static final String TAG = "OnDemandActivity";
 
@@ -34,5 +37,24 @@ public class OnDemandActivity extends FragmentActivity {
     Log.d(TAG, "onCreate");
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_ondemand);
+    if (savedInstanceState == null) {
+      getSupportFragmentManager()
+          .beginTransaction()
+          .add(R.id.ondemand_fragment_container, new BrowseFragment())
+          .commit();
+    }
+  }
+
+  @Override
+  public void onVideoSelected(Video video) {
+    Bundle args = new Bundle();
+    args.putParcelable(VIDEO, video);
+    DetailsFragment detailsFragment = new DetailsFragment();
+    detailsFragment.setArguments(args);
+    getSupportFragmentManager()
+        .beginTransaction()
+        .replace(R.id.ondemand_fragment_container, detailsFragment)
+        .addToBackStack(null)
+        .commit();
   }
 }

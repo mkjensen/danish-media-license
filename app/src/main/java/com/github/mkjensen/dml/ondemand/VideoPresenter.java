@@ -26,7 +26,7 @@ import com.bumptech.glide.Glide;
 import com.github.mkjensen.dml.R;
 
 /**
- * Presenter for {@link Video} instances.
+ * Presenter for {@link Video}.
  */
 class VideoPresenter extends Presenter {
 

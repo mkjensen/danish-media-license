@@ -28,16 +28,15 @@ import android.support.v17.leanback.widget.Presenter;
 import android.support.v17.leanback.widget.Row;
 import android.support.v17.leanback.widget.RowPresenter;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.github.mkjensen.dml.R;
 
 /**
- * Leanback browse screen for on-demand videos.
+ * Browse screen for on-demand videos.
  */
-public class OnDemandFragment extends BrowseSupportFragment {
+public class BrowseFragment extends BrowseSupportFragment {
 
-  private static final String TAG = "OnDemandFragment";
+  private static final String TAG = "BrowseFragment";
 
   private ArrayObjectAdapter categoryAdapter;
 
@@ -64,9 +63,7 @@ public class OnDemandFragment extends BrowseSupportFragment {
       public void onItemClicked(Presenter.ViewHolder itemViewHolder, Object item,
                                 RowPresenter.ViewHolder rowViewHolder, Row row) {
         Video video = (Video) item;
-        Toast.makeText(OnDemandFragment.this.getActivity(),
-            video.getTitle(),
-            Toast.LENGTH_SHORT).show();
+        ((OnVideoSelectedListener) getActivity()).onVideoSelected(video);
       }
     });
   }
@@ -97,5 +94,10 @@ public class OnDemandFragment extends BrowseSupportFragment {
         .imageUrl("http://www.dr.dk/muTest/api/1.2/bar/56cadf266187a41af0811885")
         .build());
     categoryAdapter.add(new ListRow(headerItem, videoAdapter));
+  }
+
+  interface OnVideoSelectedListener {
+
+    void onVideoSelected(Video video);
   }
 }
