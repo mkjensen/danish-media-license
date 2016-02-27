@@ -1,5 +1,7 @@
 # Danish Media License
 
+[![Build Status](https://travis-ci.org/mkjensen/danish-media-license.svg?branch=master)](https://travis-ci.org/mkjensen/danish-media-license)
+
 Provides access to media produced by the national broadcasting corporation of Denmark.
 
 ## License
