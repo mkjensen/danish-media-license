@@ -10,6 +10,8 @@ env:
     - EMULATOR_ANDROID_ABI=armeabi-v7a
     - EMULATOR_ANDROID_SDK_VERSION=21
     - EMULATOR_ANDROID_TARGET=android-tv
+    - JPM_BIN=${HOME}/jpm/bin
+    - JPM_HOME=${HOME}/jpm
 
 android:
   components:
@@ -20,6 +22,11 @@ android:
     - extra-android-m2repository
     - sys-img-${EMULATOR_ANDROID_ABI}-android-tv-${EMULATOR_ANDROID_SDK_VERSION}
 
+before_install:
+  - curl -sL http://bit.ly/jpm4j > jpm4j.jar
+  - java -jar jpm4j.jar --home ${JPM_HOME} --bindir ${JPM_BIN} init
+  - ${JPM_BIN}/jpm install com.codacy:codacy-coverage-reporter:assembly
+
 before_script:
   - echo no | android create avd --force -n test -t android-${EMULATOR_ANDROID_SDK_VERSION} --abi ${EMULATOR_ANDROID_TARGET}/${EMULATOR_ANDROID_ABI}
   - emulator -avd test -no-audio -no-window &
@@ -28,6 +35,9 @@ before_script:
 
 script:
    - ./gradlew clean assemble check connectedCheck
+
+after_success:
+  - ${JPM_BIN}/codacy-coverage-reporter --projectToken ${CODACY_PROJECT_TOKEN} --language Java --coverageReport app/build/reports/coverage/debug/report.xml
 
 before_cache:
   - rm -f $HOME/.gradle/caches/modules-2/modules-2.lock

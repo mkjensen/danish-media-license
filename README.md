@@ -1,6 +1,6 @@
 # Danish Media License
 
-[![Build Status](https://travis-ci.org/mkjensen/danish-media-license.svg?branch=master)](https://travis-ci.org/mkjensen/danish-media-license)
+[![Build Status](https://travis-ci.org/mkjensen/danish-media-license.svg?branch=master)](https://travis-ci.org/mkjensen/danish-media-license) [![Codacy Badge](https://api.codacy.com/project/badge/grade/23e8d80e9f0a44d9851f05e0a6158e19)](https://www.codacy.com/app/mkjensen/danish-media-license)
 
 Provides access to media produced by the national broadcasting corporation of Denmark.
 

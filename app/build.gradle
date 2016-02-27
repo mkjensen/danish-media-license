@@ -15,6 +15,16 @@
  */
 
 apply plugin: 'com.android.application'
+apply plugin: 'jacoco-everywhere'
+
+buildscript {
+  repositories {
+    mavenCentral()
+  }
+  dependencies {
+    classpath 'com.trickyandroid:jacoco-everywhere:0.2.1'
+  }
+}
 
 android {
   compileSdkVersion 23
@@ -28,6 +38,9 @@ android {
     versionName "1.0"
   }
   buildTypes {
+    debug {
+      testCoverageEnabled = true
+    }
     release {
       minifyEnabled false
       proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
