@@ -26,8 +26,10 @@ import org.junit.Test;
  */
 public class VideoTest {
 
-  private static final String TITLE = "myTitle";
-  private static final String IMAGE_URL = "myImageUrl";
+  private static final String SLUG = "My slug";
+  private static final String TITLE = "My title";
+  private static final String DESCRIPTION = "My description";
+  private static final String IMAGE_URL = "My imageUrl";
 
   private Video.Builder builder;
   private Video video;
@@ -40,7 +42,9 @@ public class VideoTest {
 
     // Given (shared)
     builder = new Video.Builder()
+        .slug(SLUG)
         .title(TITLE)
+        .description(DESCRIPTION)
         .imageUrl(IMAGE_URL);
     video = builder.build();
   }
@@ -52,7 +56,9 @@ public class VideoTest {
     Video video = builder.build();
 
     // Then
+    assertEquals(SLUG, video.getSlug());
     assertEquals(TITLE, video.getTitle());
+    assertEquals(DESCRIPTION, video.getDescription());
     assertEquals(IMAGE_URL, video.getImageUrl());
   }
 
@@ -63,8 +69,6 @@ public class VideoTest {
     String videoToString = video.toString();
 
     // Then
-    assertEquals(
-        String.format("title: [%s], imageUrl: [%s]", video.getTitle(), video.getImageUrl()),
-        videoToString);
+    assertEquals(String.format("Video{slug=%s}", video.getSlug()), videoToString);
   }
 }

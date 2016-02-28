@@ -26,7 +26,9 @@ final class Video implements Parcelable {
 
   public static final Parcelable.Creator<Video> CREATOR = new ParcelableCreator();
 
+  private String slug;
   private String title;
+  private String description;
   private String imageUrl;
 
   private Video() {
@@ -34,7 +36,7 @@ final class Video implements Parcelable {
 
   @Override
   public String toString() {
-    return String.format("title: [%s], imageUrl: [%s]", title, imageUrl);
+    return String.format("Video{slug=%s}", slug);
   }
 
   @Override
@@ -44,12 +46,22 @@ final class Video implements Parcelable {
 
   @Override
   public void writeToParcel(Parcel dest, int flags) {
+    dest.writeString(slug);
     dest.writeString(title);
+    dest.writeString(description);
     dest.writeString(imageUrl);
+  }
+
+  String getSlug() {
+    return slug;
   }
 
   String getTitle() {
     return title;
+  }
+
+  String getDescription() {
+    return description;
   }
 
   String getImageUrl() {
@@ -58,7 +70,9 @@ final class Video implements Parcelable {
 
   private Video copy() {
     Video copy = new Video();
+    copy.slug = slug;
     copy.title = title;
+    copy.description = description;
     copy.imageUrl = imageUrl;
     return copy;
   }
@@ -75,8 +89,18 @@ final class Video implements Parcelable {
       return video.copy();
     }
 
+    Builder slug(String slug) {
+      video.slug = slug;
+      return this;
+    }
+
     Builder title(String title) {
       video.title = title;
+      return this;
+    }
+
+    Builder description(String description) {
+      video.description = description;
       return this;
     }
 
@@ -91,7 +115,9 @@ final class Video implements Parcelable {
     @Override
     public Video createFromParcel(Parcel source) {
       Video video = new Video();
+      video.slug = source.readString();
       video.title = source.readString();
+      video.description = source.readString();
       video.imageUrl = source.readString();
       return video;
     }

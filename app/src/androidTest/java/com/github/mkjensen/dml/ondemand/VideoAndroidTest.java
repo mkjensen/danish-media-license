@@ -35,7 +35,9 @@ public class VideoAndroidTest {
 
     // Given
     Video.Builder builder = new Video.Builder()
+        .slug("My slug")
         .title("My title")
+        .description("My description")
         .imageUrl("My imageUrl");
     Video video = builder.build();
 
@@ -46,7 +48,9 @@ public class VideoAndroidTest {
     Video parceledVideo = Video.CREATOR.createFromParcel(parcel);
 
     // Then
+    assertEquals(video.getSlug(), parceledVideo.getSlug());
     assertEquals(video.getTitle(), parceledVideo.getTitle());
+    assertEquals(video.getDescription(), parceledVideo.getDescription());
     assertEquals(video.getImageUrl(), parceledVideo.getImageUrl());
   }
 }

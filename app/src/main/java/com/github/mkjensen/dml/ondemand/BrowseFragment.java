@@ -94,18 +94,49 @@ public class BrowseFragment extends BrowseSupportFragment {
     VideoPresenter videoPresenter = new VideoPresenter();
     ArrayObjectAdapter videoAdapter = new ArrayObjectAdapter(videoPresenter);
     videoAdapter.add(new Video.Builder()
+        .slug("bedrag-9-10")
         .title("Bedrag 9:10")
+        .description("Alf begraver Mia og tynges af skyld, men Mads får ham ud af"
+            + " selvmedlidenheden, da han gør en vild opdagelse. Energreen har ikke bare store"
+            + " huller i regnskaberne - deres pengekasse er helt tom. Det kan de udnytte."
+            + " Claudia er nået frem til samme konklusion om Energreen, men Sander insisterer på"
+            + " at fortsætte det farlige spil - og sætter hende til at stikke en kæp i hjulet på"
+            + " Bagmandspolitiets planer. Sanders håndlanger opdager, hvor Nicky og Bimse har deres"
+            + " mange penge fra og insisterer på at få dem tilbage. Og Svenskeren er ikke en mand,"
+            + " man siger nej til.\nSerien er uegnet for mindre børn.\nMedvirkende: Thomas Bo"
+            + " Larsen, Natalie Madueño, Esben Smed, Nikolaj Lie Kaas m.fl.\nManuskript: Jeppe"
+            + " Gjervig Gram, Anders August og Jannik Tai Mosholt\nInstruktion:"
+            + " Søren Kragh-Jacobsen\nSe også: \nWeb: www.dr.dk/bedrag\nInstagram:"
+            + " BEDRAGDR\nFacebook: https://www.facebook.com/bedragDR\nSendes med synstolkning"
+            + " på DR1Syn")
         .imageUrl("http://www.dr.dk/muTest/api/1.2/bar/56c330b2a11f9f0fc418f087")
         .build());
     videoAdapter.add(new Video.Builder()
+        .slug("x-factor-2016-02-26")
         .title("X Factor")
-        .imageUrl("http://www.dr.dk/muTest/api/1.2/bar/56c2e0b86187a415ac0ff6a4").build());
+        .description("Konkurrencen er i top, når X Factor i aften blænder op for årets andet"
+            + " liveshow. Otte deltagere er tilbage, men kun syv kan fortsætte til næste uge, så"
+            + " der er lagt op til masser af spænding, når deltagerne skal kaste sig ud i sange"
+            + " fra de nordiske lande. Dommerne har gjort, hvad de kan for at forberede dem, så nu"
+            + " er det op til dem selv at synge sig videre. Hvem der fortjener en plads videre, og"
+            + " hvem der skal i farezonen, er op til dig derhjemme. Se med i aften på DR1.")
+        .imageUrl("http://www.dr.dk/muTest/api/1.2/bar/56cc4c076187a40a6cb56de5").build());
     categoryAdapter.add(new ListRow(headerItem, videoAdapter));
     headerItem = new HeaderItem("Spotlight");
     videoAdapter = new ArrayObjectAdapter(videoPresenter);
     videoAdapter.add(new Video.Builder()
-        .title("Fifa, Sepp Blatter og mig!")
-        .imageUrl("http://www.dr.dk/muTest/api/1.2/bar/56cadf266187a41af0811885")
+        .slug("dokumania-naturens-uorden")
+        .title("Dokumania: Naturens uorden")
+        .description("Dansk dokumentar fra 2015 af filminstruktøren Christian Sønderby"
+            + " Jepsen\nDokumentaren skildrer spastikeren Jacob Nossells selvironiske kamp for at"
+            + " forstå og iscenesætte sit eget liv. Ifølge videnskaben burde spastikeren Jacob"
+            + " allerede fra fødslen være 'fravalgt' af både forskere og forældre. Med et intakt"
+            + " intellekt, fanget i et svækket kropshylster, er han selveste legemliggørelsen af"
+            + " normalitetens dilemma: For handicappet til at være normal og for normal til at"
+            + " acceptere sig selv som handicappet. I forsøget på at forstå sig selv og sin egen"
+            + " situation opsøger han førende danske videnskabsfolk og stiller dem spørgsmålet:"
+            + " \"Er jeg unormal?\".")
+        .imageUrl("http://www.dr.dk/muTest/api/1.2/bar/56b874266187a4086441a491")
         .build());
     categoryAdapter.add(new ListRow(headerItem, videoAdapter));
   }
