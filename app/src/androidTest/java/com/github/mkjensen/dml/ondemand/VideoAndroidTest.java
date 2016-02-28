@@ -38,7 +38,8 @@ public class VideoAndroidTest {
         .slug("My slug")
         .title("My title")
         .description("My description")
-        .imageUrl("My imageUrl");
+        .imageUrl("My imageUrl")
+        .videoUrl("My videoUrl");
     Video video = builder.build();
 
     // When
@@ -52,5 +53,6 @@ public class VideoAndroidTest {
     assertEquals(video.getTitle(), parceledVideo.getTitle());
     assertEquals(video.getDescription(), parceledVideo.getDescription());
     assertEquals(video.getImageUrl(), parceledVideo.getImageUrl());
+    assertEquals(video.getVideoUrl(), parceledVideo.getVideoUrl());
   }
 }

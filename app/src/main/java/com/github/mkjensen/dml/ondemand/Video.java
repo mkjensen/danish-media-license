@@ -30,6 +30,7 @@ final class Video implements Parcelable {
   private String title;
   private String description;
   private String imageUrl;
+  private String videoUrl;
 
   private Video() {
   }
@@ -50,6 +51,7 @@ final class Video implements Parcelable {
     dest.writeString(title);
     dest.writeString(description);
     dest.writeString(imageUrl);
+    dest.writeString(videoUrl);
   }
 
   String getSlug() {
@@ -68,12 +70,17 @@ final class Video implements Parcelable {
     return imageUrl;
   }
 
+  String getVideoUrl() {
+    return videoUrl;
+  }
+
   private Video copy() {
     Video copy = new Video();
     copy.slug = slug;
     copy.title = title;
     copy.description = description;
     copy.imageUrl = imageUrl;
+    copy.videoUrl = videoUrl;
     return copy;
   }
 
@@ -108,6 +115,11 @@ final class Video implements Parcelable {
       video.imageUrl = imageUrl;
       return this;
     }
+
+    Builder videoUrl(String videoUrl) {
+      video.videoUrl = videoUrl;
+      return this;
+    }
   }
 
   private static final class ParcelableCreator implements Parcelable.Creator<Video> {
@@ -119,6 +131,7 @@ final class Video implements Parcelable {
       video.title = source.readString();
       video.description = source.readString();
       video.imageUrl = source.readString();
+      video.videoUrl = source.readString();
       return video;
     }
 

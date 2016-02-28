@@ -50,6 +50,8 @@
 
         </activity>
 
+        <activity android:name=".ondemand.PlaybackActivity" />
+
     </application>
 
 </manifest>

@@ -16,6 +16,7 @@
 
 package com.github.mkjensen.dml.ondemand;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v17.leanback.app.DetailsSupportFragment;
 import android.support.v17.leanback.widget.Action;
@@ -31,7 +32,6 @@ import android.support.v17.leanback.widget.Row;
 import android.support.v17.leanback.widget.RowPresenter;
 import android.support.v17.leanback.widget.SparseArrayObjectAdapter;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.github.mkjensen.dml.R;
 
@@ -86,9 +86,9 @@ public class DetailsFragment extends DetailsSupportFragment {
       @Override
       public void onItemClicked(Presenter.ViewHolder itemViewHolder, Object item,
                                 RowPresenter.ViewHolder rowViewHolder, Row row) {
-        Toast.makeText(getActivity(),
-            getString(R.string.ondemand_details_action_play) + ": " + video.getTitle(),
-            Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(getActivity(), PlaybackActivity.class);
+        intent.putExtra(PlaybackActivity.VIDEO, video);
+        startActivity(intent);
       }
     });
   }

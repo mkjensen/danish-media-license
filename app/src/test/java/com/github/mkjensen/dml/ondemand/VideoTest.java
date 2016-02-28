@@ -30,6 +30,7 @@ public class VideoTest {
   private static final String TITLE = "My title";
   private static final String DESCRIPTION = "My description";
   private static final String IMAGE_URL = "My imageUrl";
+  private static final String VIDEO_URL = "My videoUrl";
 
   private Video.Builder builder;
   private Video video;
@@ -45,7 +46,8 @@ public class VideoTest {
         .slug(SLUG)
         .title(TITLE)
         .description(DESCRIPTION)
-        .imageUrl(IMAGE_URL);
+        .imageUrl(IMAGE_URL)
+        .videoUrl(VIDEO_URL);
     video = builder.build();
   }
 
@@ -60,6 +62,7 @@ public class VideoTest {
     assertEquals(TITLE, video.getTitle());
     assertEquals(DESCRIPTION, video.getDescription());
     assertEquals(IMAGE_URL, video.getImageUrl());
+    assertEquals(VIDEO_URL, video.getVideoUrl());
   }
 
   @Test
