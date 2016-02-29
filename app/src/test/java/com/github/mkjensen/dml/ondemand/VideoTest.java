@@ -33,23 +33,22 @@ public class VideoTest {
   private static final String IMAGE_URL = "My imageUrl";
   private static final String VIDEO_URL = "My videoUrl";
 
-  private Video.Builder builder;
   private Video video;
 
   /**
-   * {@link #builder} and {@link #video} fields are shared.
+   * Creates a shared {@link Video} instance.
    */
   @Before
   public void before() {
 
     // Given/when (shared)
-    builder = new Video.Builder()
+    video = new Video.Builder()
         .slug(SLUG)
         .title(TITLE)
         .description(DESCRIPTION)
         .imageUrl(IMAGE_URL)
-        .videoUrl(VIDEO_URL);
-    video = builder.build();
+        .videoUrl(VIDEO_URL)
+        .build();
   }
 
   @Test
