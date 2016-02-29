@@ -219,18 +219,18 @@ public class PlaybackFragment extends PlaybackOverlaySupportFragment {
   @Override
   public void onPause() {
     Log.d(TAG, "onPause");
+    super.onPause();
     mediaSession.setActive(false);
     playPause(false);
-    super.onPause();
   }
 
   @Override
   public void onDestroy() {
     Log.d(TAG, "onDestroy");
+    super.onDestroy();
     unregisterMediaControllerCallback();
     releaseMediaSession();
     releasePlayer();
-    super.onDestroy();
   }
 
   private void unregisterMediaControllerCallback() {

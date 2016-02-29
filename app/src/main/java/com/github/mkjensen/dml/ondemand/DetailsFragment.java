@@ -105,14 +105,14 @@ public class DetailsFragment extends DetailsSupportFragment {
   @Override
   public void onStop() {
     Log.d(TAG, "onStop");
-    backgroundHelper.stop();
     super.onStop();
+    backgroundHelper.stop();
   }
 
   @Override
   public void onDestroy() {
     Log.d(TAG, "onDestroy");
-    backgroundHelper.destroy();
     super.onDestroy();
+    backgroundHelper.destroy();
   }
 }
