@@ -17,6 +17,7 @@
 package com.github.mkjensen.dml.ondemand;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -39,9 +40,9 @@ public class VideoTest {
    * {@link #builder} and {@link #video} fields are shared.
    */
   @Before
-  public void setUp() {
+  public void before() {
 
-    // Given (shared)
+    // Given/when (shared)
     builder = new Video.Builder()
         .slug(SLUG)
         .title(TITLE)
@@ -52,12 +53,11 @@ public class VideoTest {
   }
 
   @Test
-  public void testBuilder() {
-
-    // When
-    Video video = builder.build();
+  public void builder_givenValues_whenBuilt_thenVideoHasValues() {
 
     // Then
+    assertNotNull(video);
+    assertEquals(0, video.describeContents());
     assertEquals(SLUG, video.getSlug());
     assertEquals(TITLE, video.getTitle());
     assertEquals(DESCRIPTION, video.getDescription());
@@ -66,7 +66,7 @@ public class VideoTest {
   }
 
   @Test
-  public void testToString() {
+  public void toString_whenSlugSet_thenContainsSlug() {
 
     // When
     String videoToString = video.toString();

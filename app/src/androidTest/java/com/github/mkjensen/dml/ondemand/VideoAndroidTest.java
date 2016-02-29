@@ -17,11 +17,14 @@
 package com.github.mkjensen.dml.ondemand;
 
 import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertNotNull;
 
 import android.os.Parcel;
 import android.support.test.runner.AndroidJUnit4;
 
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 
 /**
@@ -30,8 +33,11 @@ import org.junit.runner.RunWith;
 @RunWith(AndroidJUnit4.class)
 public class VideoAndroidTest {
 
+  @Rule
+  public ExpectedException thrown = ExpectedException.none();
+
   @Test
-  public void testParcelable() {
+  public void writeToParcel_givenInput_whenInputWrittenAndOutputCreated_thenTheyMustBeEqual() {
 
     // Given
     Video.Builder builder = new Video.Builder()
@@ -40,19 +46,50 @@ public class VideoAndroidTest {
         .description("My description")
         .imageUrl("My imageUrl")
         .videoUrl("My videoUrl");
-    Video video = builder.build();
+    Video input = builder.build();
 
     // When
     Parcel parcel = Parcel.obtain();
-    video.writeToParcel(parcel, 0);
+    input.writeToParcel(parcel, 0);
     parcel.setDataPosition(0);
-    Video parceledVideo = Video.CREATOR.createFromParcel(parcel);
+    Video output = Video.CREATOR.createFromParcel(parcel);
+    parcel.recycle();
 
     // Then
-    assertEquals(video.getSlug(), parceledVideo.getSlug());
-    assertEquals(video.getTitle(), parceledVideo.getTitle());
-    assertEquals(video.getDescription(), parceledVideo.getDescription());
-    assertEquals(video.getImageUrl(), parceledVideo.getImageUrl());
-    assertEquals(video.getVideoUrl(), parceledVideo.getVideoUrl());
+    assertNotNull(output);
+    assertEquals(0, input.describeContents());
+    assertEquals(input.getSlug(), output.getSlug());
+    assertEquals(input.getTitle(), output.getTitle());
+    assertEquals(input.getDescription(), output.getDescription());
+    assertEquals(input.getImageUrl(), output.getImageUrl());
+    assertEquals(input.getVideoUrl(), output.getVideoUrl());
+  }
+
+  @Test
+  public void creatorNewArray_whenZeroSize_thenArrayHasZeroSize() {
+
+    // When
+    Video[] array = Video.CREATOR.newArray(0);
+
+    // Then
+    assertEquals(0, array.length);
+  }
+
+  @Test
+  public void creatorNewArray_whenPositiveSize_thenArrayHasPositiveSize() {
+
+    // When
+    Video[] array = Video.CREATOR.newArray(1);
+
+    // Then
+    assertEquals(1, array.length);
+  }
+
+  @Test()
+  public void creatorNewArray_whenNegativeSize_thenThrowNegativeArraySizeException() {
+
+    // When/then
+    thrown.expect(NegativeArraySizeException.class);
+    Video.CREATOR.newArray(-1);
   }
 }
