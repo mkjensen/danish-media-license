@@ -18,6 +18,7 @@ package com.github.mkjensen.dml.ondemand;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v17.leanback.app.DetailsSupportFragment;
 import android.support.v17.leanback.widget.Action;
 import android.support.v17.leanback.widget.ArrayObjectAdapter;
@@ -36,7 +37,7 @@ import android.util.Log;
 import com.github.mkjensen.dml.R;
 
 /**
- * Details screen for {@link Video}.
+ * Details screen for on-demand videos.
  */
 public class DetailsFragment extends DetailsSupportFragment {
 
@@ -44,33 +45,33 @@ public class DetailsFragment extends DetailsSupportFragment {
   private static final int ACTION_PLAY = 0;
 
   private Video video;
-  private ArrayObjectAdapter adapter;
+  private ArrayObjectAdapter rowsAdapter;
+  private BackgroundHelper backgroundHelper;
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
     Log.d(TAG, "onCreate");
     super.onCreate(savedInstanceState);
-    video = getArguments().getParcelable(OnDemandActivity.VIDEO);
-    createAdapter();
+    video = getActivity().getIntent().getParcelableExtra(DetailsActivity.VIDEO);
+    createRowsAdapter();
     createDetails();
     createListeners();
   }
 
-  private void createAdapter() {
+  private void createRowsAdapter() {
     FullWidthDetailsOverviewRowPresenter detailsPresenter =
         new FullWidthDetailsOverviewRowPresenter(new VideoDetailsPresenter());
     ClassPresenterSelector selector = new ClassPresenterSelector();
     selector.addClassPresenter(DetailsOverviewRow.class, detailsPresenter);
     selector.addClassPresenter(ListRow.class, new ListRowPresenter());
-    adapter = new ArrayObjectAdapter(selector);
-    setAdapter(adapter);
+    rowsAdapter = new ArrayObjectAdapter(selector);
+    setAdapter(rowsAdapter);
   }
 
   private void createDetails() {
-    final DetailsOverviewRow detailsRow = new DetailsOverviewRow(video);
-    ((BackgroundHelper.Provider) getActivity()).getBackgroundHelper().set(video.getImageUrl());
+    DetailsOverviewRow detailsRow = new DetailsOverviewRow(video);
     createActions(detailsRow);
-    adapter.add(detailsRow);
+    rowsAdapter.add(detailsRow);
   }
 
   private void createActions(DetailsOverviewRow detailsRow) {
@@ -91,5 +92,27 @@ public class DetailsFragment extends DetailsSupportFragment {
         startActivity(intent);
       }
     });
+  }
+
+  @Override
+  public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+    Log.d(TAG, "onActivityCreated");
+    super.onActivityCreated(savedInstanceState);
+    backgroundHelper = new BackgroundHelper(getActivity());
+    backgroundHelper.set(video.getImageUrl());
+  }
+
+  @Override
+  public void onStop() {
+    Log.d(TAG, "onStop");
+    backgroundHelper.stop();
+    super.onStop();
+  }
+
+  @Override
+  public void onDestroy() {
+    Log.d(TAG, "onDestroy");
+    backgroundHelper.destroy();
+    super.onDestroy();
   }
 }

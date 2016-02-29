@@ -34,7 +34,7 @@ import java.util.TimerTask;
 /**
  * Provides convenience methods for updating the background image.
  */
-public final class BackgroundHelper {
+final class BackgroundHelper {
 
   private static final String TAG = "BackgroundHelper";
   private static final int DELAY_IN_MILLISECONDS = 300;
@@ -74,7 +74,7 @@ public final class BackgroundHelper {
   public void setDelayed(@NonNull String imageUrl) {
     cancelTimer();
     Timer timer = new Timer();
-    timer.schedule(new DelayedSetTimerTask(imageUrl), DELAY_IN_MILLISECONDS);
+    timer.schedule(new SetDelayedTimerTask(imageUrl), DELAY_IN_MILLISECONDS);
     this.timer = timer;
   }
 
@@ -125,16 +125,11 @@ public final class BackgroundHelper {
         });
   }
 
-  public interface Provider {
-
-    BackgroundHelper getBackgroundHelper();
-  }
-
-  private final class DelayedSetTimerTask extends TimerTask {
+  private final class SetDelayedTimerTask extends TimerTask {
 
     private final String imageUrl;
 
-    private DelayedSetTimerTask(String imageUrl) {
+    private SetDelayedTimerTask(String imageUrl) {
       this.imageUrl = imageUrl;
     }
 

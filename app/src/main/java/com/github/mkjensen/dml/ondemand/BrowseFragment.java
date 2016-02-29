@@ -16,8 +16,9 @@
 
 package com.github.mkjensen.dml.ondemand;
 
-import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v17.leanback.app.BrowseSupportFragment;
 import android.support.v17.leanback.widget.ArrayObjectAdapter;
 import android.support.v17.leanback.widget.HeaderItem;
@@ -39,22 +40,22 @@ public class BrowseFragment extends BrowseSupportFragment {
 
   private static final String TAG = "BrowseFragment";
 
-  private ArrayObjectAdapter categoryAdapter;
+  private ArrayObjectAdapter rowsAdapter;
+  private BackgroundHelper backgroundHelper;
 
   @Override
-  public void onAttach(Context context) {
-    Log.d(TAG, "onAttach");
-    super.onAttach(context);
-    categoryAdapter = new ArrayObjectAdapter(new ListRowPresenter());
+  public void onCreate(Bundle savedInstanceState) {
+    Log.d(TAG, "onCreate");
+    super.onCreate(savedInstanceState);
+    setTitle(getString(R.string.app_name));
+    createRowsAdapter();
+    addTestData();
+    setupListeners();
   }
 
-  @Override
-  public void onActivityCreated(Bundle savedInstanceState) {
-    Log.d(TAG, "onActivityCreated");
-    super.onActivityCreated(savedInstanceState);
-    setTitle(getString(R.string.app_name));
-    setAdapter(categoryAdapter);
-    setupListeners();
+  private void createRowsAdapter() {
+    rowsAdapter = new ArrayObjectAdapter(new ListRowPresenter());
+    setAdapter(rowsAdapter);
   }
 
   private void setupListeners() {
@@ -65,8 +66,7 @@ public class BrowseFragment extends BrowseSupportFragment {
                                  RowPresenter.ViewHolder rowViewHolder, Row row) {
         if (item instanceof Video) {
           Video video = (Video) item;
-          ((BackgroundHelper.Provider) getActivity()).getBackgroundHelper()
-              .setDelayed(video.getImageUrl());
+          backgroundHelper.setDelayed(video.getImageUrl());
         }
       }
     });
@@ -77,16 +77,32 @@ public class BrowseFragment extends BrowseSupportFragment {
       public void onItemClicked(Presenter.ViewHolder itemViewHolder, Object item,
                                 RowPresenter.ViewHolder rowViewHolder, Row row) {
         Video video = (Video) item;
-        ((OnVideoSelectedListener) getActivity()).onVideoSelected(video);
+        Intent intent = new Intent(getActivity(), DetailsActivity.class);
+        intent.putExtra(DetailsActivity.VIDEO, video);
+        startActivity(intent);
       }
     });
   }
 
   @Override
-  public void onCreate(Bundle savedInstanceState) {
-    Log.d(TAG, "onCreate");
-    super.onCreate(savedInstanceState);
-    addTestData();
+  public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+    Log.d(TAG, "onActivityCreated");
+    super.onActivityCreated(savedInstanceState);
+    backgroundHelper = new BackgroundHelper(getActivity());
+  }
+
+  @Override
+  public void onStop() {
+    Log.d(TAG, "onStop");
+    backgroundHelper.stop();
+    super.onStop();
+  }
+
+  @Override
+  public void onDestroy() {
+    Log.d(TAG, "onDestroy");
+    backgroundHelper.destroy();
+    super.onDestroy();
   }
 
   private void addTestData() {
@@ -132,7 +148,7 @@ public class BrowseFragment extends BrowseSupportFragment {
             + "subtitles/playlist/urn:dr:mu:manifest:56d0d0c76187a51404d4892f"
             + "?segmentsizeinms=60000")
         .build());
-    categoryAdapter.add(new ListRow(headerItem, videoAdapter));
+    rowsAdapter.add(new ListRow(headerItem, videoAdapter));
     headerItem = new HeaderItem("Spotlight");
     videoAdapter = new ArrayObjectAdapter(videoPresenter);
     videoAdapter.add(new Video.Builder()
@@ -160,11 +176,6 @@ public class BrowseFragment extends BrowseSupportFragment {
             + "Dokumania--Naturens-uorden_c3ff1414744c4456bec9568915b283fd_,1127,562,2276,.mp4"
             + ".csmil/master.m3u8")
         .build());
-    categoryAdapter.add(new ListRow(headerItem, videoAdapter));
-  }
-
-  interface OnVideoSelectedListener {
-
-    void onVideoSelected(Video video);
+    rowsAdapter.add(new ListRow(headerItem, videoAdapter));
   }
 }

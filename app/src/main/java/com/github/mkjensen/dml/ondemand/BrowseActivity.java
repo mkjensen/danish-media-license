@@ -23,18 +23,16 @@ import android.util.Log;
 import com.github.mkjensen.dml.R;
 
 /**
- * Host activity for {@link PlaybackFragment}.
+ * Host activity for {@link BrowseFragment}.
  */
-public class PlaybackActivity extends FragmentActivity {
+public class BrowseActivity extends FragmentActivity {
 
-  public static final String VIDEO = "video";
-
-  private static final String TAG = "PlaybackActivity";
+  private static final String TAG = "BrowseActivity";
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
     Log.d(TAG, "onCreate");
     super.onCreate(savedInstanceState);
-    setContentView(R.layout.activity_ondemand_playback);
+    setContentView(R.layout.activity_ondemand_browse);
   }
 }
