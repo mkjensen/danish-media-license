@@ -18,7 +18,6 @@ package com.github.mkjensen.dml.ondemand;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v17.leanback.app.DetailsSupportFragment;
 import android.support.v17.leanback.widget.Action;
 import android.support.v17.leanback.widget.ArrayObjectAdapter;
@@ -46,7 +45,6 @@ public class DetailsFragment extends DetailsSupportFragment {
 
   private Video video;
   private ArrayObjectAdapter rowsAdapter;
-  private BackgroundHelper backgroundHelper;
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
@@ -92,27 +90,5 @@ public class DetailsFragment extends DetailsSupportFragment {
         startActivity(intent);
       }
     });
-  }
-
-  @Override
-  public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-    Log.d(TAG, "onActivityCreated");
-    super.onActivityCreated(savedInstanceState);
-    backgroundHelper = new BackgroundHelper(getActivity());
-    backgroundHelper.set(video.getImageUrl());
-  }
-
-  @Override
-  public void onStop() {
-    Log.d(TAG, "onStop");
-    super.onStop();
-    backgroundHelper.stop();
-  }
-
-  @Override
-  public void onDestroy() {
-    Log.d(TAG, "onDestroy");
-    super.onDestroy();
-    backgroundHelper.destroy();
   }
 }

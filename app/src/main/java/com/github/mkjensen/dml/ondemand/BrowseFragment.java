@@ -18,14 +18,12 @@ package com.github.mkjensen.dml.ondemand;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v17.leanback.app.BrowseSupportFragment;
 import android.support.v17.leanback.widget.ArrayObjectAdapter;
 import android.support.v17.leanback.widget.HeaderItem;
 import android.support.v17.leanback.widget.ListRow;
 import android.support.v17.leanback.widget.ListRowPresenter;
 import android.support.v17.leanback.widget.OnItemViewClickedListener;
-import android.support.v17.leanback.widget.OnItemViewSelectedListener;
 import android.support.v17.leanback.widget.Presenter;
 import android.support.v17.leanback.widget.Row;
 import android.support.v17.leanback.widget.RowPresenter;
@@ -41,7 +39,6 @@ public class BrowseFragment extends BrowseSupportFragment {
   private static final String TAG = "BrowseFragment";
 
   private ArrayObjectAdapter rowsAdapter;
-  private BackgroundHelper backgroundHelper;
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
@@ -59,18 +56,6 @@ public class BrowseFragment extends BrowseSupportFragment {
   }
 
   private void setupListeners() {
-    setOnItemViewSelectedListener(new OnItemViewSelectedListener() {
-
-      @Override
-      public void onItemSelected(Presenter.ViewHolder itemViewHolder, Object item,
-                                 RowPresenter.ViewHolder rowViewHolder, Row row) {
-        if (item instanceof Video) {
-          Video video = (Video) item;
-          backgroundHelper.setDelayed(video.getImageUrl());
-        }
-      }
-    });
-
     setOnItemViewClickedListener(new OnItemViewClickedListener() {
 
       @Override
@@ -82,27 +67,6 @@ public class BrowseFragment extends BrowseSupportFragment {
         startActivity(intent);
       }
     });
-  }
-
-  @Override
-  public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-    Log.d(TAG, "onActivityCreated");
-    super.onActivityCreated(savedInstanceState);
-    backgroundHelper = new BackgroundHelper(getActivity());
-  }
-
-  @Override
-  public void onStop() {
-    Log.d(TAG, "onStop");
-    super.onStop();
-    backgroundHelper.stop();
-  }
-
-  @Override
-  public void onDestroy() {
-    Log.d(TAG, "onDestroy");
-    super.onDestroy();
-    backgroundHelper.destroy();
   }
 
   private void addTestData() {
