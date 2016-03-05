@@ -81,6 +81,7 @@ public final class DmlProvider extends ContentProvider {
         break;
       default:
         throwUnsupportedOperationException(dmlUri);
+        break;
     }
     SQLiteDatabase database = databaseHelper.getReadableDatabase();
     Cursor cursor = queryBuilder.query(
