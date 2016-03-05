@@ -307,6 +307,7 @@ public class PlaybackFragment extends PlaybackOverlaySupportFragment {
 
     @Override
     public void onSurfaceTextureSizeChanged(SurfaceTexture surface, int width, int height) {
+      // Do nothing.
     }
 
     @Override
@@ -320,6 +321,7 @@ public class PlaybackFragment extends PlaybackOverlaySupportFragment {
 
     @Override
     public void onSurfaceTextureUpdated(SurfaceTexture surface) {
+      // Do nothing.
     }
   }
 
@@ -327,6 +329,7 @@ public class PlaybackFragment extends PlaybackOverlaySupportFragment {
 
     @Override
     public void onStateChanged(boolean playWhenReady, int playbackState) {
+      // Do nothing.
     }
 
     @Override
@@ -337,6 +340,7 @@ public class PlaybackFragment extends PlaybackOverlaySupportFragment {
     @Override
     public void onVideoSizeChanged(int width, int height, int unappliedRotationDegrees,
                                    float pixelWidthHeightRatio) {
+      // Do nothing.
     }
   }
 }
