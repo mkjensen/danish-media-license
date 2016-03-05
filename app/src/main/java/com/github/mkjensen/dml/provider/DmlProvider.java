@@ -23,6 +23,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
@@ -53,8 +54,8 @@ public final class DmlProvider extends ContentProvider {
 
   @Nullable
   @Override
-  public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs,
-                      String sortOrder) {
+  public Cursor query(@NonNull Uri uri, String[] projection, String selection,
+                      String[] selectionArgs, String sortOrder) {
     Log.v(TAG, "query " + uri);
     DmlUri dmlUri = uriMatcher.match(uri); // Throws IllegalArgumentException for invalid URIs.
     SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
@@ -96,7 +97,7 @@ public final class DmlProvider extends ContentProvider {
 
   @Nullable
   @Override
-  public String getType(Uri uri) {
+  public String getType(@NonNull Uri uri) {
     Log.v(TAG, "getType " + uri);
     DmlUri dmlUri = uriMatcher.match(uri);  // Throws IllegalArgumentException for invalid URIs.
     return dmlUri.getContentType();
@@ -104,7 +105,7 @@ public final class DmlProvider extends ContentProvider {
 
   @Nullable
   @Override
-  public Uri insert(Uri uri, ContentValues values) {
+  public Uri insert(@NonNull Uri uri, ContentValues values) {
     Log.v(TAG, "insert " + uri);
     DmlUri dmlUri = uriMatcher.match(uri); // Throws IllegalArgumentException for invalid URIs.
     switch (dmlUri) {
@@ -137,14 +138,15 @@ public final class DmlProvider extends ContentProvider {
   }
 
   @Override
-  public int delete(Uri uri, String selection, String[] selectionArgs) {
+  public int delete(@NonNull Uri uri, String selection, String[] selectionArgs) {
     Log.v(TAG, "delete " + uri);
     uriMatcher.match(uri); // Throws IllegalArgumentException for invalid URIs.
     return 0;
   }
 
   @Override
-  public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
+  public int update(@NonNull Uri uri, ContentValues values, String selection,
+                    String[] selectionArgs) {
     Log.v(TAG, "update " + uri);
     uriMatcher.match(uri); // Throws IllegalArgumentException for invalid URIs.
     return 0;
