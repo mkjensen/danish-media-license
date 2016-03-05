@@ -37,7 +37,7 @@ import org.junit.runner.RunWith;
  * Integration tests for {@link DmlProvider}.
  */
 @RunWith(AndroidJUnit4.class)
-public class DmlProviderTest extends ProviderTestCase2<DmlProvider> {
+public class DmlProviderAndroidTest extends ProviderTestCase2<DmlProvider> {
 
   @Rule
   public final ExpectedException thrown = ExpectedException.none();
@@ -48,7 +48,7 @@ public class DmlProviderTest extends ProviderTestCase2<DmlProvider> {
 
   private static final String NONEXISTENT_ID = "nonexistent";
 
-  public DmlProviderTest() {
+  public DmlProviderAndroidTest() {
     super(DmlProvider.class, DmlContract.AUTHORITY);
   }
 
