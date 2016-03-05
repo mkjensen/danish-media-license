@@ -57,6 +57,11 @@
             android:name=".ondemand.PlaybackActivity"
             android:theme="@style/Theme.Leanback.Details" />
 
+        <provider
+            android:name=".provider.DmlProvider"
+            android:authorities="com.github.mkjensen.dml.provider"
+            android:exported="false" />
+
     </application>
 
 </manifest>
