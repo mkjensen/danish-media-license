@@ -81,7 +81,7 @@ public final class DmlProvider extends ContentProvider {
         break;
       default:
         throwUnsupportedOperationException(dmlUri);
-        break;
+        return null;
     }
     SQLiteDatabase database = databaseHelper.getReadableDatabase();
     Cursor cursor = queryBuilder.query(
@@ -118,6 +118,7 @@ public final class DmlProvider extends ContentProvider {
         break;
       default:
         throwUnsupportedOperationException(dmlUri);
+        return null;
     }
     try (SQLiteDatabase database = databaseHelper.getWritableDatabase()) {
       database.insertOrThrow(
