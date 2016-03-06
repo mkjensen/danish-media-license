@@ -149,7 +149,7 @@ public class PlaybackFragment extends PlaybackOverlaySupportFragment {
   private void preparePlayer(boolean playWhenReady) {
     if (player == null) {
       HlsRendererBuilder rendererBuilder =
-          new HlsRendererBuilder(getActivity(), TAG, video.getVideoUrl());
+          new HlsRendererBuilder(getActivity(), TAG, video.getUrl());
       player = new DemoPlayer(rendererBuilder);
       player.addListener(new DemoPlayerListener());
     } else {

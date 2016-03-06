@@ -29,11 +29,13 @@ import org.junit.rules.ExpectedException;
  */
 public class VideoTest {
 
-  private static final String SLUG = "My slug";
+  private static final String ID = "My id";
   private static final String TITLE = "My title";
-  private static final String DESCRIPTION = "My description";
   private static final String IMAGE_URL = "My imageUrl";
-  private static final String VIDEO_URL = "My videoUrl";
+  private static final String DETAILS_URL = "My detailsUrl";
+  private static final String DESCRIPTION = "My description";
+  private static final String LIST_URL = "My listUrl";
+  private static final String URL = "My url";
 
   @Rule
   public final ExpectedException thrown = ExpectedException.none();
@@ -50,15 +52,17 @@ public class VideoTest {
     // Then
     assertNotNull(video);
     assertEquals(0, video.describeContents());
-    assertEquals(SLUG, video.getSlug());
+    assertEquals(ID, video.getId());
     assertEquals(TITLE, video.getTitle());
-    assertEquals(DESCRIPTION, video.getDescription());
     assertEquals(IMAGE_URL, video.getImageUrl());
-    assertEquals(VIDEO_URL, video.getVideoUrl());
+    assertEquals(DETAILS_URL, video.getDetailsUrl());
+    assertEquals(DESCRIPTION, video.getDescription());
+    assertEquals(LIST_URL, video.getListUrl());
+    assertEquals(URL, video.getUrl());
   }
 
   @Test
-  public void toString_whenSlugSet_thenContainsSlug() {
+  public void toString_whenIdSet_thenContainsId() {
 
     // Given
     Video video = createVideoBuilder().build();
@@ -67,7 +71,7 @@ public class VideoTest {
     String videoToString = video.toString();
 
     // Then
-    assertEquals(String.format("Video{slug=%s}", video.getSlug()), videoToString);
+    assertEquals(String.format("Video {id=%s}", video.getId()), videoToString);
   }
 
   @Test
@@ -101,10 +105,12 @@ public class VideoTest {
 
   private static Video.Builder createVideoBuilder() {
     return new Video.Builder()
-        .slug(SLUG)
+        .id(ID)
         .title(TITLE)
-        .description(DESCRIPTION)
         .imageUrl(IMAGE_URL)
-        .videoUrl(VIDEO_URL);
+        .detailsUrl(DETAILS_URL)
+        .description(DESCRIPTION)
+        .listUrl(LIST_URL)
+        .url(URL);
   }
 }

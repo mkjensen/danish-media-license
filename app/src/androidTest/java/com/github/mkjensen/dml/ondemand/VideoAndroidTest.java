@@ -36,11 +36,13 @@ public class VideoAndroidTest {
 
     // Given
     Video.Builder builder = new Video.Builder()
-        .slug("My slug")
+        .id("My id")
         .title("My title")
-        .description("My description")
         .imageUrl("My imageUrl")
-        .videoUrl("My videoUrl");
+        .detailsUrl("My detailsUrl")
+        .description("My description")
+        .listUrl("My listUrl")
+        .url("My url");
     Video input = builder.build();
 
     // When
@@ -53,10 +55,12 @@ public class VideoAndroidTest {
     // Then
     assertNotNull(output);
     assertEquals(0, input.describeContents());
-    assertEquals(input.getSlug(), output.getSlug());
+    assertEquals(input.getId(), output.getId());
     assertEquals(input.getTitle(), output.getTitle());
-    assertEquals(input.getDescription(), output.getDescription());
     assertEquals(input.getImageUrl(), output.getImageUrl());
-    assertEquals(input.getVideoUrl(), output.getVideoUrl());
+    assertEquals(input.getDetailsUrl(), output.getDetailsUrl());
+    assertEquals(input.getDescription(), output.getDescription());
+    assertEquals(input.getListUrl(), output.getListUrl());
+    assertEquals(input.getUrl(), output.getUrl());
   }
 }
