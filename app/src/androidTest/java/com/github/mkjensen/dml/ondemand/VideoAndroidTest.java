@@ -18,14 +18,11 @@ package com.github.mkjensen.dml.ondemand;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
 
 import android.os.Parcel;
 import android.support.test.runner.AndroidJUnit4;
 
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 
 /**
@@ -33,9 +30,6 @@ import org.junit.runner.RunWith;
  */
 @RunWith(AndroidJUnit4.class)
 public class VideoAndroidTest {
-
-  @Rule
-  public final ExpectedException thrown = ExpectedException.none();
 
   @Test
   public void writeToParcel_givenInput_whenInputWrittenAndOutputCreated_thenTheyMustBeEqual() {
@@ -64,34 +58,5 @@ public class VideoAndroidTest {
     assertEquals(input.getDescription(), output.getDescription());
     assertEquals(input.getImageUrl(), output.getImageUrl());
     assertEquals(input.getVideoUrl(), output.getVideoUrl());
-  }
-
-  @Test
-  public void creatorNewArray_whenZeroSize_thenArrayHasZeroSize() {
-
-    // When
-    Video[] array = Video.CREATOR.newArray(0);
-
-    // Then
-    assertEquals(0, array.length);
-  }
-
-  @Test
-  public void creatorNewArray_whenPositiveSize_thenArrayHasPositiveSize() {
-
-    // When
-    Video[] array = Video.CREATOR.newArray(1);
-
-    // Then
-    assertEquals(1, array.length);
-  }
-
-  @Test()
-  public void creatorNewArray_whenNegativeSize_thenThrowNegativeArraySizeException() {
-
-    // When/then
-    thrown.expect(NegativeArraySizeException.class);
-    Video[] array = Video.CREATOR.newArray(-1);
-    assertNull(array); // Make PMD happy.
   }
 }

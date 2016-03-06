@@ -18,9 +18,11 @@ package com.github.mkjensen.dml.ondemand;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
-import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 /**
  * Unit tests for {@link Video}.
@@ -33,26 +35,17 @@ public class VideoTest {
   private static final String IMAGE_URL = "My imageUrl";
   private static final String VIDEO_URL = "My videoUrl";
 
-  private Video video;
-
-  /**
-   * Creates a shared {@link Video} instance.
-   */
-  @Before
-  public void before() {
-
-    // Given/when (shared)
-    video = new Video.Builder()
-        .slug(SLUG)
-        .title(TITLE)
-        .description(DESCRIPTION)
-        .imageUrl(IMAGE_URL)
-        .videoUrl(VIDEO_URL)
-        .build();
-  }
+  @Rule
+  public final ExpectedException thrown = ExpectedException.none();
 
   @Test
   public void builder_givenValues_whenBuilt_thenVideoHasValues() {
+
+    // Given
+    Video.Builder videoBuilder = createVideoBuilder();
+
+    // When
+    Video video = videoBuilder.build();
 
     // Then
     assertNotNull(video);
@@ -67,10 +60,51 @@ public class VideoTest {
   @Test
   public void toString_whenSlugSet_thenContainsSlug() {
 
+    // Given
+    Video video = createVideoBuilder().build();
+
     // When
     String videoToString = video.toString();
 
     // Then
     assertEquals(String.format("Video{slug=%s}", video.getSlug()), videoToString);
+  }
+
+  @Test
+  public void creatorNewArray_whenZeroSize_thenArrayHasZeroSize() {
+
+    // When
+    Video[] array = Video.CREATOR.newArray(0);
+
+    // Then
+    assertEquals(0, array.length);
+  }
+
+  @Test
+  public void creatorNewArray_whenPositiveSize_thenArrayHasPositiveSize() {
+
+    // When
+    Video[] array = Video.CREATOR.newArray(1);
+
+    // Then
+    assertEquals(1, array.length);
+  }
+
+  @Test()
+  public void creatorNewArray_whenNegativeSize_thenThrowNegativeArraySizeException() {
+
+    // When/then
+    thrown.expect(NegativeArraySizeException.class);
+    Video[] array = Video.CREATOR.newArray(-1);
+    assertNull(array); // Make PMD happy.
+  }
+
+  private static Video.Builder createVideoBuilder() {
+    return new Video.Builder()
+        .slug(SLUG)
+        .title(TITLE)
+        .description(DESCRIPTION)
+        .imageUrl(IMAGE_URL)
+        .videoUrl(VIDEO_URL);
   }
 }
