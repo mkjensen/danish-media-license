@@ -142,8 +142,39 @@ public final class DmlProvider extends ContentProvider {
   @Override
   public int delete(@NonNull Uri uri, String selection, String[] selectionArgs) {
     Log.v(TAG, "delete " + uri);
-    uriMatcher.match(uri); // Throws IllegalArgumentException for invalid URIs.
-    return 0;
+    DmlUri dmlUri = uriMatcher.match(uri); // Throws IllegalArgumentException for invalid URIs.
+    String whereClause = null;
+    String[] whereArgs = null;
+    switch (dmlUri) {
+      case CATEGORIES:
+        break;
+      case CATEGORIES_ID:
+        whereClause = Categories.ID + "=?";
+        whereArgs = new String[] {Categories.getCategoryId(uri)};
+        break;
+      case CATEGORIES_ID_VIDEOS:
+        whereClause = CategoriesVideosColumns.CATEGORY_ID + "=?";
+        whereArgs = new String[] {Categories.getCategoryId(uri)};
+        break;
+      case VIDEOS:
+        break;
+      case VIDEOS_ID:
+        whereClause = Videos.ID + "=?";
+        whereArgs = new String[] {Videos.getVideoId(uri)};
+        break;
+      default:
+        throwUnsupportedOperationException(dmlUri);
+        return 0;
+    }
+    try (SQLiteDatabase database = databaseHelper.getWritableDatabase()) {
+      int deleted = database.delete(
+          dmlUri.getTable(),
+          whereClause,
+          whereArgs
+      );
+      notifyChange(uri);
+      return deleted;
+    }
   }
 
   @Override

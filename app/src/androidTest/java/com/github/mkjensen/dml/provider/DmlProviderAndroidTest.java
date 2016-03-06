@@ -340,7 +340,12 @@ public class DmlProviderAndroidTest extends ProviderTestCase2<DmlProvider> {
   }
 
   @Test
-  public void delete_whenCategoriesUri_thenZeroIsReturned() {
+  public void delete_whenCategoriesUri_thenAllCategoriesAreDeleted() {
+
+    // Given
+    insertCategory("c0");
+    insertCategory("c1");
+    insertCategory("c2");
 
     // When
     int deleted = getMockContentResolver().delete(
@@ -349,37 +354,84 @@ public class DmlProviderAndroidTest extends ProviderTestCase2<DmlProvider> {
         null); // selectionArgs
 
     // Then
-    assertEquals(0, deleted);
+    assertEquals(3, deleted);
   }
 
   @Test
-  public void delete_whenCategoriesIdUri_thenZeroIsReturned() {
+  public void delete_whenCategoriesIdUri_thenCategoryIsDeleted() {
+
+    // Given
+    insertCategory("c0");
+    insertCategory("c1");
+    insertCategory("c2");
 
     // When
     int deleted = getMockContentResolver().delete(
-        Categories.buildCategoryUri(NONEXISTENT_ID),
+        Categories.buildCategoryUri("c1"),
         null, // where
         null); // selectionArgs
 
     // Then
-    assertEquals(0, deleted);
+    assertEquals(1, deleted);
   }
 
   @Test
-  public void delete_whenCategoriesIdVideosUri_thenZeroIsReturned() {
+  public void delete_whenCategoriesIdVideosUri_thenVideosAreRemovedFromCategory() {
+
+    // Given
+    insertCategory("c0");
+    insertCategory("c1");
+    insertCategory("c2");
+    insertVideo("v0");
+    insertVideo("v1");
+    insertVideo("v2");
+    addToCategory("c0", "v0");
+    addToCategory("c1", "v1");
+    addToCategory("c1", "v2");
 
     // When
     int deleted = getMockContentResolver().delete(
-        Categories.buildVideosUri(NONEXISTENT_ID),
+        Categories.buildVideosUri("c1"),
         null, // where
         null); // selectionArgs
 
-    // Then
-    assertEquals(0, deleted);
+    try (Cursor categoriesCursor = getMockContentResolver().query(
+        Videos.CONTENT_URI,
+        null, // projection
+        null, // selection
+        null, // selectionArgs
+        null) // sortOrder
+    ) {
+
+      try (Cursor videosCursor = getMockContentResolver().query(
+          Categories.CONTENT_URI,
+          null, // projection
+          null, // selection
+          null, // selectionArgs
+          null) // sortOrder
+      ) {
+
+        // Then
+        assertEquals(2, deleted);
+
+        assertNotNull(categoriesCursor);
+        assertTrue(categoriesCursor.moveToFirst());
+        assertEquals(3, categoriesCursor.getCount());
+
+        assertNotNull(videosCursor);
+        assertTrue(videosCursor.moveToFirst());
+        assertEquals(3, videosCursor.getCount());
+      }
+    }
   }
 
   @Test
-  public void delete_whenVideosUri_thenZeroIsReturned() {
+  public void delete_whenVideosUri_thenAllVideosAreDeleted() {
+
+    // Given
+    insertVideo("v0");
+    insertVideo("v1");
+    insertVideo("v2");
 
     // When
     int deleted = getMockContentResolver().delete(
@@ -388,20 +440,25 @@ public class DmlProviderAndroidTest extends ProviderTestCase2<DmlProvider> {
         null); // selectionArgs
 
     // Then
-    assertEquals(0, deleted);
+    assertEquals(3, deleted);
   }
 
   @Test
-  public void delete_whenVideosIdUri_thenZeroIsReturned() {
+  public void delete_whenVideosIdUri_thenVideoIsDeleted() {
+
+    // Given
+    insertVideo("v0");
+    insertVideo("v1");
+    insertVideo("v2");
 
     // When
     int deleted = getMockContentResolver().delete(
-        Videos.buildVideoUri(NONEXISTENT_ID),
+        Videos.buildVideoUri("v1"),
         null, // where
         null); // selectionArgs
 
     // Then
-    assertEquals(0, deleted);
+    assertEquals(1, deleted);
   }
 
   @Test
