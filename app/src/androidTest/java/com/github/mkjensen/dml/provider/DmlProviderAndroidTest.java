@@ -24,7 +24,7 @@ import android.support.test.runner.AndroidJUnit4;
 import android.test.ProviderTestCase2;
 
 import com.github.mkjensen.dml.provider.DmlContract.Categories;
-import com.github.mkjensen.dml.provider.DmlContract.CategoriesVideosColumns;
+import com.github.mkjensen.dml.provider.DmlContract.CategoriesVideos;
 import com.github.mkjensen.dml.provider.DmlContract.Videos;
 
 import org.junit.Before;
@@ -145,7 +145,7 @@ public class DmlProviderAndroidTest extends ProviderTestCase2<DmlProvider> {
     addToCategory("c1", "v2");
 
     // When
-    try (Cursor cursor = query(Categories.buildVideosUri("c1"))) {
+    try (Cursor cursor = query(CategoriesVideos.buildUri("c1"))) {
 
       // Then
       assertNotNull(cursor);
@@ -253,7 +253,7 @@ public class DmlProviderAndroidTest extends ProviderTestCase2<DmlProvider> {
   public void getType_whenCategoriesIdVideosUri_thenCategoriesIdVideosContentTypeIsReturned() {
 
     // When
-    String type = getMockContentResolver().getType(Categories.buildVideosUri(NONEXISTENT_ID));
+    String type = getMockContentResolver().getType(CategoriesVideos.buildUri(NONEXISTENT_ID));
 
     // Then
     assertEquals(DmlUri.CATEGORIES_ID_VIDEOS.getContentType(), type);
@@ -343,7 +343,7 @@ public class DmlProviderAndroidTest extends ProviderTestCase2<DmlProvider> {
 
     // When
     int deleted = getMockContentResolver().delete(
-        Categories.buildVideosUri("c1"),
+        CategoriesVideos.buildUri("c1"),
         null, // where
         null); // selectionArgs
 
@@ -447,7 +447,7 @@ public class DmlProviderAndroidTest extends ProviderTestCase2<DmlProvider> {
 
     // When
     int updated = getMockContentResolver().update(
-        Categories.buildVideosUri(NONEXISTENT_ID),
+        CategoriesVideos.buildUri(NONEXISTENT_ID),
         null, // values
         null, // where
         null); // selectionArgs
@@ -538,8 +538,8 @@ public class DmlProviderAndroidTest extends ProviderTestCase2<DmlProvider> {
 
   private Uri addToCategory(String categoryId, String videoId) {
     ContentValues values = new ContentValues();
-    values.put(CategoriesVideosColumns.VIDEO_ID, videoId);
-    return getMockContentResolver().insert(Categories.buildVideosUri(categoryId), values);
+    values.put(CategoriesVideos.VIDEO_ID, videoId);
+    return getMockContentResolver().insert(CategoriesVideos.buildUri(categoryId), values);
   }
 
   private Cursor query(Uri uri) {

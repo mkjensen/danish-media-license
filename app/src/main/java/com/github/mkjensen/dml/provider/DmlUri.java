@@ -23,6 +23,7 @@ import static com.github.mkjensen.dml.provider.DmlContract.AUTHORITY;
 import android.net.Uri;
 
 import com.github.mkjensen.dml.provider.DmlContract.Categories;
+import com.github.mkjensen.dml.provider.DmlContract.CategoriesVideos;
 import com.github.mkjensen.dml.provider.DmlContract.Videos;
 import com.github.mkjensen.dml.provider.DmlDatabaseHelper.Tables;
 
@@ -48,7 +49,7 @@ enum DmlUri {
   /**
    * Videos associated with a category.
    */
-  CATEGORIES_ID_VIDEOS(12, Categories.PATH + "/*/" + Videos.PATH, Videos.CONTENT_TYPE_ID, false,
+  CATEGORIES_ID_VIDEOS(12, CategoriesVideos.PATH, CategoriesVideos.CONTENT_TYPE_ID, false,
       Tables.CATEGORIES_VIDEOS),
 
   /**
