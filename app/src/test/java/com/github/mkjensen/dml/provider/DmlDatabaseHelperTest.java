@@ -37,6 +37,10 @@ import java.util.Collection;
  */
 public class DmlDatabaseHelperTest extends PowerMockParameterizedRobolectricTest {
 
+  private final int oldVersion;
+
+  private final int newVersion;
+
   /**
    * Values for {@link #oldVersion} and {@link #newVersion}.
    */
@@ -46,10 +50,6 @@ public class DmlDatabaseHelperTest extends PowerMockParameterizedRobolectricTest
         {0, 0}, {0, 1}, {1, 0}
     });
   }
-
-  private final int oldVersion;
-
-  private final int newVersion;
 
   public DmlDatabaseHelperTest(int oldVersion, int newVersion) {
     this.oldVersion = oldVersion;
