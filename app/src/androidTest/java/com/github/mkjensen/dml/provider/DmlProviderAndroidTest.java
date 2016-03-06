@@ -75,26 +75,14 @@ public class DmlProviderAndroidTest extends ProviderTestCase2<DmlProvider> {
     // When/then
     thrown.expect(IllegalArgumentException.class);
     thrown.expectMessage("Unknown URI: " + INVALID_URL);
-    getMockContentResolver().query(
-        INVALID_URL,
-        null, // projection
-        null, // selection
-        null, // selectionArgs
-        null // sortOrder
-    );
+    query(INVALID_URL);
   }
 
   @Test
   public void query_whenRequestingNonexistentCategory_thenEmptyCursorIsReturned() {
 
     // When
-    try (Cursor cursor = getMockContentResolver().query(
-        Categories.buildCategoryUri(NONEXISTENT_ID),
-        null, // projection
-        null, // selection
-        null, // selectionArgs
-        null) // sortOrder
-    ) {
+    try (Cursor cursor = query(Categories.buildCategoryUri(NONEXISTENT_ID))) {
 
       // Then
       assertNotNull(cursor);
@@ -111,13 +99,7 @@ public class DmlProviderAndroidTest extends ProviderTestCase2<DmlProvider> {
     insertCategory("c2");
 
     // When
-    try (Cursor cursor = getMockContentResolver().query(
-        Categories.CONTENT_URI,
-        null, // projection
-        null, // selection
-        null, // selectionArgs
-        null) // sortOrder
-    ) {
+    try (Cursor cursor = query(Categories.CONTENT_URI)) {
 
       // Then
       assertNotNull(cursor);
@@ -136,13 +118,7 @@ public class DmlProviderAndroidTest extends ProviderTestCase2<DmlProvider> {
     insertCategory("c2");
 
     // When
-    try (Cursor cursor = getMockContentResolver().query(
-        Categories.buildCategoryUri(expectedId),
-        null, // projection
-        null, // selection
-        null, // selectionArgs
-        null) // sortOrder
-    ) {
+    try (Cursor cursor = query(Categories.buildCategoryUri(expectedId))) {
 
       // Then
       assertNotNull(cursor);
@@ -169,13 +145,7 @@ public class DmlProviderAndroidTest extends ProviderTestCase2<DmlProvider> {
     addToCategory("c1", "v2");
 
     // When
-    try (Cursor cursor = getMockContentResolver().query(
-        Categories.buildVideosUri("c1"),
-        null, // projection
-        null, // selection
-        null, // selectionArgs
-        null) // sortOrder
-    ) {
+    try (Cursor cursor = query(Categories.buildVideosUri("c1"))) {
 
       // Then
       assertNotNull(cursor);
@@ -188,13 +158,7 @@ public class DmlProviderAndroidTest extends ProviderTestCase2<DmlProvider> {
   public void query_whenRequestingNonexistentVideo_thenEmptyCursorIsReturned() {
 
     // When
-    try (Cursor cursor = getMockContentResolver().query(
-        Videos.buildVideoUri(NONEXISTENT_ID),
-        null, // projection
-        null, // selection
-        null, // selectionArgs
-        null) // sortOrder
-    ) {
+    try (Cursor cursor = query(Videos.buildVideoUri(NONEXISTENT_ID))) {
 
       // Then
       assertNotNull(cursor);
@@ -211,13 +175,7 @@ public class DmlProviderAndroidTest extends ProviderTestCase2<DmlProvider> {
     insertVideo("v2");
 
     // When
-    try (Cursor cursor = getMockContentResolver().query(
-        Videos.CONTENT_URI,
-        null, // projection
-        null, // selection
-        null, // selectionArgs
-        null) // sortOrder
-    ) {
+    try (Cursor cursor = query(Videos.CONTENT_URI)) {
 
       // Then
       assertNotNull(cursor);
@@ -236,13 +194,7 @@ public class DmlProviderAndroidTest extends ProviderTestCase2<DmlProvider> {
     insertVideo("v2");
 
     // When
-    try (Cursor cursor = getMockContentResolver().query(
-        Videos.buildVideoUri(expectedId),
-        null, // projection
-        null, // selection
-        null, // selectionArgs
-        null) // sortOrder
-    ) {
+    try (Cursor cursor = query(Videos.buildVideoUri(expectedId))) {
 
       // Then
       assertNotNull(cursor);
@@ -395,21 +347,9 @@ public class DmlProviderAndroidTest extends ProviderTestCase2<DmlProvider> {
         null, // where
         null); // selectionArgs
 
-    try (Cursor categoriesCursor = getMockContentResolver().query(
-        Videos.CONTENT_URI,
-        null, // projection
-        null, // selection
-        null, // selectionArgs
-        null) // sortOrder
-    ) {
+    try (Cursor categoriesCursor = query(Videos.CONTENT_URI)) {
 
-      try (Cursor videosCursor = getMockContentResolver().query(
-          Categories.CONTENT_URI,
-          null, // projection
-          null, // selection
-          null, // selectionArgs
-          null) // sortOrder
-      ) {
+      try (Cursor videosCursor = query(Categories.CONTENT_URI)) {
 
         // Then
         assertEquals(2, deleted);
@@ -600,6 +540,16 @@ public class DmlProviderAndroidTest extends ProviderTestCase2<DmlProvider> {
     ContentValues values = new ContentValues();
     values.put(CategoriesVideosColumns.VIDEO_ID, videoId);
     return getMockContentResolver().insert(Categories.buildVideosUri(categoryId), values);
+  }
+
+  private Cursor query(Uri uri) {
+    return getMockContentResolver().query(
+        uri,
+        null, // projection
+        null, // selection
+        null, // selectionArgs
+        null // sortOrder
+    );
   }
 
   private static String getString(Cursor cursor, String columnName) {
