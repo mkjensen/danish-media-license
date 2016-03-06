@@ -23,7 +23,7 @@ import static org.powermock.api.mockito.PowerMockito.mock;
 
 import android.database.sqlite.SQLiteDatabase;
 
-import com.github.mkjensen.dml.PowerMockParameterizedRobolectricTest;
+import com.github.mkjensen.dml.ParameterizedPowerMockRobolectricTest;
 
 import org.junit.Test;
 import org.mockito.InOrder;
@@ -35,7 +35,7 @@ import java.util.Collection;
 /**
  * Unit tests for {@link DmlDatabaseHelper}.
  */
-public class DmlDatabaseHelperTest extends PowerMockParameterizedRobolectricTest {
+public class DmlDatabaseHelperTest extends ParameterizedPowerMockRobolectricTest {
 
   private final int oldVersion;
 

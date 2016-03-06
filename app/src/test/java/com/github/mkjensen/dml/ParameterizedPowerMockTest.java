@@ -17,16 +17,11 @@
 package com.github.mkjensen.dml;
 
 import org.junit.runner.RunWith;
-import org.powermock.core.classloader.annotations.PowerMockIgnore;
-import org.powermock.modules.junit4.PowerMockRunner;
-import org.powermock.modules.junit4.PowerMockRunnerDelegate;
-import org.robolectric.ParameterizedRobolectricTestRunner;
+import org.junit.runners.Parameterized;
 
 /**
- * Base class for running Powermock-enabled parameterized Robolectric unit tests.
+ * Base class for running parameterized Powermock-enabled unit tests.
  */
-@RunWith(PowerMockRunner.class)
-@PowerMockRunnerDelegate(ParameterizedRobolectricTestRunner.class)
-@PowerMockIgnore( {"android.*", "org.mockito.*", "org.robolectric.*"})
-public abstract class PowerMockParameterizedRobolectricTest extends RobolectricTest {
+@RunWith(Parameterized.class)
+public abstract class ParameterizedPowerMockTest extends PowerMockTest {
 }
