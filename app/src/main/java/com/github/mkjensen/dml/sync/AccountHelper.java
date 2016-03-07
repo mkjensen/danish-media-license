@@ -62,14 +62,6 @@ public final class AccountHelper {
    */
   public Account getOrCreateAccount(Context context) {
     AccountManager accountManager = getAccountManager(context);
-    return getOrCreateAccount(accountManager);
-  }
-
-  private static AccountManager getAccountManager(Context context) {
-    return (AccountManager) context.getSystemService(Context.ACCOUNT_SERVICE);
-  }
-
-  private static Account getOrCreateAccount(AccountManager accountManager) {
     Account[] accounts = getAccounts(accountManager);
     switch (accounts.length) {
       case 0:
@@ -79,6 +71,10 @@ public final class AccountHelper {
       default:
         throw new DmlSyncException("More than one account was found: " + Arrays.toString(accounts));
     }
+  }
+
+  private static AccountManager getAccountManager(Context context) {
+    return (AccountManager) context.getSystemService(Context.ACCOUNT_SERVICE);
   }
 
   private static Account[] getAccounts(AccountManager accountManager) {
