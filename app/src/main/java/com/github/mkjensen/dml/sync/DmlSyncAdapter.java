@@ -33,6 +33,12 @@ final class DmlSyncAdapter extends AbstractThreadedSyncAdapter {
   private static final String TAG = "DmlSyncAdapter";
 
   /**
+   * Whether or not sync requests that have {@link ContentResolver#SYNC_EXTRAS_INITIALIZE} set will
+   * be internally handled by {@link AbstractThreadedSyncAdapter}.
+   */
+  private static final boolean AUTO_INITIALIZE = true;
+
+  /**
    * Specifies whether or not syncs for different accounts are allowed to run at the same time, each
    * in their own thread. This must be consistent with the setting in the sync adapter's
    * configuration file.
@@ -42,15 +48,10 @@ final class DmlSyncAdapter extends AbstractThreadedSyncAdapter {
   /**
    * Creates a {@link DmlSyncAdapter}.
    *
-   * @param context        the {@link Context} that the sync adapter is running within
-   * @param autoInitialize if {@code true} then sync requests that have {@link
-   *                       ContentResolver#SYNC_EXTRAS_INITIALIZE} set will be internally handled by
-   *                       {@link AbstractThreadedSyncAdapter} by calling {@link
-   *                       ContentResolver#setIsSyncable(android.accounts.Account, String, int)}
-   *                       with {@code 1} if it is currently set to {@code <0}
+   * @param context the {@link Context} that the sync adapter is running within
    */
-  DmlSyncAdapter(Context context, boolean autoInitialize) {
-    super(context, autoInitialize, ALLOW_PARALLEL_SYNCS);
+  DmlSyncAdapter(Context context) {
+    super(context, AUTO_INITIALIZE, ALLOW_PARALLEL_SYNCS);
   }
 
   @Override

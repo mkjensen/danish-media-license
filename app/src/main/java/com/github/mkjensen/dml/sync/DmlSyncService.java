@@ -40,7 +40,7 @@ public final class DmlSyncService extends Service {
   public void onCreate() {
     synchronized (LOCK) {
       if (syncAdapter == null) {
-        syncAdapter = new DmlSyncAdapter(getApplicationContext(), true);
+        syncAdapter = new DmlSyncAdapter(getApplicationContext());
       }
     }
   }
