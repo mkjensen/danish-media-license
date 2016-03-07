@@ -16,10 +16,12 @@
 
 package com.github.mkjensen.dml;
 
+import android.content.Context;
 import android.os.Build;
 
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricGradleTestRunner;
+import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
 
 /**
@@ -42,4 +44,13 @@ public abstract class RobolectricTest {
    * {@link android.os.Build.VERSION_CODES#LOLLIPOP}.
    */
   static final int ROBOLECTRIC_ANDROID_SDK_LEVEL = Build.VERSION_CODES.LOLLIPOP;
+
+  /**
+   * Returns a {@link Context} instance from {@link RuntimeEnvironment}.
+   *
+   * @return a {@link Context} instance from {@link RuntimeEnvironment}
+   */
+  protected Context getContext() {
+    return RuntimeEnvironment.application;
+  }
 }
