@@ -19,7 +19,6 @@ package com.github.mkjensen.dml.sync;
 import android.accounts.Account;
 import android.content.AbstractThreadedSyncAdapter;
 import android.content.ContentProviderClient;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.SyncResult;
 import android.os.Bundle;
@@ -32,10 +31,13 @@ final class DmlSyncAdapter extends AbstractThreadedSyncAdapter {
 
   private static final String TAG = "DmlSyncAdapter";
 
+  // @formatter:off
   /**
-   * Whether or not sync requests that have {@link ContentResolver#SYNC_EXTRAS_INITIALIZE} set will
-   * be internally handled by {@link AbstractThreadedSyncAdapter}.
+   * Whether or not sync requests that have
+   * {@link android.content.ContentResolver#SYNC_EXTRAS_INITIALIZE} set will be internally handled
+   * by {@link AbstractThreadedSyncAdapter}.
    */
+  // @formatter:on
   private static final boolean AUTO_INITIALIZE = true;
 
   /**
