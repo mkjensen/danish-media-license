@@ -16,7 +16,7 @@
 
 package com.github.mkjensen.dml.ondemand;
 
-import android.content.ContentValues;
+import android.accounts.Account;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -42,6 +42,8 @@ import android.widget.TextView;
 
 import com.github.mkjensen.dml.R;
 import com.github.mkjensen.dml.provider.DmlContract;
+import com.github.mkjensen.dml.sync.AccountHelper;
+import com.github.mkjensen.dml.sync.SyncHelper;
 
 /**
  * Browse screen for on-demand videos.
@@ -52,6 +54,10 @@ public class BrowseFragment extends BrowseSupportFragment
   private static final String TAG = "BrowseFragment";
 
   private static final int CATEGORIES_LOADER_ID = -1;
+
+  private AccountHelper accountHelper;
+
+  private SyncHelper syncHelper;
 
   private ArrayObjectAdapter categories;
 
@@ -64,6 +70,7 @@ public class BrowseFragment extends BrowseSupportFragment
     Log.d(TAG, "onCreate");
     super.onCreate(savedInstanceState);
     initAdapter();
+    createSyncHelpers();
     initLoader();
     initUi();
     initListeners();
@@ -72,6 +79,11 @@ public class BrowseFragment extends BrowseSupportFragment
   private void initAdapter() {
     categories = new ArrayObjectAdapter(new ListRowPresenter());
     setAdapter(categories);
+  }
+
+  private void createSyncHelpers() {
+    accountHelper = new AccountHelper();
+    syncHelper = new SyncHelper();
   }
 
   private void initLoader() {
@@ -235,10 +247,11 @@ public class BrowseFragment extends BrowseSupportFragment
   private void createDebugCategory() {
     DebugItemPresenter presenter = new DebugItemPresenter();
     ArrayObjectAdapter adapter = new ArrayObjectAdapter(presenter);
-    adapter.add(new DebugItem("Add test data", new DebugItem.OnItemClickedListener() {
+    adapter.add(new DebugItem("Sync", new DebugItem.OnItemClickedListener() {
       @Override
       public void onItemClicked() {
-        addTestData();
+        Account account = accountHelper.getOrCreateAccount(getActivity());
+        syncHelper.requestSync(account);
       }
     }));
     adapter.add(new DebugItem("Remove all", new DebugItem.OnItemClickedListener() {
@@ -295,107 +308,8 @@ public class BrowseFragment extends BrowseSupportFragment
     }
   }
 
-  private void addTestData() {
-    Log.d(TAG, "addTestData");
-
-    ContentValues values = new ContentValues();
-    values.put(DmlContract.Categories.ID, "most-viewed");
-    values.put(DmlContract.Categories.TITLE, "Most Viewed");
-    values.put(DmlContract.Categories.URL, "TODO");
-    getActivity().getContentResolver().insert(DmlContract.Categories.CONTENT_URI, values);
-
-    values = new ContentValues();
-    values.put(DmlContract.Categories.ID, "selected");
-    values.put(DmlContract.Categories.TITLE, "Selected");
-    values.put(DmlContract.Categories.URL, "TODO");
-    getActivity().getContentResolver().insert(DmlContract.Categories.CONTENT_URI, values);
-
-    values = new ContentValues();
-    values.put(DmlContract.Videos.ID, "bedrag-10-10");
-    values.put(DmlContract.Videos.TITLE, "Bedrag (10:10)");
-    values.put(DmlContract.Videos.IMAGE_URL, "http://www.dr.dk/muTest/api/1.2/bar/"
-        + "56cec0826187a41eacfa6dd8");
-    values.put(DmlContract.Videos.DETAILS_URL, "TODO");
-    values.put(DmlContract.Videos.DESCRIPTION, "TODO");
-    values.put(DmlContract.Videos.LIST_URL, "http://www.dr.dk/muTest/api/1.2/bar/"
-        + "56ce1df96187a41eacfa6925");
-    values.put(DmlContract.Videos.URL, "http://drod08o-vh.akamaihd.net/i/all/clear/streaming/fb/"
-        + "56cdb80ca11f9f11f88769fb/Bedrag--10-10-_021fde6ffdd049d7b45e3de5625e9b0c_,1125,562,2324,"
-        + ".mp4.csmil/master.m3u8?cc1=name=Dansk~default=yes~forced=no~lang=da~uri=http://www.dr.dk"
-        + "/muTest/api/1.2/subtitles/playlist/urn:dr:mu:manifest:56cdb80ca11f9f11f88769fb"
-        + "?segmentsizeinms=60000");
-    getActivity().getContentResolver().insert(DmlContract.Videos.CONTENT_URI, values);
-
-    values = new ContentValues();
-    values.put(DmlContract.Videos.ID, "x-factor-2016-03-04");
-    values.put(DmlContract.Videos.TITLE, "X Factor");
-    values.put(DmlContract.Videos.IMAGE_URL, "http://www.dr.dk/muTest/api/1.2/bar/"
-        + "56d7f8a26187a40e104a3f7e");
-    values.put(DmlContract.Videos.DETAILS_URL, "TODO");
-    values.put(DmlContract.Videos.DESCRIPTION, "TODO");
-    values.put(DmlContract.Videos.LIST_URL, "http://www.dr.dk/muTest/api/1.2/bar/"
-        + "56da5734a11fa017189202c3");
-    values.put(DmlContract.Videos.URL, "http://drod04b-vh.akamaihd.net/i/all/clear/streaming/24/"
-        + "56da1dfb6187a416346a2a24/X-Factor_88457b85200f4b88ab7d271f639dd1ae_,1127,562,2317,.mp4"
-        + ".csmil/master.m3u8?cc1=name=Dansk~default=yes~forced=no~lang=da~uri=http://www.dr.dk/"
-        + "muTest/api/1.2/subtitles/playlist/urn:dr:mu:manifest:56da1dfb6187a416346a2a24"
-        + "?segmentsizeinms=60000");
-    getActivity().getContentResolver().insert(DmlContract.Videos.CONTENT_URI, values);
-
-    values = new ContentValues();
-    values.put(DmlContract.Videos.ID, "spoerg-mig-om-alt-5-8-3");
-    values.put(DmlContract.Videos.TITLE, "Spørg mig om alt (5:8)");
-    values.put(DmlContract.Videos.IMAGE_URL, "http://www.dr.dk/muTest/api/1.2/bar/"
-        + "56d6c469a11f9f0d085c37e9");
-    values.put(DmlContract.Videos.DETAILS_URL, "TODO");
-    values.put(DmlContract.Videos.DESCRIPTION, "TODO");
-    values.put(DmlContract.Videos.LIST_URL, "http://www.dr.dk/muTest/api/1.2/bar/"
-        + "56d9e7326187a416346a294d");
-    values.put(DmlContract.Videos.URL, "http://drod06h-vh.akamaihd.net/i/all/clear/download/e8/"
-        + "56d9d3afa11fa0171891ffe8/Spoerg-mig-om-alt--5-8-_543f18cc538d4deb933937582334a226_,"
-        + "1126,562,2325,.mp4.csmil/master.m3u8?cc1=name=Dansk~default=yes~forced=no~lang=da~uri="
-        + "http://www.dr.dk/muTest/api/1.2/subtitles/playlist/"
-        + "urn:dr:mu:manifest:56d9d3afa11fa0171891ffe8?segmentsizeinms=60000");
-    getActivity().getContentResolver().insert(DmlContract.Videos.CONTENT_URI, values);
-
-    values = new ContentValues();
-    values.put(DmlContract.Videos.ID, "dokumania-naturens-uorden");
-    values.put(DmlContract.Videos.TITLE, "Dokumania: Naturens uorden");
-    values.put(DmlContract.Videos.IMAGE_URL, "http://www.dr.dk/muTest/api/1.2/bar/"
-        + "56b874266187a4086441a491");
-    values.put(DmlContract.Videos.DETAILS_URL, "TODO");
-    values.put(DmlContract.Videos.DESCRIPTION, "TODO");
-    values.put(DmlContract.Videos.LIST_URL, "http://www.dr.dk/muTest/api/1.2/bar/"
-        + "56b5e10ea11f9f12b82a3264");
-    values.put(DmlContract.Videos.URL, "http://drod03m-vh.akamaihd.net/i/dk/clear/streaming/53/"
-        + "56b592836187a409c0fc0b53/Dokumania--Naturens-uorden_c3ff1414744c4456bec9568915b283fd_,"
-        + "1127,562,2276,.mp4.csmil/master.m3u8");
-    getActivity().getContentResolver().insert(DmlContract.Videos.CONTENT_URI, values);
-
-    values = new ContentValues();
-    values.put(DmlContract.CategoriesVideos.VIDEO_ID, "bedrag-10-10");
-    getActivity().getContentResolver().insert(
-        DmlContract.CategoriesVideos.buildUri("most-viewed"), values);
-
-    values = new ContentValues();
-    values.put(DmlContract.CategoriesVideos.VIDEO_ID, "x-factor-2016-03-04");
-    getActivity().getContentResolver().insert(
-        DmlContract.CategoriesVideos.buildUri("most-viewed"), values);
-
-    values = new ContentValues();
-    values.put(DmlContract.CategoriesVideos.VIDEO_ID, "spoerg-mig-om-alt-5-8-3");
-    getActivity().getContentResolver().insert(
-        DmlContract.CategoriesVideos.buildUri("selected"), values);
-
-    values = new ContentValues();
-    values.put(DmlContract.CategoriesVideos.VIDEO_ID, "dokumania-naturens-uorden");
-    getActivity().getContentResolver().insert(
-        DmlContract.CategoriesVideos.buildUri("selected"), values);
-  }
-
   private void removeData() {
     Log.d(TAG, "removeData");
-    getActivity().getContentResolver().delete(DmlContract.Videos.CONTENT_URI, null, null);
     getActivity().getContentResolver().delete(DmlContract.Categories.CONTENT_URI, null, null);
   }
 }
