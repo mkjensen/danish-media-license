@@ -28,7 +28,7 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.github.mkjensen.dml.provider.DmlContract.Categories;
-import com.github.mkjensen.dml.provider.DmlContract.CategoriesVideosColumns;
+import com.github.mkjensen.dml.provider.DmlContract.CategoriesVideos;
 import com.github.mkjensen.dml.provider.DmlContract.Videos;
 import com.github.mkjensen.dml.provider.DmlDatabaseHelper.Tables;
 
@@ -71,7 +71,7 @@ public final class DmlProvider extends ContentProvider {
         queryBuilder.setTables(Tables.CATEGORIES_VIDEOS_JOIN_VIDEOS);
         queryBuilder.appendWhere(String.format("%s.%s='%s'",
             Tables.CATEGORIES_VIDEOS,
-            CategoriesVideosColumns.CATEGORY_ID,
+            CategoriesVideos.CATEGORY_ID,
             Categories.getCategoryId(uri)));
         break;
       case VIDEOS:
@@ -114,7 +114,7 @@ public final class DmlProvider extends ContentProvider {
       case VIDEOS:
         break;
       case CATEGORIES_ID_VIDEOS:
-        values.put(CategoriesVideosColumns.CATEGORY_ID, Categories.getCategoryId(uri));
+        values.put(CategoriesVideos.CATEGORY_ID, Categories.getCategoryId(uri));
         break;
       default:
         throwUnsupportedOperationException(dmlUri);
@@ -128,8 +128,9 @@ public final class DmlProvider extends ContentProvider {
     notifyChange(uri);
     switch (dmlUri) {
       case CATEGORIES:
-      case CATEGORIES_ID_VIDEOS:
         return Categories.buildCategoryUri(values.getAsString(Categories.ID));
+      case CATEGORIES_ID_VIDEOS:
+        return CategoriesVideos.buildUri(values.getAsString(CategoriesVideos.CATEGORY_ID));
       case VIDEOS:
         return Videos.buildVideoUri(values.getAsString(Videos.ID));
       default:
@@ -152,7 +153,7 @@ public final class DmlProvider extends ContentProvider {
         whereArgs = new String[] {Categories.getCategoryId(uri)};
         break;
       case CATEGORIES_ID_VIDEOS:
-        whereClause = CategoriesVideosColumns.CATEGORY_ID + "=?";
+        whereClause = CategoriesVideos.CATEGORY_ID + "=?";
         whereArgs = new String[] {Categories.getCategoryId(uri)};
         break;
       case VIDEOS:

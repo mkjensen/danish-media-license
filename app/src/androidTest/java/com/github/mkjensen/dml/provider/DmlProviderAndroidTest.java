@@ -220,6 +220,44 @@ public class DmlProviderAndroidTest extends ProviderTestCase2<DmlProvider> {
   }
 
   @Test
+  public void insert_whenCategoriesUri_thenReturnedUriContainsId() {
+
+    // When
+    String id = "c0";
+    Uri uri = insertCategory(id);
+
+    // Then
+    assertEquals(Categories.buildCategoryUri(id), uri);
+  }
+
+  @Test
+  public void insert_whenCategoriesVideosUri_thenReturnedUriContainsId() {
+
+    // Given
+    String categoryId = "c0";
+    insertCategory(categoryId);
+    String videoId = "v0";
+    insertVideo(videoId);
+
+    // When
+    Uri uri = addToCategory(categoryId, videoId);
+
+    // Then
+    assertEquals(CategoriesVideos.buildUri(categoryId), uri);
+  }
+
+  @Test
+  public void insert_whenVideosUri_thenReturnedUriContainsId() {
+
+    // When
+    String id = "v0";
+    Uri uri = insertVideo(id);
+
+    // Then
+    assertEquals(Videos.buildVideoUri(id), uri);
+  }
+
+  @Test
   public void getType_whenInvalidUri_thenNullIsReturned() {
 
     // When
