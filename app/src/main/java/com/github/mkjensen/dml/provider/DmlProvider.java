@@ -120,13 +120,12 @@ public final class DmlProvider extends ContentProvider {
         throwUnsupportedOperationException(dmlUri);
         return null;
     }
-    try (SQLiteDatabase database = databaseHelper.getWritableDatabase()) {
-      database.insertOrThrow(
-          dmlUri.getTable(),
-          null, // nullColumnHack
-          values);
-      notifyChange(uri);
-    }
+    SQLiteDatabase database = databaseHelper.getWritableDatabase();
+    database.insertOrThrow(
+        dmlUri.getTable(),
+        null, // nullColumnHack
+        values);
+    notifyChange(uri);
     switch (dmlUri) {
       case CATEGORIES:
       case CATEGORIES_ID_VIDEOS:
@@ -166,15 +165,14 @@ public final class DmlProvider extends ContentProvider {
         throwUnsupportedOperationException(dmlUri);
         return 0;
     }
-    try (SQLiteDatabase database = databaseHelper.getWritableDatabase()) {
-      int deleted = database.delete(
-          dmlUri.getTable(),
-          whereClause,
-          whereArgs
-      );
-      notifyChange(uri);
-      return deleted;
-    }
+    SQLiteDatabase database = databaseHelper.getWritableDatabase();
+    int deleted = database.delete(
+        dmlUri.getTable(),
+        whereClause,
+        whereArgs
+    );
+    notifyChange(uri);
+    return deleted;
   }
 
   @Override
