@@ -153,6 +153,8 @@ public class BrowseFragment extends BrowseSupportFragment
       if (loaderId == CATEGORIES_LOADER_ID) {
         categories.clear();
         createDebugCategory();
+      } else {
+        resetVideoLoader(loaderId);
       }
       return;
     }
