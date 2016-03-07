@@ -36,6 +36,9 @@ public class DmlAuthenticatorTest {
 
   private DmlAuthenticator authenticator;
 
+  /**
+   * Creates {@link #authenticator}.
+   */
   @Before
   public void before() {
 
