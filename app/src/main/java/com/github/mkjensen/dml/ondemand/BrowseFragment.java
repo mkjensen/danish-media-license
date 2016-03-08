@@ -93,7 +93,7 @@ public class BrowseFragment extends BrowseSupportFragment
   }
 
   private void initUi() {
-    setTitle(getString(R.string.app_name));
+    enableRowScaling(false);
   }
 
   private void initListeners() {
