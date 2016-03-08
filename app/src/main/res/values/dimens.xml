@@ -16,7 +16,7 @@
 
 <resources>
 
-    <dimen name="card_width">156dp</dimen>
-    <dimen name="card_height">88dp</dimen>
+    <dimen name="ondemand_browse_video_width">240dp</dimen>
+    <dimen name="ondemand_browse_video_height">135dp</dimen>
 
 </resources>

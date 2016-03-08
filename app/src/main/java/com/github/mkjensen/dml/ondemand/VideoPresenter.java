@@ -41,8 +41,8 @@ class VideoPresenter extends Presenter {
 
   private static ImageCardView createView(ViewGroup parent) {
     Resources resources = parent.getResources();
-    int width = resources.getDimensionPixelSize(R.dimen.card_width);
-    int height = resources.getDimensionPixelSize(R.dimen.card_height);
+    int width = resources.getDimensionPixelSize(R.dimen.ondemand_browse_video_width);
+    int height = resources.getDimensionPixelSize(R.dimen.ondemand_browse_video_height);
     ImageCardView view = new ImageCardView(parent.getContext());
     view.setFocusable(true);
     view.setFocusableInTouchMode(true);
