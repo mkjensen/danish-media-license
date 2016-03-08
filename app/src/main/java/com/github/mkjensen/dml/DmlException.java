@@ -17,7 +17,7 @@
 package com.github.mkjensen.dml;
 
 /**
- * Thrown when an issue occurs within the Danish Media Player application.
+ * Thrown when an issue occurs within the application.
  */
 public class DmlException extends RuntimeException {
 

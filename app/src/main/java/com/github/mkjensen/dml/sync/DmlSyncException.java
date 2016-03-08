@@ -16,10 +16,12 @@
 
 package com.github.mkjensen.dml.sync;
 
+import com.github.mkjensen.dml.DmlException;
+
 /**
- * Thrown when a critical issue with sync occurs.
+ * Thrown when a sync issue occurs.
  */
-public class DmlSyncException extends RuntimeException {
+public class DmlSyncException extends DmlException {
 
   private static final long serialVersionUID = -6766437545060713221L;
 
