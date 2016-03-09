@@ -16,13 +16,19 @@
 
 package com.github.mkjensen.dml.provider;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+
+import android.content.ContentProvider;
+import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
-import android.support.test.InstrumentationRegistry;
-import android.support.test.runner.AndroidJUnit4;
-import android.test.ProviderTestCase2;
 
+import com.github.mkjensen.dml.RobolectricTest;
 import com.github.mkjensen.dml.provider.DmlContract.Categories;
 import com.github.mkjensen.dml.provider.DmlContract.CategoriesVideos;
 import com.github.mkjensen.dml.provider.DmlContract.Videos;
@@ -31,13 +37,13 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
-import org.junit.runner.RunWith;
+import org.robolectric.RuntimeEnvironment;
+import org.robolectric.shadows.ShadowContentResolver;
 
 /**
- * Integration tests for {@link DmlProvider}.
+ * Tests for {@link DmlProvider}.
  */
-@RunWith(AndroidJUnit4.class)
-public class DmlProviderAndroidTest extends ProviderTestCase2<DmlProvider> {
+public class DmlProviderTest extends RobolectricTest {
 
   @Rule
   public final ExpectedException thrown = ExpectedException.none();
@@ -48,25 +54,18 @@ public class DmlProviderAndroidTest extends ProviderTestCase2<DmlProvider> {
 
   private static final String NONEXISTENT_ID = "nonexistent";
 
-  public DmlProviderAndroidTest() {
-    super(DmlProvider.class, DmlContract.AUTHORITY);
-  }
+  private ContentResolver contentResolver;
 
+  /**
+   * Registers {@link DmlContract#AUTHORITY} to be handled by {@link DmlProvider}. Also asserts that
+   * the {@link ContentProvider#onCreate()} method returns {@code true}.
+   */
   @Before
-  @Override
-  public void setUp() throws Exception {
-    setContext(InstrumentationRegistry.getTargetContext());
-    super.setUp();
-  }
-
-  @Test
-  public void onCreate_whenCalled_thenTrueIsReturned() {
-
-    // When
-    boolean created = getProvider().onCreate();
-
-    // Then
-    assertEquals(true, created);
+  public void before() {
+    ContentProvider contentProvider = new DmlProvider();
+    assertEquals(true, contentProvider.onCreate());
+    contentResolver = RuntimeEnvironment.application.getContentResolver();
+    ShadowContentResolver.registerProvider(DmlContract.AUTHORITY, contentProvider);
   }
 
   @Test
@@ -216,7 +215,7 @@ public class DmlProviderAndroidTest extends ProviderTestCase2<DmlProvider> {
     // When/then
     thrown.expect(IllegalArgumentException.class);
     thrown.expectMessage("Unknown URI: " + INVALID_URL);
-    getMockContentResolver().insert(INVALID_URL, null);
+    contentResolver.insert(INVALID_URL, null);
   }
 
   @Test
@@ -261,7 +260,7 @@ public class DmlProviderAndroidTest extends ProviderTestCase2<DmlProvider> {
   public void getType_whenInvalidUri_thenNullIsReturned() {
 
     // When
-    String type = getMockContentResolver().getType(INVALID_URL);
+    String type = contentResolver.getType(INVALID_URL);
 
     // Then
     assertNull(type);
@@ -271,7 +270,7 @@ public class DmlProviderAndroidTest extends ProviderTestCase2<DmlProvider> {
   public void getType_whenCategoriesUri_thenCategoriesContentTypeIsReturned() {
 
     // When
-    String type = getMockContentResolver().getType(Categories.CONTENT_URI);
+    String type = contentResolver.getType(Categories.CONTENT_URI);
 
     // Then
     assertEquals(DmlUri.CATEGORIES.getContentType(), type);
@@ -281,7 +280,7 @@ public class DmlProviderAndroidTest extends ProviderTestCase2<DmlProvider> {
   public void getType_whenCategoriesIdUri_thenCategoriesIdContentTypeIsReturned() {
 
     // When
-    String type = getMockContentResolver().getType(Categories.buildCategoryUri(NONEXISTENT_ID));
+    String type = contentResolver.getType(Categories.buildCategoryUri(NONEXISTENT_ID));
 
     // Then
     assertEquals(DmlUri.CATEGORIES_ID.getContentType(), type);
@@ -291,7 +290,7 @@ public class DmlProviderAndroidTest extends ProviderTestCase2<DmlProvider> {
   public void getType_whenCategoriesIdVideosUri_thenCategoriesIdVideosContentTypeIsReturned() {
 
     // When
-    String type = getMockContentResolver().getType(CategoriesVideos.buildUri(NONEXISTENT_ID));
+    String type = contentResolver.getType(CategoriesVideos.buildUri(NONEXISTENT_ID));
 
     // Then
     assertEquals(DmlUri.CATEGORIES_ID_VIDEOS.getContentType(), type);
@@ -301,7 +300,7 @@ public class DmlProviderAndroidTest extends ProviderTestCase2<DmlProvider> {
   public void getType_whenVideosUri_thenVideosContentTypeIsReturned() {
 
     // When
-    String type = getMockContentResolver().getType(Videos.CONTENT_URI);
+    String type = contentResolver.getType(Videos.CONTENT_URI);
 
     // Then
     assertEquals(DmlUri.VIDEOS.getContentType(), type);
@@ -311,7 +310,7 @@ public class DmlProviderAndroidTest extends ProviderTestCase2<DmlProvider> {
   public void getType_whenVideosIdUri_thenVideosIdContentTypeIsReturned() {
 
     // When
-    String type = getMockContentResolver().getType(Videos.buildVideoUri(NONEXISTENT_ID));
+    String type = contentResolver.getType(Videos.buildVideoUri(NONEXISTENT_ID));
 
     // Then
     assertEquals(DmlUri.VIDEOS_ID.getContentType(), type);
@@ -323,7 +322,7 @@ public class DmlProviderAndroidTest extends ProviderTestCase2<DmlProvider> {
     // When/then
     thrown.expect(IllegalArgumentException.class);
     thrown.expectMessage("Unknown URI: " + INVALID_URL);
-    getMockContentResolver().delete(
+    contentResolver.delete(
         INVALID_URL,
         null, // where
         null); // selectionArgs
@@ -338,7 +337,7 @@ public class DmlProviderAndroidTest extends ProviderTestCase2<DmlProvider> {
     insertCategory("c2");
 
     // When
-    int deleted = getMockContentResolver().delete(
+    int deleted = contentResolver.delete(
         Categories.CONTENT_URI,
         null, // where
         null); // selectionArgs
@@ -356,7 +355,7 @@ public class DmlProviderAndroidTest extends ProviderTestCase2<DmlProvider> {
     insertCategory("c2");
 
     // When
-    int deleted = getMockContentResolver().delete(
+    int deleted = contentResolver.delete(
         Categories.buildCategoryUri("c1"),
         null, // where
         null); // selectionArgs
@@ -380,7 +379,7 @@ public class DmlProviderAndroidTest extends ProviderTestCase2<DmlProvider> {
     addToCategory("c1", "v2");
 
     // When
-    int deleted = getMockContentResolver().delete(
+    int deleted = contentResolver.delete(
         CategoriesVideos.buildUri("c1"),
         null, // where
         null); // selectionArgs
@@ -412,7 +411,7 @@ public class DmlProviderAndroidTest extends ProviderTestCase2<DmlProvider> {
     insertVideo("v2");
 
     // When
-    int deleted = getMockContentResolver().delete(
+    int deleted = contentResolver.delete(
         Videos.CONTENT_URI,
         null, // where
         null); // selectionArgs
@@ -430,7 +429,7 @@ public class DmlProviderAndroidTest extends ProviderTestCase2<DmlProvider> {
     insertVideo("v2");
 
     // When
-    int deleted = getMockContentResolver().delete(
+    int deleted = contentResolver.delete(
         Videos.buildVideoUri("v1"),
         null, // where
         null); // selectionArgs
@@ -445,7 +444,7 @@ public class DmlProviderAndroidTest extends ProviderTestCase2<DmlProvider> {
     // When/then
     thrown.expect(IllegalArgumentException.class);
     thrown.expectMessage("Unknown URI: " + INVALID_URL);
-    getMockContentResolver().update(
+    contentResolver.update(
         INVALID_URL,
         null, // values
         null, // where
@@ -456,7 +455,7 @@ public class DmlProviderAndroidTest extends ProviderTestCase2<DmlProvider> {
   public void update_whenCategoriesUri_thenZeroIsReturned() {
 
     // When
-    int updated = getMockContentResolver().update(
+    int updated = contentResolver.update(
         Categories.CONTENT_URI,
         null, // values
         null, // where
@@ -470,7 +469,7 @@ public class DmlProviderAndroidTest extends ProviderTestCase2<DmlProvider> {
   public void update_whenCategoriesIdUri_thenZeroIsReturned() {
 
     // When
-    int updated = getMockContentResolver().update(
+    int updated = contentResolver.update(
         Categories.buildCategoryUri(NONEXISTENT_ID),
         null, // values
         null, // where
@@ -484,7 +483,7 @@ public class DmlProviderAndroidTest extends ProviderTestCase2<DmlProvider> {
   public void update_whenCategoriesIdVideosUri_thenZeroIsReturned() {
 
     // When
-    int updated = getMockContentResolver().update(
+    int updated = contentResolver.update(
         CategoriesVideos.buildUri(NONEXISTENT_ID),
         null, // values
         null, // where
@@ -498,7 +497,7 @@ public class DmlProviderAndroidTest extends ProviderTestCase2<DmlProvider> {
   public void update_whenVideosUri_thenZeroIsReturned() {
 
     // When
-    int updated = getMockContentResolver().update(
+    int updated = contentResolver.update(
         Videos.CONTENT_URI,
         null, // values
         null, // where
@@ -512,7 +511,7 @@ public class DmlProviderAndroidTest extends ProviderTestCase2<DmlProvider> {
   public void update_whenVideosIdUri_thenZeroIsReturned() {
 
     // When
-    int updated = getMockContentResolver().update(
+    int updated = contentResolver.update(
         Videos.buildVideoUri(NONEXISTENT_ID),
         null, // values
         null, // where
@@ -527,7 +526,7 @@ public class DmlProviderAndroidTest extends ProviderTestCase2<DmlProvider> {
     values.put(Categories.ID, id);
     values.put(Categories.TITLE, getCategoryTitle(id));
     values.put(Categories.URL, getCategoryUrl(id));
-    return getMockContentResolver().insert(Categories.CONTENT_URI, values);
+    return contentResolver.insert(Categories.CONTENT_URI, values);
   }
 
   private static String getCategoryTitle(String id) {
@@ -547,7 +546,7 @@ public class DmlProviderAndroidTest extends ProviderTestCase2<DmlProvider> {
     values.put(Videos.DESCRIPTION, getVideoDescriptionUrl(id));
     values.put(Videos.LIST_URL, getVideoListUrl(id));
     values.put(Videos.URL, getVideoUrl(id));
-    return getMockContentResolver().insert(Videos.CONTENT_URI, values);
+    return contentResolver.insert(Videos.CONTENT_URI, values);
   }
 
   private static String getVideoTitle(String id) {
@@ -577,11 +576,11 @@ public class DmlProviderAndroidTest extends ProviderTestCase2<DmlProvider> {
   private Uri addToCategory(String categoryId, String videoId) {
     ContentValues values = new ContentValues();
     values.put(CategoriesVideos.VIDEO_ID, videoId);
-    return getMockContentResolver().insert(CategoriesVideos.buildUri(categoryId), values);
+    return contentResolver.insert(CategoriesVideos.buildUri(categoryId), values);
   }
 
   private Cursor query(Uri uri) {
-    return getMockContentResolver().query(
+    return contentResolver.query(
         uri,
         null, // projection
         null, // selection

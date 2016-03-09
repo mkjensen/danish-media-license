@@ -100,8 +100,12 @@ public final class DmlProvider extends ContentProvider {
   @Override
   public String getType(@NonNull Uri uri) {
     Log.v(TAG, "getType " + uri);
-    DmlUri dmlUri = uriMatcher.match(uri);  // Throws IllegalArgumentException for invalid URIs.
-    return dmlUri.getContentType();
+    try {
+      DmlUri dmlUri = uriMatcher.match(uri);  // Throws IllegalArgumentException for invalid URIs.
+      return dmlUri.getContentType();
+    } catch (IllegalArgumentException ex) {
+      return null;
+    }
   }
 
   @Nullable
