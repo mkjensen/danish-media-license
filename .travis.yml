@@ -24,7 +24,7 @@ before_install:
   - ${JPM_BIN}/jpm install com.codacy:codacy-coverage-reporter:assembly
 
 script:
-   - ./gradlew clean assembleDebug checkstyle lintDebug testDebugUnitTest createDebugCoverageReport
+   - ./gradlew clean assembleDebug checkstyle lintDebug testDebugUnitTest createDebugCoverageReport -PdisablePreDex
 
 after_success:
   - ${JPM_BIN}/codacy-coverage-reporter --projectToken ${CODACY_PROJECT_TOKEN} --language Java --coverageReport app/build/reports/coverage/debug/report.xml
