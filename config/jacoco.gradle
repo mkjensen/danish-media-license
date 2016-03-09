@@ -1,0 +1,49 @@
+/*
+ * Copyright 2016 Martin Kamp Jensen
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+//
+// This file includes a hack to use Jacoco 0.7.2.201409121644 for code coverage purposes.
+//
+// Jacoco versions 0.7.3 - 0.7.5 do not capture coverage for Robolectric tests.
+// Jacoco version 0.7.6+ requires Gradle 2.13+ which is not released yet.
+//
+// https://github.com/robolectric/robolectric/issues/2230#issuecomment-181265957
+// https://github.com/jacoco/jacoco/pull/288#issuecomment-192321883
+// https://github.com/gradle/gradle/pull/575#issuecomment-189957212
+
+configurations {
+  jacoco
+}
+
+dependencies {
+  jacoco 'org.jacoco:org.jacoco.agent:0.7.2.201409121644'
+}
+
+project.afterEvaluate {
+  unzipJacocoAgent.onlyIf {false}
+
+  transformClassesWithJacocoForDebug.dependsOn extractJacocoAgent
+
+  testDebugUnitTest.jvmArgs "-javaagent:${project.buildDir}/intermediates/jacoco/jacocoagent.jar=append=true,destfile=${project.buildDir}/outputs/code-coverage/connected/coverage.ec"
+  testDebugUnitTest.mustRunAfter connectedDebugAndroidTest
+}
+
+task extractJacocoAgent(type: Copy) {
+  from {
+    configurations.jacoco.collect {zipTree(it)}
+  }
+  into "${project.buildDir}/intermediates/jacoco"
+}
