@@ -20,6 +20,10 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
+import android.os.Parcel;
+
+import com.github.mkjensen.dml.RobolectricTest;
+
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -27,7 +31,7 @@ import org.junit.rules.ExpectedException;
 /**
  * Unit tests for {@link Video}.
  */
-public class VideoTest {
+public class VideoTest extends RobolectricTest {
 
   private static final String ID = "My id";
   private static final String TITLE = "My title";
@@ -94,7 +98,7 @@ public class VideoTest {
     assertEquals(1, array.length);
   }
 
-  @Test()
+  @Test
   public void creatorNewArray_whenNegativeSize_thenThrowNegativeArraySizeException() {
 
     // When/then
@@ -112,5 +116,30 @@ public class VideoTest {
         .description(DESCRIPTION)
         .listUrl(LIST_URL)
         .url(URL);
+  }
+
+  @Test
+  public void writeToParcel_givenInput_whenInputWrittenAndOutputCreated_thenTheyMustBeEqual() {
+
+    // Given
+    Video input = createVideoBuilder().build();
+
+    // When
+    Parcel parcel = Parcel.obtain();
+    input.writeToParcel(parcel, 0);
+    parcel.setDataPosition(0);
+    Video output = Video.CREATOR.createFromParcel(parcel);
+    parcel.recycle();
+
+    // Then
+    assertNotNull(output);
+    assertEquals(0, input.describeContents());
+    assertEquals(input.getId(), output.getId());
+    assertEquals(input.getTitle(), output.getTitle());
+    assertEquals(input.getImageUrl(), output.getImageUrl());
+    assertEquals(input.getDetailsUrl(), output.getDetailsUrl());
+    assertEquals(input.getDescription(), output.getDescription());
+    assertEquals(input.getListUrl(), output.getListUrl());
+    assertEquals(input.getUrl(), output.getUrl());
   }
 }
