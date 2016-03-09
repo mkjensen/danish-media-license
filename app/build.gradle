@@ -15,16 +15,12 @@
  */
 
 apply plugin: 'com.android.application'
-apply plugin: 'jacoco-everywhere'
 
 apply from: '../config/checkstyle.gradle'
 
 buildscript {
   repositories {
     mavenCentral()
-  }
-  dependencies {
-    classpath 'com.trickyandroid:jacoco-everywhere:0.2.1'
   }
 }
 
