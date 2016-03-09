@@ -15,6 +15,7 @@
  */
 
 apply plugin: 'com.android.application'
+apply plugin: 'jacoco'
 
 apply from: '../config/checkstyle.gradle'
 
@@ -44,6 +45,15 @@ android {
       proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
     }
   }
+}
+
+jacoco {
+  // Jacoco versions 0.7.3 - 0.7.5 do not capture coverage for Robolectric tests.
+  // Jacoco version 0.7.6+ requires Gradle 2.13+ which is not released yet.
+  // https://github.com/robolectric/robolectric/issues/2230#issuecomment-181265957
+  // https://github.com/jacoco/jacoco/pull/288#issuecomment-192321883
+  // https://github.com/gradle/gradle/pull/575#issuecomment-189957212
+  toolVersion '0.7.2.201409121644'
 }
 
 dependencies {
