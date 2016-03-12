@@ -29,7 +29,7 @@ import com.github.mkjensen.dml.provider.DmlContract.Videos;
 import org.junit.Test;
 
 /**
- * Unit tests for {@link DmlContract}.
+ * Tests for {@link DmlContract}.
  */
 public class DmlContractTest extends RobolectricTest {
 

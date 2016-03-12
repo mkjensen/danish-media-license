@@ -23,7 +23,7 @@ import org.powermock.modules.junit4.rule.PowerMockRule;
 import org.robolectric.ParameterizedRobolectricTestRunner;
 
 /**
- * Base class for running parameterized Powermock-enabled Robolectric unit tests.
+ * Base class for running parameterized Powermock-enabled Robolectric tests.
  */
 @RunWith(ParameterizedRobolectricTestRunner.class)
 @PowerMockIgnore( {"android.*", "org.mockito.*", "org.robolectric.*"})

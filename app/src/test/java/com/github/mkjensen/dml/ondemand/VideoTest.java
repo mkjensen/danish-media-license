@@ -29,7 +29,7 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 /**
- * Unit tests for {@link Video}.
+ * Tests for {@link Video}.
  */
 public class VideoTest extends RobolectricTest {
 

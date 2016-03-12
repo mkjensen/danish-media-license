@@ -33,7 +33,7 @@ import java.util.Arrays;
 import java.util.Collection;
 
 /**
- * Unit tests for {@link DmlDatabaseHelper}.
+ * Tests for {@link DmlDatabaseHelper}.
  */
 public class DmlDatabaseHelperTest extends ParameterizedPowerMockRobolectricTest {
 

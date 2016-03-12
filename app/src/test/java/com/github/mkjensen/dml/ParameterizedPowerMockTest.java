@@ -20,7 +20,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
 /**
- * Base class for running parameterized Powermock-enabled unit tests.
+ * Base class for running parameterized Powermock-enabled tests.
  */
 @RunWith(Parameterized.class)
 public abstract class ParameterizedPowerMockTest extends PowerMockTest {

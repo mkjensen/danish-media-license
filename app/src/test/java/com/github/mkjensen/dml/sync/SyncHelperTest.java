@@ -31,7 +31,7 @@ import org.junit.Test;
 import org.robolectric.shadows.ShadowContentResolver;
 
 /**
- * Unit tests for {@link SyncHelper}.
+ * Tests for {@link SyncHelper}.
  */
 public class SyncHelperTest extends RobolectricTest {
 

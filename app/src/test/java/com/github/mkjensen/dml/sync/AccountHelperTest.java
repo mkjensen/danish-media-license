@@ -28,7 +28,7 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 /**
- * Unit tests for {@link AccountHelper}.
+ * Tests for {@link AccountHelper}.
  */
 public class AccountHelperTest extends RobolectricTest {
 

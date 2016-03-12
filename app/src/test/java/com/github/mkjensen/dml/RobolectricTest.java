@@ -25,7 +25,7 @@ import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
 
 /**
- * Base class for running Robolectric unit tests.
+ * Base class for running Robolectric tests.
  */
 @RunWith(RobolectricGradleTestRunner.class)
 @Config(

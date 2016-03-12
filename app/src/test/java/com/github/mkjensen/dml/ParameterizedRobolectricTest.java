@@ -20,7 +20,7 @@ import org.junit.runner.RunWith;
 import org.robolectric.ParameterizedRobolectricTestRunner;
 
 /**
- * Base class for running parameterized Robolectric unit tests.
+ * Base class for running parameterized Robolectric tests.
  */
 @RunWith(ParameterizedRobolectricTestRunner.class)
 public abstract class ParameterizedRobolectricTest extends RobolectricTest {

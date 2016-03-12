@@ -29,7 +29,7 @@ import org.junit.Test;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 
 /**
- * Unit tests for {@link VideoDetailsPresenter}.
+ * Tests for {@link VideoDetailsPresenter}.
  */
 @PrepareForTest(Video.class)
 public class VideoDetailsPresenterTest extends PowerMockTest {

@@ -27,7 +27,7 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 /**
- * Unit tests for {@link DmlAuthenticator}.
+ * Tests for {@link DmlAuthenticator}.
  */
 public class DmlAuthenticatorTest {
 
