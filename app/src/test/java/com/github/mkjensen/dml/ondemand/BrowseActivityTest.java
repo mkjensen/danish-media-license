@@ -36,7 +36,9 @@ public class BrowseActivityTest extends RobolectricTest {
 
   @Before
   public void before() {
-    browseActivity = Robolectric.setupActivity(BrowseActivity.class);
+    browseActivity = Robolectric.buildActivity(BrowseActivity.class)
+        .create()
+        .get();
   }
 
   @Test
