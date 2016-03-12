@@ -17,11 +17,13 @@
 package com.github.mkjensen.dml;
 
 import org.junit.Rule;
+import org.powermock.core.classloader.annotations.PowerMockIgnore;
 import org.powermock.modules.junit4.rule.PowerMockRule;
 
 /**
  * Base class for running Powermock-enabled tests.
  */
+@PowerMockIgnore( {"android.*", "org.mockito.*", "org.powermock.*", "org.robolectric.*"})
 public abstract class PowerMockTest {
 
   @Rule

@@ -23,7 +23,7 @@ import org.powermock.modules.junit4.rule.PowerMockRule;
 /**
  * Base class for running Powermock-enabled Robolectric tests.
  */
-@PowerMockIgnore( {"android.*", "org.mockito.*", "org.robolectric.*"})
+@PowerMockIgnore( {"android.*", "org.mockito.*", "org.powermock.*", "org.robolectric.*"})
 public abstract class PowerMockRobolectricTest extends RobolectricTest {
 
   @Rule

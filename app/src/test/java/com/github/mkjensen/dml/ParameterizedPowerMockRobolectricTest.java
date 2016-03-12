@@ -16,19 +16,12 @@
 
 package com.github.mkjensen.dml;
 
-import org.junit.Rule;
 import org.junit.runner.RunWith;
-import org.powermock.core.classloader.annotations.PowerMockIgnore;
-import org.powermock.modules.junit4.rule.PowerMockRule;
 import org.robolectric.ParameterizedRobolectricTestRunner;
 
 /**
  * Base class for running parameterized Powermock-enabled Robolectric tests.
  */
 @RunWith(ParameterizedRobolectricTestRunner.class)
-@PowerMockIgnore( {"android.*", "org.mockito.*", "org.robolectric.*"})
-public abstract class ParameterizedPowerMockRobolectricTest extends RobolectricTest {
-
-  @Rule
-  public final PowerMockRule powerMockRule = new PowerMockRule();
+public abstract class ParameterizedPowerMockRobolectricTest extends PowerMockRobolectricTest {
 }
