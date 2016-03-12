@@ -104,7 +104,8 @@ public class VideoPresenterTest extends PowerMockRobolectricTest {
     return videoPresenter.onCreateViewHolder(layout);
   }
 
-  private static void setViewHolderView(ViewHolder viewHolder, View view) throws IllegalAccessException {
+  private static void setViewHolderView(ViewHolder viewHolder, View view)
+      throws IllegalAccessException {
     field(ViewHolder.class, "view").set(viewHolder, view);
   }
 }
