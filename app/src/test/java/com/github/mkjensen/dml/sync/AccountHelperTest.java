@@ -17,7 +17,7 @@
 package com.github.mkjensen.dml.sync;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertSame;
 
 import android.accounts.Account;
 
@@ -71,7 +71,6 @@ public class AccountHelperTest extends RobolectricTest {
     Account accountSndCall = accountHelper.getOrCreateAccount(getContext());
 
     // Then
-    assertEquals(account, accountSndCall);
-    assertTrue(account == accountSndCall);
+    assertSame(account, accountSndCall);
   }
 }
