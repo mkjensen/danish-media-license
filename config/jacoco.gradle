@@ -33,6 +33,10 @@ dependencies {
 }
 
 project.afterEvaluate {
+  if (getTasksByName("unzipJacocoAgent", false).isEmpty()) {
+    return;
+  }
+
   unzipJacocoAgent.onlyIf {false}
 
   transformClassesWithJacocoForDebug.dependsOn extractJacocoAgent
