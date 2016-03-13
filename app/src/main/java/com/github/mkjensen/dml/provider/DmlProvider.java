@@ -61,6 +61,7 @@ public final class DmlProvider extends ContentProvider {
     queryBuilder.setTables(dmlUri.getTable());
     switch (dmlUri) {
       case CATEGORIES:
+      case VIDEOS:
         break;
       case CATEGORIES_ID:
         queryBuilder.appendWhere(
@@ -72,8 +73,6 @@ public final class DmlProvider extends ContentProvider {
             Table.CATEGORY_VIDEO,
             Category.CATEGORY_ID,
             Category.getCategoryId(uri)));
-        break;
-      case VIDEOS:
         break;
       case VIDEOS_ID:
         queryBuilder.appendWhere(String.format("%s='%s'", Video.VIDEO_ID, Video.getVideoId(uri)));
@@ -150,6 +149,7 @@ public final class DmlProvider extends ContentProvider {
     String[] whereArgs = null;
     switch (dmlUri) {
       case CATEGORIES:
+      case VIDEOS:
         break;
       case CATEGORIES_ID:
         whereClause = Category.CATEGORY_ID + "=?";
@@ -158,8 +158,6 @@ public final class DmlProvider extends ContentProvider {
       case CATEGORIES_ID_VIDEOS:
         whereClause = Category.CATEGORY_ID + "=?";
         whereArgs = new String[] {Category.getCategoryId(uri)};
-        break;
-      case VIDEOS:
         break;
       case VIDEOS_ID:
         whereClause = Video.VIDEO_ID + "=?";
