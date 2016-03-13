@@ -95,9 +95,13 @@ final class DmlDatabase extends SQLiteOpenHelper {
 
     db.execSQL("CREATE TABLE " + Table.CATEGORY_VIDEO + " ("
         + BaseColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
-        + CATEGORY_ID + " TEXT NOT NULL " + References.CATEGORY_ID + ","
-        + VIDEO_ID + " TEXT NOT NULL " + References.VIDEO_ID + ","
+        + CATEGORY_ID + " TEXT NOT NULL " + getReference(Table.CATEGORY, CATEGORY_ID) + ","
+        + VIDEO_ID + " TEXT NOT NULL " + getReference(Table.VIDEO, VIDEO_ID) + ","
         + "UNIQUE (" + CATEGORY_ID + "," + VIDEO_ID + ") ON CONFLICT REPLACE)");
+  }
+
+  private static String getReference(String table, String column) {
+    return String.format("REFERENCES %s (%s)", table, column);
   }
 
   @Override
@@ -159,15 +163,5 @@ final class DmlDatabase extends SQLiteOpenHelper {
     String VIDEO_LIST_URL = "video_list_url";
 
     String VIDEO_URL = "video_url";
-  }
-
-  /**
-   * Constants for creating foreign keys.
-   */
-  private interface References {
-
-    String CATEGORY_ID = "REFERENCES " + Table.CATEGORY + "(" + CategoryColumns.CATEGORY_ID + ")";
-
-    String VIDEO_ID = "REFERENCES " + Table.VIDEO + "(" + VideoColumns.VIDEO_ID + ")";
   }
 }
