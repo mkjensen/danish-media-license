@@ -24,7 +24,6 @@ import android.provider.BaseColumns;
 import android.util.Log;
 
 import com.github.mkjensen.dml.provider.DmlContract.CategoriesColumns;
-import com.github.mkjensen.dml.provider.DmlContract.CategoriesVideosColumns;
 import com.github.mkjensen.dml.provider.DmlContract.VideosColumns;
 
 /**
@@ -88,10 +87,9 @@ final class DmlDatabaseHelper extends SQLiteOpenHelper {
 
     db.execSQL("CREATE TABLE " + Tables.CATEGORIES_VIDEOS + " ("
         + BaseColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
-        + CategoriesVideosColumns.CATEGORY_ID + " TEXT NOT NULL " + References.CATEGORY_ID + ","
-        + CategoriesVideosColumns.VIDEO_ID + " TEXT NOT NULL " + References.VIDEO_ID + ","
-        + "UNIQUE (" + CategoriesVideosColumns.CATEGORY_ID + "," + CategoriesVideosColumns.VIDEO_ID
-        + ") ON CONFLICT REPLACE)");
+        + CategoriesColumns.ID + " TEXT NOT NULL " + References.CATEGORY_ID + ","
+        + VideosColumns.ID + " TEXT NOT NULL " + References.VIDEO_ID + ","
+        + "UNIQUE (" + CategoriesColumns.ID + "," + VideosColumns.ID + ") ON CONFLICT REPLACE)");
   }
 
   @Override
@@ -118,7 +116,7 @@ final class DmlDatabaseHelper extends SQLiteOpenHelper {
         CATEGORIES_VIDEOS,
         VIDEOS,
         CATEGORIES_VIDEOS,
-        CategoriesVideosColumns.VIDEO_ID,
+        VideosColumns.ID,
         VIDEOS,
         VideosColumns.ID);
   }

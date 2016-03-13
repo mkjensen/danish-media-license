@@ -29,7 +29,6 @@ import android.database.Cursor;
 import android.net.Uri;
 
 import com.github.mkjensen.dml.provider.DmlContract.Categories;
-import com.github.mkjensen.dml.provider.DmlContract.CategoriesVideos;
 import com.github.mkjensen.dml.provider.DmlContract.Videos;
 import com.github.mkjensen.dml.test.RobolectricTest;
 
@@ -144,7 +143,7 @@ public class DmlProviderTest extends RobolectricTest {
     addToCategory("c1", "v2");
 
     // When
-    try (Cursor cursor = query(CategoriesVideos.buildUri("c1"))) {
+    try (Cursor cursor = query(Categories.buildVideosUri("c1"))) {
 
       // Then
       assertNotNull(cursor);
@@ -242,7 +241,7 @@ public class DmlProviderTest extends RobolectricTest {
     Uri uri = addToCategory(categoryId, videoId);
 
     // Then
-    assertEquals(CategoriesVideos.buildUri(categoryId), uri);
+    assertEquals(Categories.buildVideosUri(categoryId), uri);
   }
 
   @Test
@@ -290,7 +289,7 @@ public class DmlProviderTest extends RobolectricTest {
   public void getType_whenCategoriesIdVideosUri_thenCategoriesIdVideosContentTypeIsReturned() {
 
     // When
-    String type = contentResolver.getType(CategoriesVideos.buildUri(NONEXISTENT_ID));
+    String type = contentResolver.getType(Categories.buildVideosUri(NONEXISTENT_ID));
 
     // Then
     assertEquals(DmlUri.CATEGORIES_ID_VIDEOS.getContentType(), type);
@@ -380,7 +379,7 @@ public class DmlProviderTest extends RobolectricTest {
 
     // When
     int deleted = contentResolver.delete(
-        CategoriesVideos.buildUri("c1"),
+        Categories.buildVideosUri("c1"),
         null, // where
         null); // selectionArgs
 
@@ -484,7 +483,7 @@ public class DmlProviderTest extends RobolectricTest {
 
     // When
     int updated = contentResolver.update(
-        CategoriesVideos.buildUri(NONEXISTENT_ID),
+        Categories.buildVideosUri(NONEXISTENT_ID),
         null, // values
         null, // where
         null); // selectionArgs
@@ -575,8 +574,8 @@ public class DmlProviderTest extends RobolectricTest {
 
   private Uri addToCategory(String categoryId, String videoId) {
     ContentValues values = new ContentValues();
-    values.put(CategoriesVideos.VIDEO_ID, videoId);
-    return contentResolver.insert(CategoriesVideos.buildUri(categoryId), values);
+    values.put(Videos.ID, videoId);
+    return contentResolver.insert(Categories.buildVideosUri(categoryId), values);
   }
 
   private Cursor query(Uri uri) {

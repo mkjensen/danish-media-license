@@ -126,7 +126,7 @@ public class BrowseFragment extends BrowseSupportFragment
         break;
       default:
         String categoryId = args.getString(DmlContract.Categories.ID);
-        uri = DmlContract.CategoriesVideos.buildUri(categoryId);
+        uri = DmlContract.Categories.buildVideosUri(categoryId);
         break;
     }
     return createCursorLoader(uri);

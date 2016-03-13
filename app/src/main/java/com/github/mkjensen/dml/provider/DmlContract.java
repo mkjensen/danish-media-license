@@ -69,6 +69,14 @@ public final class DmlContract {
     public static String getCategoryId(Uri uri) {
       return uri.getPathSegments().get(1);
     }
+
+    /**
+     * Builds a {@link Uri} that references any {@link Videos} associated with the requested {@link
+     * Categories#ID}.
+     */
+    public static Uri buildVideosUri(String categoryId) {
+      return Categories.buildCategoryUri(categoryId).buildUpon().appendPath(Videos.PATH).build();
+    }
   }
 
   /**
@@ -106,36 +114,15 @@ public final class DmlContract {
   }
 
   /**
-   * Constants for the categories_videos many-to-many relation.
-   */
-  public static final class CategoriesVideos implements CategoriesVideosColumns {
-
-    static final String CONTENT_TYPE_ID = Videos.CONTENT_TYPE_ID;
-
-    static final String PATH = Categories.PATH + "/*/" + Videos.PATH;
-
-    private CategoriesVideos() {
-    }
-
-    /**
-     * Builds a {@link Uri} that references any {@link Videos} associated with the requested {@link
-     * Categories#ID}.
-     */
-    public static Uri buildUri(String categoryId) {
-      return Categories.buildCategoryUri(categoryId).buildUpon().appendPath(Videos.PATH).build();
-    }
-  }
-
-  /**
    * Columns of {@link Categories}.
    */
   interface CategoriesColumns {
 
-    String ID = "id";
+    String ID = "category_id";
 
-    String TITLE = "title";
+    String TITLE = "category_title";
 
-    String URL = "url";
+    String URL = "category_url";
   }
 
   /**
@@ -143,28 +130,18 @@ public final class DmlContract {
    */
   interface VideosColumns {
 
-    String ID = "id";
+    String ID = "video_id";
 
-    String TITLE = "title";
+    String TITLE = "video_title";
 
-    String IMAGE_URL = "image_url";
+    String IMAGE_URL = "video_image_url";
 
-    String DETAILS_URL = "details_url";
+    String DETAILS_URL = "video_details_url";
 
-    String DESCRIPTION = "description";
+    String DESCRIPTION = "video_description";
 
-    String LIST_URL = "list_url";
+    String LIST_URL = "video_list_url";
 
-    String URL = "url";
-  }
-
-  /**
-   * Columns for the many-to-many relation between {@link Categories} and {@link Videos}.
-   */
-  interface CategoriesVideosColumns {
-
-    String CATEGORY_ID = "category_id";
-
-    String VIDEO_ID = "video_id";
+    String URL = "video_url";
   }
 }

@@ -126,20 +126,20 @@ public final class SyncHelper {
     insert(provider, DmlContract.Videos.CONTENT_URI, values, syncResult);
 
     values = new ContentValues();
-    values.put(DmlContract.CategoriesVideos.VIDEO_ID, "bedrag-10-10");
-    insert(provider, DmlContract.CategoriesVideos.buildUri("most-viewed"), values, syncResult);
+    values.put(DmlContract.Videos.ID, "bedrag-10-10");
+    insert(provider, DmlContract.Categories.buildVideosUri("most-viewed"), values, syncResult);
 
     values = new ContentValues();
-    values.put(DmlContract.CategoriesVideos.VIDEO_ID, "x-factor-2016-03-04");
-    insert(provider, DmlContract.CategoriesVideos.buildUri("most-viewed"), values, syncResult);
+    values.put(DmlContract.Videos.ID, "x-factor-2016-03-04");
+    insert(provider, DmlContract.Categories.buildVideosUri("most-viewed"), values, syncResult);
 
     values = new ContentValues();
-    values.put(DmlContract.CategoriesVideos.VIDEO_ID, "spoerg-mig-om-alt-5-8-3");
-    insert(provider, DmlContract.CategoriesVideos.buildUri("selected"), values, syncResult);
+    values.put(DmlContract.Videos.ID, "spoerg-mig-om-alt-5-8-3");
+    insert(provider, DmlContract.Categories.buildVideosUri("selected"), values, syncResult);
 
     values = new ContentValues();
-    values.put(DmlContract.CategoriesVideos.VIDEO_ID, "dokumania-naturens-uorden");
-    insert(provider, DmlContract.CategoriesVideos.buildUri("selected"), values, syncResult);
+    values.put(DmlContract.Videos.ID, "dokumania-naturens-uorden");
+    insert(provider, DmlContract.Categories.buildVideosUri("selected"), values, syncResult);
   }
 
   private static void insert(ContentProviderClient provider, Uri uri, ContentValues values,
