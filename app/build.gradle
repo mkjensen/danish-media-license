@@ -19,12 +19,6 @@ apply plugin: 'com.android.application'
 apply from: '../config/checkstyle.gradle'
 apply from: '../config/jacoco.gradle'
 
-buildscript {
-  repositories {
-    mavenCentral()
-  }
-}
-
 android {
   compileSdkVersion 23
   buildToolsVersion "23.0.2"
