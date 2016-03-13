@@ -32,7 +32,7 @@ public final class TestUtils {
    * constructor is invoked via reflection for code coverage purposes.
    *
    * @return {@code true} if {@code clazz} has a private parameterless contructor, {@code false}
-   * otherwise
+   *     otherwise
    */
   public static boolean hasPrivateParameterlessConstructor(Class<?> clazz) {
     Constructor<?> constructor;
