@@ -443,22 +443,14 @@ public class DmlProviderTest extends RobolectricTest {
     // When/then
     thrown.expect(IllegalArgumentException.class);
     thrown.expectMessage("Unknown URI: " + INVALID_URL);
-    contentResolver.update(
-        INVALID_URL,
-        null, // values
-        null, // where
-        null); // selectionArgs
+    update(INVALID_URL);
   }
 
   @Test
   public void update_whenCategoriesUri_thenZeroIsReturned() {
 
     // When
-    int updated = contentResolver.update(
-        Category.CONTENT_URI,
-        null, // values
-        null, // where
-        null); // selectionArgs
+    int updated = update(Category.CONTENT_URI);
 
     // Then
     assertEquals(0, updated);
@@ -468,11 +460,7 @@ public class DmlProviderTest extends RobolectricTest {
   public void update_whenCategoriesIdUri_thenZeroIsReturned() {
 
     // When
-    int updated = contentResolver.update(
-        Category.buildCategoryUri(NONEXISTENT_ID),
-        null, // values
-        null, // where
-        null); // selectionArgs
+    int updated = update(Category.buildCategoryUri(NONEXISTENT_ID));
 
     // Then
     assertEquals(0, updated);
@@ -482,11 +470,7 @@ public class DmlProviderTest extends RobolectricTest {
   public void update_whenCategoriesIdVideosUri_thenZeroIsReturned() {
 
     // When
-    int updated = contentResolver.update(
-        Category.buildVideosUri(NONEXISTENT_ID),
-        null, // values
-        null, // where
-        null); // selectionArgs
+    int updated = update(Category.buildVideosUri(NONEXISTENT_ID));
 
     // Then
     assertEquals(0, updated);
@@ -496,11 +480,7 @@ public class DmlProviderTest extends RobolectricTest {
   public void update_whenVideosUri_thenZeroIsReturned() {
 
     // When
-    int updated = contentResolver.update(
-        Video.CONTENT_URI,
-        null, // values
-        null, // where
-        null); // selectionArgs
+    int updated = update(Video.CONTENT_URI);
 
     // Then
     assertEquals(0, updated);
@@ -510,11 +490,7 @@ public class DmlProviderTest extends RobolectricTest {
   public void update_whenVideosIdUri_thenZeroIsReturned() {
 
     // When
-    int updated = contentResolver.update(
-        Video.buildVideoUri(NONEXISTENT_ID),
-        null, // values
-        null, // where
-        null); // selectionArgs
+    int updated = update(Video.buildVideoUri(NONEXISTENT_ID));
 
     // Then
     assertEquals(0, updated);
@@ -586,6 +562,14 @@ public class DmlProviderTest extends RobolectricTest {
         null, // selectionArgs
         null // sortOrder
     );
+  }
+
+  private int update(Uri uri) {
+    return contentResolver.update(
+        uri,
+        null, // values
+        null, // where
+        null); // selectionArgs
   }
 
   private static String getString(Cursor cursor, String columnName) {
