@@ -42,13 +42,13 @@ class VideoCursorMapper extends CursorMapper {
 
   @Override
   protected void bindColumns(Cursor cursor) {
-    idIndex = cursor.getColumnIndex(DmlContract.Videos.ID);
-    titleIndex = cursor.getColumnIndex(DmlContract.Videos.TITLE);
-    imageUrlIndex = cursor.getColumnIndex(DmlContract.Videos.IMAGE_URL);
-    detailsUrlIndex = cursor.getColumnIndex(DmlContract.Videos.DETAILS_URL);
-    descriptionIndex = cursor.getColumnIndex(DmlContract.Videos.DESCRIPTION);
-    listUrlIndex = cursor.getColumnIndex(DmlContract.Videos.LIST_URL);
-    urlIndex = cursor.getColumnIndex(DmlContract.Videos.URL);
+    idIndex = cursor.getColumnIndex(DmlContract.Video.VIDEO_ID);
+    titleIndex = cursor.getColumnIndex(DmlContract.Video.VIDEO_TITLE);
+    imageUrlIndex = cursor.getColumnIndex(DmlContract.Video.VIDEO_IMAGE_URL);
+    detailsUrlIndex = cursor.getColumnIndex(DmlContract.Video.VIDEO_DETAILS_URL);
+    descriptionIndex = cursor.getColumnIndex(DmlContract.Video.VIDEO_DESCRIPTION);
+    listUrlIndex = cursor.getColumnIndex(DmlContract.Video.VIDEO_LIST_URL);
+    urlIndex = cursor.getColumnIndex(DmlContract.Video.VIDEO_URL);
   }
 
   @Override

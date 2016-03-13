@@ -28,8 +28,8 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
 
-import com.github.mkjensen.dml.provider.DmlContract.Categories;
-import com.github.mkjensen.dml.provider.DmlContract.Videos;
+import com.github.mkjensen.dml.provider.DmlContract.Category;
+import com.github.mkjensen.dml.provider.DmlContract.Video;
 import com.github.mkjensen.dml.test.RobolectricTest;
 
 import org.junit.Before;
@@ -80,7 +80,7 @@ public class DmlProviderTest extends RobolectricTest {
   public void query_whenRequestingNonexistentCategory_thenEmptyCursorIsReturned() {
 
     // When
-    try (Cursor cursor = query(Categories.buildCategoryUri(NONEXISTENT_ID))) {
+    try (Cursor cursor = query(Category.buildCategoryUri(NONEXISTENT_ID))) {
 
       // Then
       assertNotNull(cursor);
@@ -97,7 +97,7 @@ public class DmlProviderTest extends RobolectricTest {
     insertCategory("c2");
 
     // When
-    try (Cursor cursor = query(Categories.CONTENT_URI)) {
+    try (Cursor cursor = query(Category.CONTENT_URI)) {
 
       // Then
       assertNotNull(cursor);
@@ -116,15 +116,15 @@ public class DmlProviderTest extends RobolectricTest {
     insertCategory("c2");
 
     // When
-    try (Cursor cursor = query(Categories.buildCategoryUri(expectedId))) {
+    try (Cursor cursor = query(Category.buildCategoryUri(expectedId))) {
 
       // Then
       assertNotNull(cursor);
       assertTrue(cursor.moveToFirst());
-      String actualId = getString(cursor, Categories.ID);
+      String actualId = getString(cursor, Category.CATEGORY_ID);
       assertEquals(expectedId, actualId);
-      assertEquals(getCategoryTitle(actualId), getString(cursor, Categories.TITLE));
-      assertEquals(getCategoryUrl(actualId), getString(cursor, Categories.URL));
+      assertEquals(getCategoryTitle(actualId), getString(cursor, Category.CATEGORY_TITLE));
+      assertEquals(getCategoryUrl(actualId), getString(cursor, Category.CATEGORY_URL));
     }
   }
 
@@ -143,7 +143,7 @@ public class DmlProviderTest extends RobolectricTest {
     addToCategory("c1", "v2");
 
     // When
-    try (Cursor cursor = query(Categories.buildVideosUri("c1"))) {
+    try (Cursor cursor = query(Category.buildVideosUri("c1"))) {
 
       // Then
       assertNotNull(cursor);
@@ -156,7 +156,7 @@ public class DmlProviderTest extends RobolectricTest {
   public void query_whenRequestingNonexistentVideo_thenEmptyCursorIsReturned() {
 
     // When
-    try (Cursor cursor = query(Videos.buildVideoUri(NONEXISTENT_ID))) {
+    try (Cursor cursor = query(Video.buildVideoUri(NONEXISTENT_ID))) {
 
       // Then
       assertNotNull(cursor);
@@ -173,7 +173,7 @@ public class DmlProviderTest extends RobolectricTest {
     insertVideo("v2");
 
     // When
-    try (Cursor cursor = query(Videos.CONTENT_URI)) {
+    try (Cursor cursor = query(Video.CONTENT_URI)) {
 
       // Then
       assertNotNull(cursor);
@@ -192,19 +192,19 @@ public class DmlProviderTest extends RobolectricTest {
     insertVideo("v2");
 
     // When
-    try (Cursor cursor = query(Videos.buildVideoUri(expectedId))) {
+    try (Cursor cursor = query(Video.buildVideoUri(expectedId))) {
 
       // Then
       assertNotNull(cursor);
       assertTrue(cursor.moveToFirst());
-      String actualId = getString(cursor, Videos.ID);
+      String actualId = getString(cursor, Video.VIDEO_ID);
       assertEquals(expectedId, actualId);
-      assertEquals(getVideoTitle(actualId), getString(cursor, Videos.TITLE));
-      assertEquals(getVideoImageUrl(actualId), getString(cursor, Videos.IMAGE_URL));
-      assertEquals(getVideoDetailsUrl(actualId), getString(cursor, Videos.DETAILS_URL));
-      assertEquals(getVideoDescriptionUrl(actualId), getString(cursor, Videos.DESCRIPTION));
-      assertEquals(getVideoListUrl(actualId), getString(cursor, Videos.LIST_URL));
-      assertEquals(getVideoUrl(actualId), getString(cursor, Videos.URL));
+      assertEquals(getVideoTitle(actualId), getString(cursor, Video.VIDEO_TITLE));
+      assertEquals(getVideoImageUrl(actualId), getString(cursor, Video.VIDEO_IMAGE_URL));
+      assertEquals(getVideoDetailsUrl(actualId), getString(cursor, Video.VIDEO_DETAILS_URL));
+      assertEquals(getVideoDescriptionUrl(actualId), getString(cursor, Video.VIDEO_DESCRIPTION));
+      assertEquals(getVideoListUrl(actualId), getString(cursor, Video.VIDEO_LIST_URL));
+      assertEquals(getVideoUrl(actualId), getString(cursor, Video.VIDEO_URL));
     }
   }
 
@@ -225,7 +225,7 @@ public class DmlProviderTest extends RobolectricTest {
     Uri uri = insertCategory(id);
 
     // Then
-    assertEquals(Categories.buildCategoryUri(id), uri);
+    assertEquals(Category.buildCategoryUri(id), uri);
   }
 
   @Test
@@ -241,7 +241,7 @@ public class DmlProviderTest extends RobolectricTest {
     Uri uri = addToCategory(categoryId, videoId);
 
     // Then
-    assertEquals(Categories.buildVideosUri(categoryId), uri);
+    assertEquals(Category.buildVideosUri(categoryId), uri);
   }
 
   @Test
@@ -252,7 +252,7 @@ public class DmlProviderTest extends RobolectricTest {
     Uri uri = insertVideo(id);
 
     // Then
-    assertEquals(Videos.buildVideoUri(id), uri);
+    assertEquals(Video.buildVideoUri(id), uri);
   }
 
   @Test
@@ -269,7 +269,7 @@ public class DmlProviderTest extends RobolectricTest {
   public void getType_whenCategoriesUri_thenCategoriesContentTypeIsReturned() {
 
     // When
-    String type = contentResolver.getType(Categories.CONTENT_URI);
+    String type = contentResolver.getType(Category.CONTENT_URI);
 
     // Then
     assertEquals(DmlUri.CATEGORIES.getContentType(), type);
@@ -279,7 +279,7 @@ public class DmlProviderTest extends RobolectricTest {
   public void getType_whenCategoriesIdUri_thenCategoriesIdContentTypeIsReturned() {
 
     // When
-    String type = contentResolver.getType(Categories.buildCategoryUri(NONEXISTENT_ID));
+    String type = contentResolver.getType(Category.buildCategoryUri(NONEXISTENT_ID));
 
     // Then
     assertEquals(DmlUri.CATEGORIES_ID.getContentType(), type);
@@ -289,7 +289,7 @@ public class DmlProviderTest extends RobolectricTest {
   public void getType_whenCategoriesIdVideosUri_thenCategoriesIdVideosContentTypeIsReturned() {
 
     // When
-    String type = contentResolver.getType(Categories.buildVideosUri(NONEXISTENT_ID));
+    String type = contentResolver.getType(Category.buildVideosUri(NONEXISTENT_ID));
 
     // Then
     assertEquals(DmlUri.CATEGORIES_ID_VIDEOS.getContentType(), type);
@@ -299,7 +299,7 @@ public class DmlProviderTest extends RobolectricTest {
   public void getType_whenVideosUri_thenVideosContentTypeIsReturned() {
 
     // When
-    String type = contentResolver.getType(Videos.CONTENT_URI);
+    String type = contentResolver.getType(Video.CONTENT_URI);
 
     // Then
     assertEquals(DmlUri.VIDEOS.getContentType(), type);
@@ -309,7 +309,7 @@ public class DmlProviderTest extends RobolectricTest {
   public void getType_whenVideosIdUri_thenVideosIdContentTypeIsReturned() {
 
     // When
-    String type = contentResolver.getType(Videos.buildVideoUri(NONEXISTENT_ID));
+    String type = contentResolver.getType(Video.buildVideoUri(NONEXISTENT_ID));
 
     // Then
     assertEquals(DmlUri.VIDEOS_ID.getContentType(), type);
@@ -337,7 +337,7 @@ public class DmlProviderTest extends RobolectricTest {
 
     // When
     int deleted = contentResolver.delete(
-        Categories.CONTENT_URI,
+        Category.CONTENT_URI,
         null, // where
         null); // selectionArgs
 
@@ -355,7 +355,7 @@ public class DmlProviderTest extends RobolectricTest {
 
     // When
     int deleted = contentResolver.delete(
-        Categories.buildCategoryUri("c1"),
+        Category.buildCategoryUri("c1"),
         null, // where
         null); // selectionArgs
 
@@ -379,13 +379,13 @@ public class DmlProviderTest extends RobolectricTest {
 
     // When
     int deleted = contentResolver.delete(
-        Categories.buildVideosUri("c1"),
+        Category.buildVideosUri("c1"),
         null, // where
         null); // selectionArgs
 
-    try (Cursor categoriesCursor = query(Videos.CONTENT_URI)) {
+    try (Cursor categoriesCursor = query(Video.CONTENT_URI)) {
 
-      try (Cursor videosCursor = query(Categories.CONTENT_URI)) {
+      try (Cursor videosCursor = query(Category.CONTENT_URI)) {
 
         // Then
         assertEquals(2, deleted);
@@ -411,7 +411,7 @@ public class DmlProviderTest extends RobolectricTest {
 
     // When
     int deleted = contentResolver.delete(
-        Videos.CONTENT_URI,
+        Video.CONTENT_URI,
         null, // where
         null); // selectionArgs
 
@@ -429,7 +429,7 @@ public class DmlProviderTest extends RobolectricTest {
 
     // When
     int deleted = contentResolver.delete(
-        Videos.buildVideoUri("v1"),
+        Video.buildVideoUri("v1"),
         null, // where
         null); // selectionArgs
 
@@ -455,7 +455,7 @@ public class DmlProviderTest extends RobolectricTest {
 
     // When
     int updated = contentResolver.update(
-        Categories.CONTENT_URI,
+        Category.CONTENT_URI,
         null, // values
         null, // where
         null); // selectionArgs
@@ -469,7 +469,7 @@ public class DmlProviderTest extends RobolectricTest {
 
     // When
     int updated = contentResolver.update(
-        Categories.buildCategoryUri(NONEXISTENT_ID),
+        Category.buildCategoryUri(NONEXISTENT_ID),
         null, // values
         null, // where
         null); // selectionArgs
@@ -483,7 +483,7 @@ public class DmlProviderTest extends RobolectricTest {
 
     // When
     int updated = contentResolver.update(
-        Categories.buildVideosUri(NONEXISTENT_ID),
+        Category.buildVideosUri(NONEXISTENT_ID),
         null, // values
         null, // where
         null); // selectionArgs
@@ -497,7 +497,7 @@ public class DmlProviderTest extends RobolectricTest {
 
     // When
     int updated = contentResolver.update(
-        Videos.CONTENT_URI,
+        Video.CONTENT_URI,
         null, // values
         null, // where
         null); // selectionArgs
@@ -511,7 +511,7 @@ public class DmlProviderTest extends RobolectricTest {
 
     // When
     int updated = contentResolver.update(
-        Videos.buildVideoUri(NONEXISTENT_ID),
+        Video.buildVideoUri(NONEXISTENT_ID),
         null, // values
         null, // where
         null); // selectionArgs
@@ -522,60 +522,60 @@ public class DmlProviderTest extends RobolectricTest {
 
   private Uri insertCategory(String id) {
     ContentValues values = new ContentValues();
-    values.put(Categories.ID, id);
-    values.put(Categories.TITLE, getCategoryTitle(id));
-    values.put(Categories.URL, getCategoryUrl(id));
-    return contentResolver.insert(Categories.CONTENT_URI, values);
+    values.put(Category.CATEGORY_ID, id);
+    values.put(Category.CATEGORY_TITLE, getCategoryTitle(id));
+    values.put(Category.CATEGORY_URL, getCategoryUrl(id));
+    return contentResolver.insert(Category.CONTENT_URI, values);
   }
 
   private static String getCategoryTitle(String id) {
-    return id + Categories.TITLE;
+    return id + Category.CATEGORY_TITLE;
   }
 
   private static String getCategoryUrl(String id) {
-    return id + Categories.URL;
+    return id + Category.CATEGORY_URL;
   }
 
   private Uri insertVideo(String id) {
     ContentValues values = new ContentValues();
-    values.put(Videos.ID, id);
-    values.put(Videos.TITLE, getVideoTitle(id));
-    values.put(Videos.IMAGE_URL, getVideoImageUrl(id));
-    values.put(Videos.DETAILS_URL, getVideoDetailsUrl(id));
-    values.put(Videos.DESCRIPTION, getVideoDescriptionUrl(id));
-    values.put(Videos.LIST_URL, getVideoListUrl(id));
-    values.put(Videos.URL, getVideoUrl(id));
-    return contentResolver.insert(Videos.CONTENT_URI, values);
+    values.put(Video.VIDEO_ID, id);
+    values.put(Video.VIDEO_TITLE, getVideoTitle(id));
+    values.put(Video.VIDEO_IMAGE_URL, getVideoImageUrl(id));
+    values.put(Video.VIDEO_DETAILS_URL, getVideoDetailsUrl(id));
+    values.put(Video.VIDEO_DESCRIPTION, getVideoDescriptionUrl(id));
+    values.put(Video.VIDEO_LIST_URL, getVideoListUrl(id));
+    values.put(Video.VIDEO_URL, getVideoUrl(id));
+    return contentResolver.insert(Video.CONTENT_URI, values);
   }
 
   private static String getVideoTitle(String id) {
-    return id + Videos.TITLE;
+    return id + Video.VIDEO_TITLE;
   }
 
   private static String getVideoImageUrl(String id) {
-    return id + Videos.IMAGE_URL;
+    return id + Video.VIDEO_IMAGE_URL;
   }
 
   private static String getVideoDescriptionUrl(String id) {
-    return id + Videos.DESCRIPTION;
+    return id + Video.VIDEO_DESCRIPTION;
   }
 
   private static String getVideoListUrl(String id) {
-    return id + Videos.LIST_URL;
+    return id + Video.VIDEO_LIST_URL;
   }
 
   private static String getVideoUrl(String id) {
-    return id + Videos.URL;
+    return id + Video.VIDEO_URL;
   }
 
   private static String getVideoDetailsUrl(String id) {
-    return id + Videos.DETAILS_URL;
+    return id + Video.VIDEO_DETAILS_URL;
   }
 
   private Uri addToCategory(String categoryId, String videoId) {
     ContentValues values = new ContentValues();
-    values.put(Videos.ID, videoId);
-    return contentResolver.insert(Categories.buildVideosUri(categoryId), values);
+    values.put(Video.VIDEO_ID, videoId);
+    return contentResolver.insert(Category.buildVideosUri(categoryId), values);
   }
 
   private Cursor query(Uri uri) {

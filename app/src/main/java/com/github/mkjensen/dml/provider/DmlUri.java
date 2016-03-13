@@ -22,9 +22,9 @@ import static com.github.mkjensen.dml.provider.DmlContract.AUTHORITY;
 
 import android.net.Uri;
 
-import com.github.mkjensen.dml.provider.DmlContract.Categories;
-import com.github.mkjensen.dml.provider.DmlContract.Videos;
-import com.github.mkjensen.dml.provider.DmlDatabaseHelper.Tables;
+import com.github.mkjensen.dml.provider.DmlContract.Category;
+import com.github.mkjensen.dml.provider.DmlContract.Video;
+import com.github.mkjensen.dml.provider.DmlDatabase.Table;
 
 /**
  * Contains the {@link Uri}s supported by {@link DmlProvider}. {@link DmlUri}s are matched against
@@ -38,28 +38,28 @@ enum DmlUri {
   /**
    * Categories.
    */
-  CATEGORIES(10, Categories.PATH, Categories.CONTENT_TYPE_ID, false, Tables.CATEGORIES),
+  CATEGORIES(10, Category.PATH, Category.CONTENT_TYPE_ID, false, Table.CATEGORY),
 
   /**
    * Categories by id.
    */
-  CATEGORIES_ID(11, Categories.PATH + "/*", Categories.CONTENT_TYPE_ID, true, Tables.CATEGORIES),
+  CATEGORIES_ID(11, Category.PATH + "/*", Category.CONTENT_TYPE_ID, true, Table.CATEGORY),
 
   /**
-   * Videos associated with a category.
+   * Videos associated with categories.
    */
-  CATEGORIES_ID_VIDEOS(12, Categories.PATH + "/*/" + Videos.PATH, Videos.CONTENT_TYPE_ID, false,
-      Tables.CATEGORIES_VIDEOS),
+  CATEGORIES_ID_VIDEOS(12, Category.PATH + "/*/" + Video.PATH, Video.CONTENT_TYPE_ID, false,
+      Table.CATEGORY_VIDEO),
 
   /**
    * Videos.
    */
-  VIDEOS(20, Videos.PATH, Videos.CONTENT_TYPE_ID, false, Tables.VIDEOS),
+  VIDEOS(20, Video.PATH, Video.CONTENT_TYPE_ID, false, Table.VIDEO),
 
   /**
    * Videos by id.
    */
-  VIDEOS_ID(21, Videos.PATH + "/*", Videos.CONTENT_TYPE_ID, true, Tables.VIDEOS);
+  VIDEOS_ID(21, Video.PATH + "/*", Video.CONTENT_TYPE_ID, true, Table.VIDEO);
 
   private static final String CONTENT_TYPE = CURSOR_DIR_BASE_TYPE + "/vnd." + AUTHORITY + ".";
 

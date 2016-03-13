@@ -28,7 +28,6 @@ import android.database.Cursor;
 import android.net.Uri;
 
 import com.github.mkjensen.dml.provider.DmlContract;
-import com.github.mkjensen.dml.provider.DmlContract.Videos;
 import com.github.mkjensen.dml.provider.DmlProvider;
 import com.github.mkjensen.dml.test.PowerMockRobolectricTest;
 
@@ -86,7 +85,7 @@ public class VideoCursorMapperTest extends PowerMockRobolectricTest {
 
       // Then
       for (String columnName : columnNames) {
-        if (Videos._ID.equals(columnName)) {
+        if (DmlContract.Video._ID.equals(columnName)) {
           continue;
         }
         verify(cursorMock).getColumnIndex(columnName);
@@ -111,7 +110,7 @@ public class VideoCursorMapperTest extends PowerMockRobolectricTest {
 
       // Then
       for (String columnName : columnNames) {
-        if (Videos._ID.equals(columnName)) {
+        if (DmlContract.Video._ID.equals(columnName)) {
           continue;
         }
         int columnIndex = cursor.getColumnIndex(columnName);
@@ -146,7 +145,7 @@ public class VideoCursorMapperTest extends PowerMockRobolectricTest {
 
   private Cursor query() {
     return contentResolver.query(
-        Videos.CONTENT_URI,
+        DmlContract.Video.CONTENT_URI,
         null, // projection
         null, // selection
         null, // selectionArgs
@@ -156,13 +155,13 @@ public class VideoCursorMapperTest extends PowerMockRobolectricTest {
 
   private Uri insertVideo() {
     ContentValues values = new ContentValues();
-    values.put(Videos.ID, VIDEO_ID);
-    values.put(Videos.TITLE, VIDEO_TITLE);
-    values.put(Videos.IMAGE_URL, VIDEO_IMAGE_URL);
-    values.put(Videos.DETAILS_URL, VIDEO_DETAILS_URL);
-    values.put(Videos.DESCRIPTION, VIDEO_DESCRIPTION);
-    values.put(Videos.LIST_URL, VIDEO_LIST_URL);
-    values.put(Videos.URL, VIDEO_URL);
-    return contentResolver.insert(Videos.CONTENT_URI, values);
+    values.put(DmlContract.Video.VIDEO_ID, VIDEO_ID);
+    values.put(DmlContract.Video.VIDEO_TITLE, VIDEO_TITLE);
+    values.put(DmlContract.Video.VIDEO_IMAGE_URL, VIDEO_IMAGE_URL);
+    values.put(DmlContract.Video.VIDEO_DETAILS_URL, VIDEO_DETAILS_URL);
+    values.put(DmlContract.Video.VIDEO_DESCRIPTION, VIDEO_DESCRIPTION);
+    values.put(DmlContract.Video.VIDEO_LIST_URL, VIDEO_LIST_URL);
+    values.put(DmlContract.Video.VIDEO_URL, VIDEO_URL);
+    return contentResolver.insert(DmlContract.Video.CONTENT_URI, values);
   }
 }

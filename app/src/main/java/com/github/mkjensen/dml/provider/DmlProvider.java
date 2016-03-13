@@ -27,9 +27,9 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
-import com.github.mkjensen.dml.provider.DmlContract.Categories;
-import com.github.mkjensen.dml.provider.DmlContract.Videos;
-import com.github.mkjensen.dml.provider.DmlDatabaseHelper.Tables;
+import com.github.mkjensen.dml.provider.DmlContract.Category;
+import com.github.mkjensen.dml.provider.DmlContract.Video;
+import com.github.mkjensen.dml.provider.DmlDatabase.Table;
 
 /**
  * Danish Media License content provider. The contract between this provider and applications is
@@ -39,14 +39,14 @@ public final class DmlProvider extends ContentProvider {
 
   private static final String TAG = "DmlProvider";
 
-  private DmlDatabaseHelper databaseHelper;
+  private DmlDatabase database;
 
   private DmlUriMatcher uriMatcher;
 
   @Override
   public boolean onCreate() {
     Log.d(TAG, "onCreate");
-    databaseHelper = new DmlDatabaseHelper(getContext());
+    database = new DmlDatabase(getContext());
     uriMatcher = DmlUriMatcher.getInstance();
     return true;
   }
@@ -64,27 +64,27 @@ public final class DmlProvider extends ContentProvider {
         break;
       case CATEGORIES_ID:
         queryBuilder.appendWhere(
-            String.format("%s='%s'", Categories.ID, Categories.getCategoryId(uri)));
+            String.format("%s='%s'", Category.CATEGORY_ID, Category.getCategoryId(uri)));
         break;
       case CATEGORIES_ID_VIDEOS:
-        queryBuilder.setTables(Tables.CATEGORIES_VIDEOS_JOIN_VIDEOS);
+        queryBuilder.setTables(Table.CATEGORY_VIDEO_JOIN_VIDEO);
         queryBuilder.appendWhere(String.format("%s.%s='%s'",
-            Tables.CATEGORIES_VIDEOS,
-            Categories.ID,
-            Categories.getCategoryId(uri)));
+            Table.CATEGORY_VIDEO,
+            Category.CATEGORY_ID,
+            Category.getCategoryId(uri)));
         break;
       case VIDEOS:
         break;
       case VIDEOS_ID:
-        queryBuilder.appendWhere(String.format("%s='%s'", Videos.ID, Videos.getVideoId(uri)));
+        queryBuilder.appendWhere(String.format("%s='%s'", Video.VIDEO_ID, Video.getVideoId(uri)));
         break;
       default:
         throwUnsupportedOperationException(dmlUri);
         return null;
     }
-    SQLiteDatabase database = databaseHelper.getReadableDatabase();
+    SQLiteDatabase db = database.getReadableDatabase();
     Cursor cursor = queryBuilder.query(
-        database,
+        db,
         projection,
         selection,
         selectionArgs,
@@ -117,25 +117,25 @@ public final class DmlProvider extends ContentProvider {
       case VIDEOS:
         break;
       case CATEGORIES_ID_VIDEOS:
-        values.put(Categories.ID, Categories.getCategoryId(uri));
+        values.put(Category.CATEGORY_ID, Category.getCategoryId(uri));
         break;
       default:
         throwUnsupportedOperationException(dmlUri);
         return null;
     }
-    SQLiteDatabase database = databaseHelper.getWritableDatabase();
-    database.insertOrThrow(
+    SQLiteDatabase db = database.getWritableDatabase();
+    db.insertOrThrow(
         dmlUri.getTable(),
         null, // nullColumnHack
         values);
     notifyChange(uri);
     switch (dmlUri) {
       case CATEGORIES:
-        return Categories.buildCategoryUri(values.getAsString(Categories.ID));
+        return Category.buildCategoryUri(values.getAsString(Category.CATEGORY_ID));
       case CATEGORIES_ID_VIDEOS:
-        return Categories.buildVideosUri(values.getAsString(Categories.ID));
+        return Category.buildVideosUri(values.getAsString(Category.CATEGORY_ID));
       case VIDEOS:
-        return Videos.buildVideoUri(values.getAsString(Videos.ID));
+        return Video.buildVideoUri(values.getAsString(Video.VIDEO_ID));
       default:
         throwUnsupportedOperationException(dmlUri);
         return null;
@@ -152,25 +152,25 @@ public final class DmlProvider extends ContentProvider {
       case CATEGORIES:
         break;
       case CATEGORIES_ID:
-        whereClause = Categories.ID + "=?";
-        whereArgs = new String[] {Categories.getCategoryId(uri)};
+        whereClause = Category.CATEGORY_ID + "=?";
+        whereArgs = new String[] {Category.getCategoryId(uri)};
         break;
       case CATEGORIES_ID_VIDEOS:
-        whereClause = Categories.ID + "=?";
-        whereArgs = new String[] {Categories.getCategoryId(uri)};
+        whereClause = Category.CATEGORY_ID + "=?";
+        whereArgs = new String[] {Category.getCategoryId(uri)};
         break;
       case VIDEOS:
         break;
       case VIDEOS_ID:
-        whereClause = Videos.ID + "=?";
-        whereArgs = new String[] {Videos.getVideoId(uri)};
+        whereClause = Video.VIDEO_ID + "=?";
+        whereArgs = new String[] {Video.getVideoId(uri)};
         break;
       default:
         throwUnsupportedOperationException(dmlUri);
         return 0;
     }
-    SQLiteDatabase database = databaseHelper.getWritableDatabase();
-    int deleted = database.delete(
+    SQLiteDatabase db = database.getWritableDatabase();
+    int deleted = db.delete(
         dmlUri.getTable(),
         whereClause,
         whereArgs

@@ -33,9 +33,9 @@ import java.util.Arrays;
 import java.util.Collection;
 
 /**
- * Tests for {@link DmlDatabaseHelper}.
+ * Tests for {@link DmlDatabase}.
  */
-public class DmlDatabaseHelperTest extends ParameterizedPowerMockRobolectricTest {
+public class DmlDatabaseTest extends ParameterizedPowerMockRobolectricTest {
 
   private final int oldVersion;
 
@@ -51,7 +51,7 @@ public class DmlDatabaseHelperTest extends ParameterizedPowerMockRobolectricTest
     });
   }
 
-  public DmlDatabaseHelperTest(int oldVersion, int newVersion) {
+  public DmlDatabaseTest(int oldVersion, int newVersion) {
     this.oldVersion = oldVersion;
     this.newVersion = newVersion;
   }
@@ -60,11 +60,11 @@ public class DmlDatabaseHelperTest extends ParameterizedPowerMockRobolectricTest
   public void onUpgrade_whenCalled_thenTablesAreDroppedAndCreated() {
 
     // Given
-    DmlDatabaseHelper databaseHelper = new DmlDatabaseHelper(null);
+    DmlDatabase database = new DmlDatabase(null);
     SQLiteDatabase databaseMock = mock(SQLiteDatabase.class);
 
     // When
-    databaseHelper.onUpgrade(databaseMock, oldVersion, newVersion);
+    database.onUpgrade(databaseMock, oldVersion, newVersion);
 
     // Then
     InOrder order = inOrder(databaseMock);

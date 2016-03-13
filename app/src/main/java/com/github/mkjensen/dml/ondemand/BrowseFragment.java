@@ -122,11 +122,11 @@ public class BrowseFragment extends BrowseSupportFragment
     Uri uri;
     switch (id) {
       case CATEGORIES_LOADER_ID:
-        uri = DmlContract.Categories.CONTENT_URI;
+        uri = DmlContract.Category.CONTENT_URI;
         break;
       default:
-        String categoryId = args.getString(DmlContract.Categories.ID);
-        uri = DmlContract.Categories.buildVideosUri(categoryId);
+        String categoryId = args.getString(DmlContract.Category.CATEGORY_ID);
+        uri = DmlContract.Category.buildVideosUri(categoryId);
         break;
     }
     return createCursorLoader(uri);
@@ -166,8 +166,8 @@ public class BrowseFragment extends BrowseSupportFragment
 
   private void finishCategoriesLoader(Cursor cursor) {
     categories.clear();
-    int idIndex = cursor.getColumnIndex(DmlContract.Categories.ID);
-    int titleIndex = cursor.getColumnIndex(DmlContract.Categories.TITLE);
+    int idIndex = cursor.getColumnIndex(DmlContract.Category.CATEGORY_ID);
+    int titleIndex = cursor.getColumnIndex(DmlContract.Category.CATEGORY_TITLE);
     while (!cursor.isAfterLast()) {
       String id = cursor.getString(idIndex);
       String title = cursor.getString(titleIndex);
@@ -212,7 +212,7 @@ public class BrowseFragment extends BrowseSupportFragment
 
   private void initVideoLoader(int loaderId, String categoryId) {
     Bundle args = new Bundle();
-    args.putString(DmlContract.Categories.ID, categoryId);
+    args.putString(DmlContract.Category.CATEGORY_ID, categoryId);
     getLoaderManager().initLoader(loaderId, args, this);
   }
 
@@ -311,6 +311,6 @@ public class BrowseFragment extends BrowseSupportFragment
 
   private void removeData() {
     Log.d(TAG, "removeData");
-    getActivity().getContentResolver().delete(DmlContract.Categories.CONTENT_URI, null, null);
+    getActivity().getContentResolver().delete(DmlContract.Category.CONTENT_URI, null, null);
   }
 }

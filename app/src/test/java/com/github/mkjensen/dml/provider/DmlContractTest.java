@@ -21,8 +21,8 @@ import static org.junit.Assert.assertTrue;
 
 import android.net.Uri;
 
-import com.github.mkjensen.dml.provider.DmlContract.Categories;
-import com.github.mkjensen.dml.provider.DmlContract.Videos;
+import com.github.mkjensen.dml.provider.DmlContract.Category;
+import com.github.mkjensen.dml.provider.DmlContract.Video;
 import com.github.mkjensen.dml.test.RobolectricTest;
 import com.github.mkjensen.dml.test.TestUtils;
 
@@ -51,12 +51,12 @@ public class DmlContractTest extends RobolectricTest {
   }
 
   @Test
-  public void categories_constructorMustBePrivateAndParameterless() {
-    assertTrue(TestUtils.hasPrivateParameterlessConstructor(Categories.class));
+  public void category_constructorMustBePrivateAndParameterless() {
+    assertTrue(TestUtils.hasPrivateParameterlessConstructor(Category.class));
   }
 
   @Test
-  public void videos_constructorMustBePrivateAndParameterless() {
-    assertTrue(TestUtils.hasPrivateParameterlessConstructor(Videos.class));
+  public void video_constructorMustBePrivateAndParameterless() {
+    assertTrue(TestUtils.hasPrivateParameterlessConstructor(Video.class));
   }
 }

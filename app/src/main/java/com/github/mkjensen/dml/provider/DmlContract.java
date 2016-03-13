@@ -38,9 +38,9 @@ public final class DmlContract {
   }
 
   /**
-   * Constants for the categories table.
+   * Constants for the category table.
    */
-  public static final class Categories implements CategoriesColumns, BaseColumns {
+  public static final class Category implements DmlDatabase.CategoryColumns, BaseColumns {
 
     static final String CONTENT_TYPE_ID = "category";
 
@@ -49,40 +49,38 @@ public final class DmlContract {
     /**
      * The {@code content://} style {@link Uri} for this table.
      */
-    public static final Uri CONTENT_URI = AUTHORITY_URI.buildUpon()
-        .appendPath(PATH)
-        .build();
+    public static final Uri CONTENT_URI = AUTHORITY_URI.buildUpon().appendPath(PATH).build();
 
-    private Categories() {
+    private Category() {
     }
 
     /**
-     * Builds a {@link Uri} for the requested {@link #ID}.
+     * Builds a {@link Uri} for the requested {@link #CATEGORY_ID}.
      */
     public static Uri buildCategoryUri(String categoryId) {
       return CONTENT_URI.buildUpon().appendPath(categoryId).build();
     }
 
     /**
-     * Reads the {@link #ID} from the specified {@link Categories} {@link Uri}.
+     * Returns the {@link #CATEGORY_ID} from the specified {@link Category} {@link Uri}.
      */
     public static String getCategoryId(Uri uri) {
       return uri.getPathSegments().get(1);
     }
 
     /**
-     * Builds a {@link Uri} that references any {@link Videos} associated with the requested {@link
-     * Categories#ID}.
+     * Builds a {@link Uri} that references any {@link Video} associated with the requested {@link
+     * Category#CATEGORY_ID}.
      */
     public static Uri buildVideosUri(String categoryId) {
-      return Categories.buildCategoryUri(categoryId).buildUpon().appendPath(Videos.PATH).build();
+      return Category.buildCategoryUri(categoryId).buildUpon().appendPath(Video.PATH).build();
     }
   }
 
   /**
-   * Constants for the videos table.
+   * Constants for the video table.
    */
-  public static final class Videos implements VideosColumns, BaseColumns {
+  public static final class Video implements DmlDatabase.VideoColumns, BaseColumns {
 
     static final String CONTENT_TYPE_ID = "video";
 
@@ -91,57 +89,23 @@ public final class DmlContract {
     /**
      * The {@code content://} style {@link Uri} for this table.
      */
-    public static final Uri CONTENT_URI = AUTHORITY_URI.buildUpon()
-        .appendPath(PATH)
-        .build();
+    public static final Uri CONTENT_URI = AUTHORITY_URI.buildUpon().appendPath(PATH).build();
 
-    private Videos() {
+    private Video() {
     }
 
     /**
-     * Builds a {@link Uri} for the requested {@link #ID}.
+     * Builds a {@link Uri} for the requested {@link #VIDEO_ID}.
      */
     public static Uri buildVideoUri(String videoId) {
       return CONTENT_URI.buildUpon().appendPath(videoId).build();
     }
 
     /**
-     * Reads the {@link #ID} from the specified {@link Videos} {@link Uri}.
+     * Returns the {@link #VIDEO_ID} from the specified {@link Video} {@link Uri}.
      */
     public static String getVideoId(Uri uri) {
       return uri.getPathSegments().get(1);
     }
-  }
-
-  /**
-   * Columns of {@link Categories}.
-   */
-  interface CategoriesColumns {
-
-    String ID = "category_id";
-
-    String TITLE = "category_title";
-
-    String URL = "category_url";
-  }
-
-  /**
-   * Columns of {@link Videos}.
-   */
-  interface VideosColumns {
-
-    String ID = "video_id";
-
-    String TITLE = "video_title";
-
-    String IMAGE_URL = "video_image_url";
-
-    String DETAILS_URL = "video_details_url";
-
-    String DESCRIPTION = "video_description";
-
-    String LIST_URL = "video_list_url";
-
-    String URL = "video_url";
   }
 }
