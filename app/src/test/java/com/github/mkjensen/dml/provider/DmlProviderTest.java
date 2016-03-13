@@ -321,10 +321,7 @@ public class DmlProviderTest extends RobolectricTest {
     // When/then
     thrown.expect(IllegalArgumentException.class);
     thrown.expectMessage("Unknown URI: " + INVALID_URL);
-    contentResolver.delete(
-        INVALID_URL,
-        null, // where
-        null); // selectionArgs
+    delete(INVALID_URL);
   }
 
   @Test
@@ -336,10 +333,7 @@ public class DmlProviderTest extends RobolectricTest {
     insertCategory("c2");
 
     // When
-    int deleted = contentResolver.delete(
-        Category.CONTENT_URI,
-        null, // where
-        null); // selectionArgs
+    int deleted = delete(Category.CONTENT_URI);
 
     // Then
     assertEquals(3, deleted);
@@ -354,10 +348,7 @@ public class DmlProviderTest extends RobolectricTest {
     insertCategory("c2");
 
     // When
-    int deleted = contentResolver.delete(
-        Category.buildCategoryUri("c1"),
-        null, // where
-        null); // selectionArgs
+    int deleted = delete(Category.buildCategoryUri("c1"));
 
     // Then
     assertEquals(1, deleted);
@@ -378,10 +369,7 @@ public class DmlProviderTest extends RobolectricTest {
     addToCategory("c1", "v2");
 
     // When
-    int deleted = contentResolver.delete(
-        Category.buildVideosUri("c1"),
-        null, // where
-        null); // selectionArgs
+    int deleted = delete(Category.buildVideosUri("c1"));
 
     try (Cursor categoriesCursor = query(Video.CONTENT_URI)) {
 
@@ -410,10 +398,7 @@ public class DmlProviderTest extends RobolectricTest {
     insertVideo("v2");
 
     // When
-    int deleted = contentResolver.delete(
-        Video.CONTENT_URI,
-        null, // where
-        null); // selectionArgs
+    int deleted = delete(Video.CONTENT_URI);
 
     // Then
     assertEquals(3, deleted);
@@ -428,10 +413,7 @@ public class DmlProviderTest extends RobolectricTest {
     insertVideo("v2");
 
     // When
-    int deleted = contentResolver.delete(
-        Video.buildVideoUri("v1"),
-        null, // where
-        null); // selectionArgs
+    int deleted = delete(Video.buildVideoUri("v1"));
 
     // Then
     assertEquals(1, deleted);
@@ -562,6 +544,13 @@ public class DmlProviderTest extends RobolectricTest {
         null, // selectionArgs
         null // sortOrder
     );
+  }
+
+  private int delete(Uri uri) {
+    return contentResolver.delete(
+        uri,
+        null, // where
+        null); // selectionArgs
   }
 
   private int update(Uri uri) {
