@@ -20,7 +20,6 @@ import static org.junit.Assert.assertEquals;
 
 import android.content.ContentProvider;
 import android.content.ContentResolver;
-import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
 
@@ -79,7 +78,8 @@ public final class ContentUtils {
   }
 
   /**
-   * Delegates to {@link ContentResolver#update(Uri, ContentValues, String, String[])}.
+   * Delegates to {@link ContentResolver#update(Uri, android.content.ContentValues, String,
+   * String[])}.
    */
   public static int update(ContentResolver contentResolver, Uri uri) {
     return contentResolver.update(
