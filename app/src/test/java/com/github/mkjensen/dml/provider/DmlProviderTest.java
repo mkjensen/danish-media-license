@@ -31,6 +31,7 @@ import android.net.Uri;
 import com.github.mkjensen.dml.provider.DmlContract.Category;
 import com.github.mkjensen.dml.provider.DmlContract.Video;
 import com.github.mkjensen.dml.test.RobolectricTest;
+import com.github.mkjensen.dml.test.VideoUtils;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -199,12 +200,14 @@ public class DmlProviderTest extends RobolectricTest {
       assertTrue(cursor.moveToFirst());
       String actualId = getString(cursor, Video.VIDEO_ID);
       assertEquals(expectedId, actualId);
-      assertEquals(getVideoTitle(actualId), getString(cursor, Video.VIDEO_TITLE));
-      assertEquals(getVideoImageUrl(actualId), getString(cursor, Video.VIDEO_IMAGE_URL));
-      assertEquals(getVideoDetailsUrl(actualId), getString(cursor, Video.VIDEO_DETAILS_URL));
-      assertEquals(getVideoDescriptionUrl(actualId), getString(cursor, Video.VIDEO_DESCRIPTION));
-      assertEquals(getVideoListUrl(actualId), getString(cursor, Video.VIDEO_LIST_URL));
-      assertEquals(getVideoUrl(actualId), getString(cursor, Video.VIDEO_URL));
+      assertEquals(VideoUtils.getVideoTitle(actualId), getString(cursor, Video.VIDEO_TITLE));
+      assertEquals(VideoUtils.getVideoImageUrl(actualId), getString(cursor, Video.VIDEO_IMAGE_URL));
+      assertEquals(VideoUtils.getVideoDetailsUrl(actualId),
+          getString(cursor, Video.VIDEO_DETAILS_URL));
+      assertEquals(VideoUtils.getVideoDescription(actualId),
+          getString(cursor, Video.VIDEO_DESCRIPTION));
+      assertEquals(VideoUtils.getVideoListUrl(actualId), getString(cursor, Video.VIDEO_LIST_URL));
+      assertEquals(VideoUtils.getVideoUrl(actualId), getString(cursor, Video.VIDEO_URL));
     }
   }
 
@@ -495,39 +498,8 @@ public class DmlProviderTest extends RobolectricTest {
   }
 
   private Uri insertVideo(String id) {
-    ContentValues values = new ContentValues();
-    values.put(Video.VIDEO_ID, id);
-    values.put(Video.VIDEO_TITLE, getVideoTitle(id));
-    values.put(Video.VIDEO_IMAGE_URL, getVideoImageUrl(id));
-    values.put(Video.VIDEO_DETAILS_URL, getVideoDetailsUrl(id));
-    values.put(Video.VIDEO_DESCRIPTION, getVideoDescriptionUrl(id));
-    values.put(Video.VIDEO_LIST_URL, getVideoListUrl(id));
-    values.put(Video.VIDEO_URL, getVideoUrl(id));
+    ContentValues values = VideoUtils.createContentValues(id);
     return contentResolver.insert(Video.CONTENT_URI, values);
-  }
-
-  private static String getVideoTitle(String id) {
-    return id + Video.VIDEO_TITLE;
-  }
-
-  private static String getVideoImageUrl(String id) {
-    return id + Video.VIDEO_IMAGE_URL;
-  }
-
-  private static String getVideoDescriptionUrl(String id) {
-    return id + Video.VIDEO_DESCRIPTION;
-  }
-
-  private static String getVideoListUrl(String id) {
-    return id + Video.VIDEO_LIST_URL;
-  }
-
-  private static String getVideoUrl(String id) {
-    return id + Video.VIDEO_URL;
-  }
-
-  private static String getVideoDetailsUrl(String id) {
-    return id + Video.VIDEO_DETAILS_URL;
   }
 
   private Uri addToCategory(String categoryId, String videoId) {

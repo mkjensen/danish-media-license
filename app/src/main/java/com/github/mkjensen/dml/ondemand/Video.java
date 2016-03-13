@@ -22,7 +22,7 @@ import android.os.Parcelable;
 /**
  * Metadata about an on-demand video. Create instances using {@link Builder}.
  */
-final class Video implements Parcelable {
+public final class Video implements Parcelable {
 
   public static final Parcelable.Creator<Video> CREATOR = new ParcelableCreator();
 
@@ -98,49 +98,49 @@ final class Video implements Parcelable {
     return copy;
   }
 
-  static final class Builder {
+  public static final class Builder {
 
     private final Video video;
 
-    Builder() {
+    public Builder() {
       video = new Video();
     }
 
-    Video build() {
+    public Video build() {
       return video.copy();
     }
 
-    Builder id(String id) {
+    public Builder id(String id) {
       video.id = id;
       return this;
     }
 
-    Builder title(String title) {
+    public Builder title(String title) {
       video.title = title;
       return this;
     }
 
-    Builder imageUrl(String imageUrl) {
+    public Builder imageUrl(String imageUrl) {
       video.imageUrl = imageUrl;
       return this;
     }
 
-    Builder detailsUrl(String detailsUrl) {
+    public Builder detailsUrl(String detailsUrl) {
       video.detailsUrl = detailsUrl;
       return this;
     }
 
-    Builder description(String description) {
+    public Builder description(String description) {
       video.description = description;
       return this;
     }
 
-    Builder listUrl(String listUrl) {
+    public Builder listUrl(String listUrl) {
       video.listUrl = listUrl;
       return this;
     }
 
-    Builder url(String url) {
+    public Builder url(String url) {
       video.url = url;
       return this;
     }

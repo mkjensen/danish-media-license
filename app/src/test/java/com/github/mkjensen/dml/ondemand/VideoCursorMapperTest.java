@@ -30,6 +30,7 @@ import android.net.Uri;
 import com.github.mkjensen.dml.provider.DmlContract;
 import com.github.mkjensen.dml.provider.DmlProvider;
 import com.github.mkjensen.dml.test.PowerMockRobolectricTest;
+import com.github.mkjensen.dml.test.VideoUtils;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -40,20 +41,6 @@ import org.robolectric.shadows.ShadowContentResolver;
  * Tests for {@link VideoCursorMapper}.
  */
 public class VideoCursorMapperTest extends PowerMockRobolectricTest {
-
-  private static final String VIDEO_ID = "id";
-
-  private static final String VIDEO_TITLE = "title";
-
-  private static final String VIDEO_IMAGE_URL = "imageUrl";
-
-  private static final String VIDEO_DETAILS_URL = "detailsUrl";
-
-  private static final String VIDEO_DESCRIPTION = "description";
-
-  private static final String VIDEO_LIST_URL = "listUrl";
-
-  private static final String VIDEO_URL = "url";
 
   private ContentResolver contentResolver;
 
@@ -98,7 +85,7 @@ public class VideoCursorMapperTest extends PowerMockRobolectricTest {
   public void bind_getsDataFromCursor() throws IllegalAccessException {
 
     // Given
-    insertVideo();
+    insertVideo("id");
     try (Cursor cursor = query()) {
       cursor.moveToFirst();
       String[] columnNames = cursor.getColumnNames();
@@ -125,7 +112,8 @@ public class VideoCursorMapperTest extends PowerMockRobolectricTest {
   public void convert_outputDataIsBuiltFromInputData() {
 
     // Given
-    insertVideo();
+    String id = "id";
+    insertVideo(id);
     try (Cursor cursor = query()) {
       cursor.moveToFirst();
 
@@ -133,13 +121,13 @@ public class VideoCursorMapperTest extends PowerMockRobolectricTest {
       Video video = (Video) cursorMapper.convert(cursor);
 
       // Then
-      assertEquals(VIDEO_ID, video.getId());
-      assertEquals(VIDEO_TITLE, video.getTitle());
-      assertEquals(VIDEO_IMAGE_URL, video.getImageUrl());
-      assertEquals(VIDEO_DETAILS_URL, video.getDetailsUrl());
-      assertEquals(VIDEO_DESCRIPTION, video.getDescription());
-      assertEquals(VIDEO_LIST_URL, video.getListUrl());
-      assertEquals(VIDEO_URL, video.getUrl());
+      assertEquals(id, video.getId());
+      assertEquals(VideoUtils.getVideoTitle(id), video.getTitle());
+      assertEquals(VideoUtils.getVideoImageUrl(id), video.getImageUrl());
+      assertEquals(VideoUtils.getVideoDetailsUrl(id), video.getDetailsUrl());
+      assertEquals(VideoUtils.getVideoDescription(id), video.getDescription());
+      assertEquals(VideoUtils.getVideoListUrl(id), video.getListUrl());
+      assertEquals(VideoUtils.getVideoUrl(id), video.getUrl());
     }
   }
 
@@ -153,15 +141,8 @@ public class VideoCursorMapperTest extends PowerMockRobolectricTest {
     );
   }
 
-  private Uri insertVideo() {
-    ContentValues values = new ContentValues();
-    values.put(DmlContract.Video.VIDEO_ID, VIDEO_ID);
-    values.put(DmlContract.Video.VIDEO_TITLE, VIDEO_TITLE);
-    values.put(DmlContract.Video.VIDEO_IMAGE_URL, VIDEO_IMAGE_URL);
-    values.put(DmlContract.Video.VIDEO_DETAILS_URL, VIDEO_DETAILS_URL);
-    values.put(DmlContract.Video.VIDEO_DESCRIPTION, VIDEO_DESCRIPTION);
-    values.put(DmlContract.Video.VIDEO_LIST_URL, VIDEO_LIST_URL);
-    values.put(DmlContract.Video.VIDEO_URL, VIDEO_URL);
+  private Uri insertVideo(String id) {
+    ContentValues values = VideoUtils.createContentValues(id);
     return contentResolver.insert(DmlContract.Video.CONTENT_URI, values);
   }
 }

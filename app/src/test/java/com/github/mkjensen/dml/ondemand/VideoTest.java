@@ -23,6 +23,7 @@ import static org.junit.Assert.assertNull;
 import android.os.Parcel;
 
 import com.github.mkjensen.dml.test.RobolectricTest;
+import com.github.mkjensen.dml.test.VideoUtils;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -33,14 +34,6 @@ import org.junit.rules.ExpectedException;
  */
 public class VideoTest extends RobolectricTest {
 
-  private static final String ID = "My id";
-  private static final String TITLE = "My title";
-  private static final String IMAGE_URL = "My imageUrl";
-  private static final String DETAILS_URL = "My detailsUrl";
-  private static final String DESCRIPTION = "My description";
-  private static final String LIST_URL = "My listUrl";
-  private static final String URL = "My url";
-
   @Rule
   public final ExpectedException thrown = ExpectedException.none();
 
@@ -48,7 +41,8 @@ public class VideoTest extends RobolectricTest {
   public void builder_givenValues_whenBuilt_thenVideoHasValues() {
 
     // Given
-    Video.Builder videoBuilder = createVideoBuilder();
+    String id = "id";
+    Video.Builder videoBuilder = VideoUtils.createVideoBuilder(id);
 
     // When
     Video video = videoBuilder.build();
@@ -56,26 +50,27 @@ public class VideoTest extends RobolectricTest {
     // Then
     assertNotNull(video);
     assertEquals(0, video.describeContents());
-    assertEquals(ID, video.getId());
-    assertEquals(TITLE, video.getTitle());
-    assertEquals(IMAGE_URL, video.getImageUrl());
-    assertEquals(DETAILS_URL, video.getDetailsUrl());
-    assertEquals(DESCRIPTION, video.getDescription());
-    assertEquals(LIST_URL, video.getListUrl());
-    assertEquals(URL, video.getUrl());
+    assertEquals(id, video.getId());
+    assertEquals(VideoUtils.getVideoTitle(id), video.getTitle());
+    assertEquals(VideoUtils.getVideoImageUrl(id), video.getImageUrl());
+    assertEquals(VideoUtils.getVideoDetailsUrl(id), video.getDetailsUrl());
+    assertEquals(VideoUtils.getVideoDescription(id), video.getDescription());
+    assertEquals(VideoUtils.getVideoListUrl(id), video.getListUrl());
+    assertEquals(VideoUtils.getVideoUrl(id), video.getUrl());
   }
 
   @Test
   public void toString_whenIdSet_thenContainsId() {
 
     // Given
-    Video video = createVideoBuilder().build();
+    String id = "id";
+    Video video = VideoUtils.createVideo(id);
 
     // When
     String videoToString = video.toString();
 
     // Then
-    assertEquals(String.format("Video {id=%s}", video.getId()), videoToString);
+    assertEquals(String.format("Video {id=%s}", id), videoToString);
   }
 
   @Test
@@ -107,22 +102,11 @@ public class VideoTest extends RobolectricTest {
     assertNull(array); // Make PMD happy.
   }
 
-  private static Video.Builder createVideoBuilder() {
-    return new Video.Builder()
-        .id(ID)
-        .title(TITLE)
-        .imageUrl(IMAGE_URL)
-        .detailsUrl(DETAILS_URL)
-        .description(DESCRIPTION)
-        .listUrl(LIST_URL)
-        .url(URL);
-  }
-
   @Test
   public void writeToParcel_givenInput_whenInputWrittenAndOutputCreated_thenTheyMustBeEqual() {
 
     // Given
-    Video input = createVideoBuilder().build();
+    Video input = VideoUtils.createVideo("id");
 
     // When
     Parcel parcel = Parcel.obtain();
