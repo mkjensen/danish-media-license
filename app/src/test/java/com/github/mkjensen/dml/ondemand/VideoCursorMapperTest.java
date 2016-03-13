@@ -21,21 +21,18 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.powermock.api.mockito.PowerMockito.spy;
 
-import android.content.ContentProvider;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
 
 import com.github.mkjensen.dml.provider.DmlContract;
-import com.github.mkjensen.dml.provider.DmlProvider;
+import com.github.mkjensen.dml.test.ContentUtils;
 import com.github.mkjensen.dml.test.PowerMockRobolectricTest;
 import com.github.mkjensen.dml.test.VideoUtils;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.robolectric.RuntimeEnvironment;
-import org.robolectric.shadows.ShadowContentResolver;
 
 /**
  * Tests for {@link VideoCursorMapper}.
@@ -47,27 +44,20 @@ public class VideoCursorMapperTest extends PowerMockRobolectricTest {
   private VideoCursorMapper cursorMapper;
 
   /**
-   * Registers {@link DmlProvider} as provider for {@link DmlContract#AUTHORITY} and sets {@link
-   * #contentResolver} and {@link #cursorMapper}.
+   * Registers the content provider and sets {@link #contentResolver} and {@link #cursorMapper}.
    */
   @Before
   public void before() {
-    regusterContentProvider();
-    contentResolver = RuntimeEnvironment.application.getContentResolver();
+    ContentUtils.registerContentProvider();
+    contentResolver = ContentUtils.getContentResolver();
     cursorMapper = new VideoCursorMapper();
-  }
-
-  private static void regusterContentProvider() {
-    ContentProvider contentProvider = new DmlProvider();
-    contentProvider.onCreate();
-    ShadowContentResolver.registerProvider(DmlContract.AUTHORITY, contentProvider);
   }
 
   @Test
   public void bindColumns_getsColumnIndicesFromCursorAndNothingElse() {
 
     // Given
-    try (Cursor cursor = query()) {
+    try (Cursor cursor = ContentUtils.query(contentResolver, DmlContract.Video.CONTENT_URI)) {
       String[] columnNames = cursor.getColumnNames();
       Cursor cursorMock = spy(cursor);
 
@@ -90,7 +80,7 @@ public class VideoCursorMapperTest extends PowerMockRobolectricTest {
 
     // Given
     insertVideo("id");
-    try (Cursor cursor = query()) {
+    try (Cursor cursor = ContentUtils.query(contentResolver, DmlContract.Video.CONTENT_URI)) {
       cursor.moveToFirst();
       String[] columnNames = cursor.getColumnNames();
       cursorMapper.bindColumns(cursor);
@@ -118,7 +108,7 @@ public class VideoCursorMapperTest extends PowerMockRobolectricTest {
     // Given
     String id = "id";
     insertVideo(id);
-    try (Cursor cursor = query()) {
+    try (Cursor cursor = ContentUtils.query(contentResolver, DmlContract.Video.CONTENT_URI)) {
       cursor.moveToFirst();
 
       // When
@@ -133,16 +123,6 @@ public class VideoCursorMapperTest extends PowerMockRobolectricTest {
       assertEquals(VideoUtils.getVideoListUrl(id), video.getListUrl());
       assertEquals(VideoUtils.getVideoUrl(id), video.getUrl());
     }
-  }
-
-  private Cursor query() {
-    return contentResolver.query(
-        DmlContract.Video.CONTENT_URI,
-        null, // projection
-        null, // selection
-        null, // selectionArgs
-        null // sortOrder
-    );
   }
 
   private Uri insertVideo(String id) {
