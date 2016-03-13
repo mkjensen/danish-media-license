@@ -36,6 +36,9 @@ public class DetailsActivityTest extends RobolectricTest {
 
   private DetailsActivity detailsActivity;
 
+  /**
+   * Creates a {@link DetailsActivity} instance.
+   */
   @Before
   public void before() {
     detailsActivity = Robolectric.buildActivity(DetailsActivity.class)

@@ -46,6 +46,10 @@ public class VideoCursorMapperTest extends PowerMockRobolectricTest {
 
   private VideoCursorMapper cursorMapper;
 
+  /**
+   * Registers {@link DmlProvider} as provider for {@link DmlContract#AUTHORITY} and sets {@link
+   * #contentResolver} and {@link #cursorMapper}.
+   */
   @Before
   public void before() {
     regusterContentProvider();

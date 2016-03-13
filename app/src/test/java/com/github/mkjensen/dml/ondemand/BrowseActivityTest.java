@@ -34,6 +34,9 @@ public class BrowseActivityTest extends RobolectricTest {
 
   private BrowseActivity browseActivity;
 
+  /**
+   * Creates a {@link BrowseActivity} instance.
+   */
   @Before
   public void before() {
     browseActivity = Robolectric.buildActivity(BrowseActivity.class)
