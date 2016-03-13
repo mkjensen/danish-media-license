@@ -14,10 +14,12 @@
  * limitations under the License.
  */
 
-package com.github.mkjensen.dml;
+package com.github.mkjensen.dml.test;
 
 import android.content.Context;
 import android.os.Build;
+
+import com.github.mkjensen.dml.BuildConfig;
 
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricGradleTestRunner;

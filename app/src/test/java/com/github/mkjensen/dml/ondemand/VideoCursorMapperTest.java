@@ -27,10 +27,10 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
 
-import com.github.mkjensen.dml.PowerMockRobolectricTest;
 import com.github.mkjensen.dml.provider.DmlContract;
 import com.github.mkjensen.dml.provider.DmlContract.Videos;
 import com.github.mkjensen.dml.provider.DmlProvider;
+import com.github.mkjensen.dml.test.PowerMockRobolectricTest;
 
 import org.junit.Before;
 import org.junit.Test;

@@ -22,7 +22,7 @@ import static org.junit.Assert.assertNull;
 
 import android.os.Parcel;
 
-import com.github.mkjensen.dml.RobolectricTest;
+import com.github.mkjensen.dml.test.RobolectricTest;
 
 import org.junit.Rule;
 import org.junit.Test;

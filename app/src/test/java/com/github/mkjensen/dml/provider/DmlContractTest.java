@@ -21,10 +21,10 @@ import static org.junit.Assert.assertTrue;
 
 import android.net.Uri;
 
-import com.github.mkjensen.dml.RobolectricTest;
-import com.github.mkjensen.dml.TestUtils;
 import com.github.mkjensen.dml.provider.DmlContract.Categories;
 import com.github.mkjensen.dml.provider.DmlContract.Videos;
+import com.github.mkjensen.dml.test.RobolectricTest;
+import com.github.mkjensen.dml.test.TestUtils;
 
 import org.junit.Test;
 

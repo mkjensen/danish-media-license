@@ -21,7 +21,7 @@ import static org.junit.Assert.assertEquals;
 import android.os.IBinder;
 import android.os.RemoteException;
 
-import com.github.mkjensen.dml.RobolectricTest;
+import com.github.mkjensen.dml.test.RobolectricTest;
 
 import org.junit.Test;
 

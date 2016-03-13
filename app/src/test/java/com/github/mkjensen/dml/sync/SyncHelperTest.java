@@ -23,7 +23,7 @@ import android.accounts.Account;
 import android.content.ContentResolver;
 import android.os.Bundle;
 
-import com.github.mkjensen.dml.RobolectricTest;
+import com.github.mkjensen.dml.test.RobolectricTest;
 import com.github.mkjensen.dml.provider.DmlContract;
 
 import org.junit.Before;

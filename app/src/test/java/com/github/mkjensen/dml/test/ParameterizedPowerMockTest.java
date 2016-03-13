@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package com.github.mkjensen.dml;
+package com.github.mkjensen.dml.test;
 
 import org.junit.runner.RunWith;
-import org.robolectric.ParameterizedRobolectricTestRunner;
+import org.junit.runners.Parameterized;
 
 /**
- * Base class for running parameterized Powermock-enabled Robolectric tests.
+ * Base class for running parameterized Powermock-enabled tests.
  */
-@RunWith(ParameterizedRobolectricTestRunner.class)
-public abstract class ParameterizedPowerMockRobolectricTest extends PowerMockRobolectricTest {
+@RunWith(Parameterized.class)
+public abstract class ParameterizedPowerMockTest extends PowerMockTest {
 }

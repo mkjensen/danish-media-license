@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.github.mkjensen.dml;
+package com.github.mkjensen.dml.test;
 
 import org.junit.Rule;
 import org.powermock.core.classloader.annotations.PowerMockIgnore;

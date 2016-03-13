@@ -23,7 +23,7 @@ import static org.powermock.api.mockito.PowerMockito.mock;
 
 import android.database.sqlite.SQLiteDatabase;
 
-import com.github.mkjensen.dml.ParameterizedPowerMockRobolectricTest;
+import com.github.mkjensen.dml.test.ParameterizedPowerMockRobolectricTest;
 
 import org.junit.Test;
 import org.mockito.InOrder;

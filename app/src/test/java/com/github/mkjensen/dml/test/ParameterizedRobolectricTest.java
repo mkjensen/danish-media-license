@@ -14,18 +14,14 @@
  * limitations under the License.
  */
 
-package com.github.mkjensen.dml;
+package com.github.mkjensen.dml.test;
 
-import org.junit.Rule;
-import org.powermock.core.classloader.annotations.PowerMockIgnore;
-import org.powermock.modules.junit4.rule.PowerMockRule;
+import org.junit.runner.RunWith;
+import org.robolectric.ParameterizedRobolectricTestRunner;
 
 /**
- * Base class for running Powermock-enabled tests.
+ * Base class for running parameterized Robolectric tests.
  */
-@PowerMockIgnore( {"android.*", "org.mockito.*", "org.powermock.*", "org.robolectric.*"})
-public abstract class PowerMockTest {
-
-  @Rule
-  public final PowerMockRule powerMockRule = new PowerMockRule();
+@RunWith(ParameterizedRobolectricTestRunner.class)
+public abstract class ParameterizedRobolectricTest extends RobolectricTest {
 }

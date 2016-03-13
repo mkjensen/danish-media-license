@@ -21,7 +21,7 @@ import static org.junit.Assert.assertSame;
 
 import android.accounts.Account;
 
-import com.github.mkjensen.dml.RobolectricTest;
+import com.github.mkjensen.dml.test.RobolectricTest;
 
 import org.junit.Before;
 import org.junit.Rule;

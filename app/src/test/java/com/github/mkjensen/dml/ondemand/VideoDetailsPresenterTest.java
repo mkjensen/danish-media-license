@@ -23,7 +23,7 @@ import static org.powermock.api.mockito.PowerMockito.when;
 import android.support.v17.leanback.widget.AbstractDetailsDescriptionPresenter.ViewHolder;
 import android.widget.TextView;
 
-import com.github.mkjensen.dml.PowerMockTest;
+import com.github.mkjensen.dml.test.PowerMockTest;
 
 import org.junit.Test;
 import org.powermock.core.classloader.annotations.PrepareForTest;

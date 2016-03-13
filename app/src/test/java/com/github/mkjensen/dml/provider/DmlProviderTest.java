@@ -28,10 +28,10 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
 
-import com.github.mkjensen.dml.RobolectricTest;
 import com.github.mkjensen.dml.provider.DmlContract.Categories;
 import com.github.mkjensen.dml.provider.DmlContract.CategoriesVideos;
 import com.github.mkjensen.dml.provider.DmlContract.Videos;
+import com.github.mkjensen.dml.test.RobolectricTest;
 
 import org.junit.Before;
 import org.junit.Rule;

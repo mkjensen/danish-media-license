@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.github.mkjensen.dml;
+package com.github.mkjensen.dml.test;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Modifier;

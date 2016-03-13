@@ -21,7 +21,7 @@ import static org.junit.Assert.assertNotNull;
 import android.view.View;
 
 import com.github.mkjensen.dml.R;
-import com.github.mkjensen.dml.RobolectricTest;
+import com.github.mkjensen.dml.test.RobolectricTest;
 
 import org.junit.Before;
 import org.junit.Test;
