@@ -37,16 +37,23 @@ public final class BackendHelper {
 
   private final DmlWebService webService;
 
+
   public BackendHelper() {
-    webService = createWebService();
+    webService = createWebService(null);
   }
 
-  private static DmlWebService createWebService() {
-    Retrofit retrofit = new Retrofit.Builder()
+  public BackendHelper(okhttp3.Call.Factory callFactory) {
+    this.webService = createWebService(callFactory);
+  }
+
+  private static DmlWebService createWebService(okhttp3.Call.Factory callFactory) {
+    Retrofit.Builder builder = new Retrofit.Builder()
         .addConverterFactory(MoshiConverterFactory.create())
-        .baseUrl(DmlWebService.BASE_URL)
-        .build();
-    return retrofit.create(DmlWebService.class);
+        .baseUrl(DmlWebService.BASE_URL);
+    if (callFactory != null) {
+      builder.callFactory(callFactory);
+    }
+    return builder.build().create(DmlWebService.class);
   }
 
   /**
