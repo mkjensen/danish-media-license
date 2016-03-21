@@ -77,7 +77,7 @@ public class BackendHelperTest extends PowerMockRobolectricTest {
     // Then
     assertNotNull(categories);
     assertEquals(2, categories.size());
-    for (int i = 0, n = categories.size(); i < n; i++) {
+    for (int i = 0; i < categories.size(); i++) {
       Category category = categories.get(i);
       assertNotNull(category);
       if (i == 0) {
