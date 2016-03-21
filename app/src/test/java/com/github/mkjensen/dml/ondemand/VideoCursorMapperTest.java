@@ -118,7 +118,6 @@ public class VideoCursorMapperTest extends PowerMockRobolectricTest {
       assertEquals(id, video.getId());
       assertEquals(VideoUtils.getVideoTitle(id), video.getTitle());
       assertEquals(VideoUtils.getVideoImageUrl(id), video.getImageUrl());
-      assertEquals(VideoUtils.getVideoDetailsUrl(id), video.getDetailsUrl());
       assertEquals(VideoUtils.getVideoDescription(id), video.getDescription());
       assertEquals(VideoUtils.getVideoListUrl(id), video.getListUrl());
       assertEquals(VideoUtils.getVideoUrl(id), video.getUrl());

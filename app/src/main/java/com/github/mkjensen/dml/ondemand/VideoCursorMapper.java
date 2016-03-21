@@ -32,8 +32,6 @@ class VideoCursorMapper extends CursorMapper {
 
   private int imageUrlIndex;
 
-  private int detailsUrlIndex;
-
   private int descriptionIndex;
 
   private int listUrlIndex;
@@ -45,7 +43,6 @@ class VideoCursorMapper extends CursorMapper {
     idIndex = cursor.getColumnIndex(DmlContract.Video.VIDEO_ID);
     titleIndex = cursor.getColumnIndex(DmlContract.Video.VIDEO_TITLE);
     imageUrlIndex = cursor.getColumnIndex(DmlContract.Video.VIDEO_IMAGE_URL);
-    detailsUrlIndex = cursor.getColumnIndex(DmlContract.Video.VIDEO_DETAILS_URL);
     descriptionIndex = cursor.getColumnIndex(DmlContract.Video.VIDEO_DESCRIPTION);
     listUrlIndex = cursor.getColumnIndex(DmlContract.Video.VIDEO_LIST_URL);
     urlIndex = cursor.getColumnIndex(DmlContract.Video.VIDEO_URL);
@@ -56,7 +53,6 @@ class VideoCursorMapper extends CursorMapper {
     String id = cursor.getString(idIndex);
     String title = cursor.getString(titleIndex);
     String imageUrl = cursor.getString(imageUrlIndex);
-    String detailsUrl = cursor.getString(detailsUrlIndex);
     String description = cursor.getString(descriptionIndex);
     String listUrl = cursor.getString(listUrlIndex);
     String url = cursor.getString(urlIndex);
@@ -64,7 +60,6 @@ class VideoCursorMapper extends CursorMapper {
         .id(id)
         .title(title)
         .imageUrl(imageUrl)
-        .detailsUrl(detailsUrl)
         .description(description)
         .listUrl(listUrl)
         .url(url)

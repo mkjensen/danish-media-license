@@ -19,6 +19,8 @@ package com.github.mkjensen.dml.ondemand;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.squareup.moshi.Json;
+
 /**
  * Metadata about an on-demand video. Create instances using {@link Builder}.
  */
@@ -26,12 +28,19 @@ public final class Video implements Parcelable {
 
   public static final Parcelable.Creator<Video> CREATOR = new ParcelableCreator();
 
+  @Json(name = "Slug")
   private String id;
+
+  @Json(name = "Title")
   private String title;
+
+  @Json(name = "PrimaryImageUri")
   private String imageUrl;
-  private String detailsUrl;
+
   private String description;
+
   private String listUrl;
+
   private String url;
 
   private Video() {
@@ -52,37 +61,32 @@ public final class Video implements Parcelable {
     dest.writeString(id);
     dest.writeString(title);
     dest.writeString(imageUrl);
-    dest.writeString(detailsUrl);
     dest.writeString(description);
     dest.writeString(listUrl);
     dest.writeString(url);
   }
 
-  String getId() {
+  public String getId() {
     return id;
   }
 
-  String getTitle() {
+  public String getTitle() {
     return title;
   }
 
-  String getImageUrl() {
+  public String getImageUrl() {
     return imageUrl;
   }
 
-  String getDetailsUrl() {
-    return detailsUrl;
-  }
-
-  String getDescription() {
+  public String getDescription() {
     return description;
   }
 
-  String getListUrl() {
+  public String getListUrl() {
     return listUrl;
   }
 
-  String getUrl() {
+  public String getUrl() {
     return url;
   }
 
@@ -91,7 +95,6 @@ public final class Video implements Parcelable {
     copy.id = id;
     copy.title = title;
     copy.imageUrl = imageUrl;
-    copy.detailsUrl = detailsUrl;
     copy.description = description;
     copy.listUrl = listUrl;
     copy.url = url;
@@ -125,11 +128,6 @@ public final class Video implements Parcelable {
       return this;
     }
 
-    public Builder detailsUrl(String detailsUrl) {
-      video.detailsUrl = detailsUrl;
-      return this;
-    }
-
     public Builder description(String description) {
       video.description = description;
       return this;
@@ -154,7 +152,6 @@ public final class Video implements Parcelable {
       video.id = source.readString();
       video.title = source.readString();
       video.imageUrl = source.readString();
-      video.detailsUrl = source.readString();
       video.description = source.readString();
       video.listUrl = source.readString();
       video.url = source.readString();

@@ -30,8 +30,6 @@ public final class VideoUtils {
 
   private static final String VIDEO_IMAGE_URL = "video_imageUrl";
 
-  private static final String VIDEO_DETAILS_URL = "video_detailsUrl";
-
   private static final String VIDEO_DESCRIPTION = "video_description";
 
   private static final String VIDEO_LIST_URL = "video_listUrl";
@@ -49,7 +47,6 @@ public final class VideoUtils {
         .id(id)
         .title(getVideoTitle(id))
         .imageUrl(getVideoImageUrl(id))
-        .detailsUrl(getVideoDetailsUrl(id))
         .description(getVideoDescription(id))
         .listUrl(getVideoListUrl(id))
         .url(getVideoUrl(id));
@@ -71,7 +68,6 @@ public final class VideoUtils {
     values.put(DmlContract.Video.VIDEO_ID, id);
     values.put(DmlContract.Video.VIDEO_TITLE, getVideoTitle(id));
     values.put(DmlContract.Video.VIDEO_IMAGE_URL, getVideoImageUrl(id));
-    values.put(DmlContract.Video.VIDEO_DETAILS_URL, getVideoDetailsUrl(id));
     values.put(DmlContract.Video.VIDEO_DESCRIPTION, getVideoDescription(id));
     values.put(DmlContract.Video.VIDEO_LIST_URL, getVideoListUrl(id));
     values.put(DmlContract.Video.VIDEO_URL, getVideoUrl(id));
@@ -84,10 +80,6 @@ public final class VideoUtils {
 
   public static String getVideoImageUrl(String id) {
     return id + VIDEO_IMAGE_URL;
-  }
-
-  public static String getVideoDetailsUrl(String id) {
-    return id + VIDEO_DETAILS_URL;
   }
 
   public static String getVideoDescription(String id) {

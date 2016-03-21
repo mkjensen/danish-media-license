@@ -19,10 +19,23 @@ package com.github.mkjensen.dml.sync;
 import android.accounts.Account;
 import android.content.AbstractThreadedSyncAdapter;
 import android.content.ContentProviderClient;
+import android.content.ContentProviderOperation;
 import android.content.Context;
+import android.content.OperationApplicationException;
 import android.content.SyncResult;
+import android.database.Cursor;
 import android.os.Bundle;
+import android.os.RemoteException;
 import android.util.Log;
+
+import com.github.mkjensen.dml.backend.BackendHelper;
+import com.github.mkjensen.dml.backend.Category;
+import com.github.mkjensen.dml.ondemand.Video;
+import com.github.mkjensen.dml.provider.DmlContract;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Sync adapter for downloading content.
@@ -30,6 +43,8 @@ import android.util.Log;
 final class DmlSyncAdapter extends AbstractThreadedSyncAdapter {
 
   private static final String TAG = "DmlSyncAdapter";
+
+  private final BackendHelper backendHelper;
 
   // @formatter:off
   /**
@@ -54,12 +69,107 @@ final class DmlSyncAdapter extends AbstractThreadedSyncAdapter {
    */
   DmlSyncAdapter(Context context) {
     super(context, AUTO_INITIALIZE, ALLOW_PARALLEL_SYNCS);
+    backendHelper = new BackendHelper();
   }
 
   @Override
   public void onPerformSync(Account account, Bundle extras, String authority,
                             ContentProviderClient provider, SyncResult syncResult) {
     Log.d(TAG, "onPerformSync");
-    SyncHelper.addTestData(provider, syncResult);
+    sync(provider, syncResult);
+  }
+
+  private void sync(ContentProviderClient provider, SyncResult syncResult) {
+    List<Category> categories;
+    try {
+      categories = backendHelper.loadCategories();
+    } catch (IOException ex) {
+      Log.e(TAG, "Could not load categories", ex);
+      syncResult.stats.numIoExceptions++;
+      return;
+    }
+    ArrayList<ContentProviderOperation> operations = new ArrayList<>();
+    for (Category category : categories) {
+      if (!hasCategory(provider, category)) {
+        addCategory(operations, category);
+      }
+      try {
+        backendHelper.loadVideos(category);
+        insertAndAddVideosToCategory(operations, category);
+      } catch (IOException ex) {
+        Log.e(TAG, String.format("Could not load videos for category [%s]", category.getId()), ex);
+        syncResult.stats.numIoExceptions++;
+      }
+    }
+    try {
+      Log.d(TAG, "Applying batch");
+      provider.applyBatch(operations);
+      // TODO: How to update syncResult.stats?
+    } catch (RemoteException | OperationApplicationException ex) {
+      Log.e(TAG, "Error applying batch", ex);
+      // TODO: Update syncResult.stats?
+    }
+  }
+
+  private static boolean hasCategory(ContentProviderClient provider, Category category) {
+    try (Cursor cursor = provider.query(
+        DmlContract.Category.buildCategoryUri(category.getId()),
+        null, // projection,
+        null, // selection
+        null, //selectionArgs,
+        null // sortOrder
+    )) {
+      return cursor != null && cursor.getCount() == 1;
+    } catch (RemoteException ex) {
+      Log.e(TAG, String.format("Error querying category [%s]", category.getId()), ex);
+      return false;
+    }
+  }
+
+  private static void addCategory(List<ContentProviderOperation> operations, Category category) {
+    ContentProviderOperation operation = ContentProviderOperation
+        .newInsert(DmlContract.Category.CONTENT_URI)
+        .withValue(DmlContract.Category.CATEGORY_ID, category.getId())
+        .withValue(DmlContract.Category.CATEGORY_TITLE, category.getTitle())
+        .withValue(DmlContract.Category.CATEGORY_URL, category.getUrl())
+        .build();
+    operations.add(operation);
+  }
+
+  private static void insertAndAddVideosToCategory(List<ContentProviderOperation> operations,
+                                                   Category category) {
+    // TODO: Remove old videos that are no longer associated with a category
+    // TODO: Check if video already exists, possibly update, instead of deleting and inserting
+    deleteVideos(operations, category);
+    for (Video video : category.getVideos()) {
+      insertVideo(operations, video);
+      addVideoToCategory(operations, category, video);
+    }
+  }
+
+  private static void deleteVideos(List<ContentProviderOperation> operations, Category category) {
+    ContentProviderOperation operation = ContentProviderOperation
+        .newDelete(DmlContract.Category.buildVideosUri(category.getId()))
+        .build();
+    operations.add(operation);
+  }
+
+  private static void insertVideo(List<ContentProviderOperation> operations, Video video) {
+    ContentProviderOperation operation = ContentProviderOperation
+        .newInsert(DmlContract.Video.CONTENT_URI)
+        .withValue(DmlContract.Video.VIDEO_ID, video.getId())
+        .withValue(DmlContract.Video.VIDEO_TITLE, video.getTitle())
+        .withValue(DmlContract.Video.VIDEO_IMAGE_URL, video.getImageUrl())
+        .build();
+    operations.add(operation);
+  }
+
+  private static void addVideoToCategory(List<ContentProviderOperation> operations,
+                                         Category category, Video video) {
+    ContentProviderOperation operation = ContentProviderOperation
+        .newInsert(DmlContract.Category.buildVideosUri(category.getId()))
+        .withValue(DmlContract.Video.VIDEO_ID, video.getId())
+        .build();
+    operations.add(operation);
   }
 }

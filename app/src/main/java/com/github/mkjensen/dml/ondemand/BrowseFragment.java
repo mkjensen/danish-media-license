@@ -251,8 +251,7 @@ public class BrowseFragment extends BrowseSupportFragment
     adapter.add(new DebugItem("Sync", new DebugItem.OnItemClickedListener() {
       @Override
       public void onItemClicked() {
-        Account account = accountHelper.getOrCreateAccount(getActivity());
-        syncHelper.requestSync(account);
+        requestSync();
       }
     }));
     adapter.add(new DebugItem("Remove all", new DebugItem.OnItemClickedListener() {
@@ -309,8 +308,14 @@ public class BrowseFragment extends BrowseSupportFragment
     }
   }
 
+  private void requestSync() {
+    Account account = accountHelper.getOrCreateAccount(getActivity());
+    syncHelper.requestSync(account);
+  }
+
   private void removeData() {
     Log.d(TAG, "removeData");
+    getActivity().getContentResolver().delete(DmlContract.Video.CONTENT_URI, null, null);
     getActivity().getContentResolver().delete(DmlContract.Category.CONTENT_URI, null, null);
   }
 }

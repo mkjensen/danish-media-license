@@ -20,7 +20,6 @@ import static com.github.mkjensen.dml.provider.DmlDatabase.CategoryColumns.CATEG
 import static com.github.mkjensen.dml.provider.DmlDatabase.CategoryColumns.CATEGORY_TITLE;
 import static com.github.mkjensen.dml.provider.DmlDatabase.CategoryColumns.CATEGORY_URL;
 import static com.github.mkjensen.dml.provider.DmlDatabase.VideoColumns.VIDEO_DESCRIPTION;
-import static com.github.mkjensen.dml.provider.DmlDatabase.VideoColumns.VIDEO_DETAILS_URL;
 import static com.github.mkjensen.dml.provider.DmlDatabase.VideoColumns.VIDEO_ID;
 import static com.github.mkjensen.dml.provider.DmlDatabase.VideoColumns.VIDEO_IMAGE_URL;
 import static com.github.mkjensen.dml.provider.DmlDatabase.VideoColumns.VIDEO_LIST_URL;
@@ -87,7 +86,6 @@ final class DmlDatabase extends SQLiteOpenHelper {
         + VIDEO_ID + " TEXT NOT NULL,"
         + VIDEO_TITLE + " TEXT NOT NULL,"
         + VIDEO_IMAGE_URL + " TEXT NOT NULL,"
-        + VIDEO_DETAILS_URL + " TEXT NOT NULL,"
         + VIDEO_DESCRIPTION + " TEXT,"
         + VIDEO_LIST_URL + " TEXT,"
         + VIDEO_URL + " TEXT,"
@@ -155,8 +153,6 @@ final class DmlDatabase extends SQLiteOpenHelper {
     String VIDEO_TITLE = "video_title";
 
     String VIDEO_IMAGE_URL = "video_image_url";
-
-    String VIDEO_DETAILS_URL = "video_details_url";
 
     String VIDEO_DESCRIPTION = "video_description";
 

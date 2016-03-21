@@ -191,6 +191,8 @@
             <emptyLine />
             <package name="repackage" withSubpackages="true" static="false" />
             <emptyLine />
+            <package name="retrofit2" withSubpackages="true" static="false" />
+            <emptyLine />
             <package name="scm" withSubpackages="true" static="false" />
             <emptyLine />
             <package name="se" withSubpackages="true" static="false" />
