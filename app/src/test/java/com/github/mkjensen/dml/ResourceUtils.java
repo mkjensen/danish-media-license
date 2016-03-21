@@ -44,7 +44,7 @@ public final class ResourceUtils {
       }
       return result.toString();
     } catch (IOException ex) {
-      throw new RuntimeException(ex);
+      throw new DmlException(ex);
     }
   }
 }
