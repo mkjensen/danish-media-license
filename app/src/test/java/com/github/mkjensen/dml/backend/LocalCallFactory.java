@@ -27,10 +27,10 @@ import okhttp3.ResponseBody;
 import java.io.IOException;
 
 /**
- * Custom implementation of {@link okhttp3.Call.Factory} that avoids remote calls by enabling
- * clients to specify the result that would have been delivered from the remote system.
+ * Custom implementation of {@link Call.Factory} that avoids remote calls by enabling clients to
+ * specify the result that would have been delivered from the remote system.
  */
-final class LocalCallFactory implements okhttp3.Call.Factory {
+final class LocalCallFactory implements Call.Factory {
 
   private int code;
   private ResponseBody responseBody;
