@@ -44,7 +44,7 @@ import java.util.concurrent.atomic.AtomicReference;
  *
  * @see <a href="https://goo.gl/m9KY6I">ExoPlayer OkHttpDataSource</a>
  */
-public class OkHttpDataSource implements HttpDataSource {
+final class OkHttpDataSource implements HttpDataSource {
 
   private static final AtomicReference<byte[]> skipBufferReference = new AtomicReference<>();
 
@@ -102,9 +102,9 @@ public class OkHttpDataSource implements HttpDataSource {
    *                             Cache-Control header. For example, you could force the network
    *                             response for all requests.
    */
-  public OkHttpDataSource(OkHttpClient client, String userAgent,
-                          Predicate<String> contentTypePredicate, TransferListener listener,
-                          CacheControl cacheControl) {
+  private OkHttpDataSource(OkHttpClient client, String userAgent,
+                           Predicate<String> contentTypePredicate, TransferListener listener,
+                           CacheControl cacheControl) {
     this.okHttpClient = Assertions.checkNotNull(client);
     this.userAgent = Assertions.checkNotEmpty(userAgent);
     this.contentTypePredicate = contentTypePredicate;
