@@ -25,7 +25,6 @@ import com.google.android.exoplayer.TrackRenderer;
 import com.google.android.exoplayer.audio.AudioCapabilities;
 import com.google.android.exoplayer.hls.DefaultHlsTrackSelector;
 import com.google.android.exoplayer.hls.HlsChunkSource;
-import com.google.android.exoplayer.hls.HlsMasterPlaylist;
 import com.google.android.exoplayer.hls.HlsPlaylist;
 import com.google.android.exoplayer.hls.HlsPlaylistParser;
 import com.google.android.exoplayer.hls.HlsSampleSource;
@@ -33,8 +32,6 @@ import com.google.android.exoplayer.hls.PtsTimestampAdjusterProvider;
 import com.google.android.exoplayer.metadata.MetadataTrackRenderer;
 import com.google.android.exoplayer.metadata.id3.Id3Frame;
 import com.google.android.exoplayer.metadata.id3.Id3Parser;
-import com.google.android.exoplayer.text.TextTrackRenderer;
-import com.google.android.exoplayer.text.eia608.Eia608TrackRenderer;
 import com.google.android.exoplayer.upstream.DataSource;
 import com.google.android.exoplayer.upstream.DefaultAllocator;
 import com.google.android.exoplayer.upstream.DefaultBandwidthMeter;
@@ -161,29 +158,10 @@ public class HlsRendererBuilder implements RendererBuilder {
       final MetadataTrackRenderer<List<Id3Frame>> id3Renderer = new MetadataTrackRenderer<>(
           sampleSource, new Id3Parser(), player, mainHandler.getLooper());
 
-      // Build the text renderer, preferring Webvtt where available.
-      boolean preferWebvtt = false;
-      if (manifest instanceof HlsMasterPlaylist) {
-        preferWebvtt = !((HlsMasterPlaylist) manifest).subtitles.isEmpty();
-      }
-      TrackRenderer textRenderer;
-      if (preferWebvtt) {
-        DataSource textDataSource = createDataSource(context, userAgent, bandwidthMeter);
-        HlsChunkSource textChunkSource = new HlsChunkSource(false /* isMaster */, textDataSource,
-            url, manifest, DefaultHlsTrackSelector.newVttInstance(), bandwidthMeter,
-            timestampAdjusterProvider, HlsChunkSource.ADAPTIVE_MODE_SPLICE);
-        HlsSampleSource textSampleSource = new HlsSampleSource(textChunkSource, loadControl,
-            TEXT_BUFFER_SEGMENTS * BUFFER_SEGMENT_SIZE, mainHandler, player, DemoPlayer.TYPE_TEXT);
-        textRenderer = new TextTrackRenderer(textSampleSource, player, mainHandler.getLooper());
-      } else {
-        textRenderer = new Eia608TrackRenderer(sampleSource, player, mainHandler.getLooper());
-      }
-
       TrackRenderer[] renderers = new TrackRenderer[DemoPlayer.RENDERER_COUNT];
       renderers[DemoPlayer.TYPE_VIDEO] = videoRenderer;
       renderers[DemoPlayer.TYPE_AUDIO] = audioRenderer;
       renderers[DemoPlayer.TYPE_METADATA] = id3Renderer;
-      renderers[DemoPlayer.TYPE_TEXT] = textRenderer;
       player.onRenderers(renderers, bandwidthMeter);
     }
   }
