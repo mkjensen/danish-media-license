@@ -39,12 +39,14 @@ public abstract class RobolectricTest {
   /**
    * The Android manifest file to load.
    */
+  @SuppressWarnings("WeakerAccess")
   static final String MANIFEST = "src/main/AndroidManifest.xml";
 
   /**
    * The Android SDK level to emulate. The greatest supported SDK level as of Robolectric 3.0 is
    * {@link android.os.Build.VERSION_CODES#LOLLIPOP}.
    */
+  @SuppressWarnings("WeakerAccess")
   static final int ROBOLECTRIC_ANDROID_SDK_LEVEL = Build.VERSION_CODES.LOLLIPOP;
 
   /**
