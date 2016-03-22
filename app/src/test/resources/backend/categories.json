@@ -1,12 +1,7 @@
 [
   {
-    "id": "1st",
-    "title": "First",
-    "url": "http://first.com"
-  },
-  {
-    "id": "2nd",
-    "title": "Second",
-    "url": "http://second.com"
+    "id": "id",
+    "title": "title",
+    "url": "http://category.com"
   }
 ]

@@ -20,15 +20,12 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.fail;
-import static org.mockito.Matchers.anyListOf;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-import static org.powermock.api.mockito.PowerMockito.mock;
 
 import com.github.mkjensen.dml.ResourceUtils;
 import com.github.mkjensen.dml.test.PowerMockRobolectricTest;
 
 import org.junit.Test;
+import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 
 import java.io.IOException;
@@ -75,59 +72,58 @@ public class BackendHelperTest extends PowerMockRobolectricTest {
 
     // Then
     assertNotNull(categories);
-    assertEquals(2, categories.size());
-    for (int i = 0; i < categories.size(); i++) {
-      Category category = categories.get(i);
-      assertNotNull(category);
-      if (i == 0) {
-        assertEquals("1st", category.getId());
-        assertEquals("First", category.getTitle());
-        assertEquals("http://first.com", category.getUrl());
-      } else {
-        assertEquals("2nd", category.getId());
-        assertEquals("Second", category.getTitle());
-        assertEquals("http://second.com", category.getUrl());
-      }
-    }
+    assertEquals(1, categories.size());
+    Category category = categories.get(0);
+    assertEquals("id", category.getId());
+    assertEquals("title", category.getTitle());
+    assertEquals("http://category.com", category.getUrl());
   }
 
   @Test
-  public void loadVideos_whenHttpNotFound_thenThrowsIoException() {
+  public void loadVideos_whenHttpNotFound_thenThrowsIoException() throws Exception {
 
     // Given
-    Category categoryMock = mock(Category.class);
-    when(categoryMock.getUrl()).thenReturn("http://dummy.com");
     LocalCallFactory callFactory = new LocalCallFactory.Builder()
         .withError(HttpURLConnection.HTTP_NOT_FOUND)
         .build();
     BackendHelper backendHelper = new BackendHelper(callFactory);
+    Category category = createCategory();
 
     // When/Then
     try {
-      backendHelper.loadVideos(categoryMock);
+      backendHelper.loadVideos(category);
       fail();
-      assertNotNull(categoryMock); // Hi PMD!
+      assertNotNull(category); // Hi PMD!
     } catch (IOException ex) {
       // Expected.
     }
   }
 
   @Test
-  public void loadVideos_whenHttpOk_thenSetsVideos() throws IOException {
+  public void loadVideos_whenHttpOk_thenSetsVideos() throws Exception {
 
     // Given
     LocalCallFactory callFactory = new LocalCallFactory.Builder()
         .withCode(HttpURLConnection.HTTP_OK)
-        .withJsonResponseBody(ResourceUtils.loadAsString("backend/videos.json"))
+        .withJsonResponseBody(ResourceUtils.loadAsString("backend/category-videos.json"))
         .build();
     BackendHelper backendHelper = new BackendHelper(callFactory);
-    Category categoryMock = mock(Category.class);
-    when(categoryMock.getUrl()).thenReturn("http://dummy.com");
+    Category category = createCategory();
 
     // When
-    backendHelper.loadVideos(categoryMock);
+    backendHelper.loadVideos(category);
 
     // Then
-    verify(categoryMock).setVideos(anyListOf(Video.class));
+    assertNotNull(category.getVideos());
+    assertEquals(1, category.getVideos().size());
+    Video video = category.getVideos().get(0);
+    assertEquals("id", video.getId());
+    assertEquals("title", video.getTitle());
+    assertEquals("http://image.com", video.getImageUrl());
+    assertEquals("http://links.com", video.getLinksUrl());
+  }
+
+  private static Category createCategory() throws Exception {
+    return PowerMockito.constructor(Category.class).newInstance();
   }
 }
