@@ -48,8 +48,7 @@ final class DmlUriMatcher {
 
   private static UriMatcher createUriMatcher(DmlUri[] dmlUris) {
     UriMatcher uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
-    for (int i = 0; i < dmlUris.length; i++) {
-      DmlUri dmlUri = dmlUris[i];
+    for (DmlUri dmlUri : dmlUris) {
       uriMatcher.addURI(DmlContract.AUTHORITY, dmlUri.getPath(), dmlUri.getCode());
     }
     return uriMatcher;
@@ -57,8 +56,7 @@ final class DmlUriMatcher {
 
   private static SparseArray<DmlUri> createCodeToDmlUriMap(DmlUri[] dmlUris) {
     SparseArray<DmlUri> codeToDmlUriMap = new SparseArray<>(dmlUris.length);
-    for (int i = 0; i < dmlUris.length; i++) {
-      DmlUri dmlUri = dmlUris[i];
+    for (DmlUri dmlUri : dmlUris) {
       codeToDmlUriMap.put(dmlUri.getCode(), dmlUri);
     }
     return codeToDmlUriMap;
