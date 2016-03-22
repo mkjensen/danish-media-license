@@ -77,7 +77,7 @@ public class VideoCursorMapperTest extends PowerMockRobolectricTest {
   }
 
   @Test
-  public void bind_getsDataFromCursor() throws IllegalAccessException {
+  public void bind_getsDataFromCursor() {
 
     // Given
     insertVideo("id");

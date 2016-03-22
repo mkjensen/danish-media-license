@@ -46,7 +46,7 @@ public class DmlContractTest extends RobolectricTest {
   }
 
   @Test
-  public void authorityUri_mustBeCorrect() throws Exception {
+  public void authorityUri_mustBeCorrect() {
     assertEquals(Uri.parse("content://" + AUTHORITY), DmlContract.AUTHORITY_URI);
   }
 
