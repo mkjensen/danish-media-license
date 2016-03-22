@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.github.mkjensen.dml.ondemand;
+package com.github.mkjensen.dml.backend;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -22,7 +22,7 @@ import android.os.Parcelable;
 import com.squareup.moshi.Json;
 
 /**
- * Metadata about an on-demand video. Create instances using {@link Builder}.
+ * Metadata about an on-demand video.
  */
 public final class Video implements Parcelable {
 

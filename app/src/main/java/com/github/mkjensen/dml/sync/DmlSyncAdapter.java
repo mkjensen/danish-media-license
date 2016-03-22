@@ -30,7 +30,7 @@ import android.util.Log;
 
 import com.github.mkjensen.dml.backend.BackendHelper;
 import com.github.mkjensen.dml.backend.Category;
-import com.github.mkjensen.dml.ondemand.Video;
+import com.github.mkjensen.dml.backend.Video;
 import com.github.mkjensen.dml.provider.DmlContract;
 
 import java.io.IOException;

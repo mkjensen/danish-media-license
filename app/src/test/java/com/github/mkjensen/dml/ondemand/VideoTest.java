@@ -22,6 +22,7 @@ import static org.junit.Assert.assertNull;
 
 import android.os.Parcel;
 
+import com.github.mkjensen.dml.backend.Video;
 import com.github.mkjensen.dml.test.RobolectricTest;
 import com.github.mkjensen.dml.test.VideoUtils;
 

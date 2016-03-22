@@ -18,7 +18,7 @@ package com.github.mkjensen.dml.test;
 
 import android.content.ContentValues;
 
-import com.github.mkjensen.dml.ondemand.Video;
+import com.github.mkjensen.dml.backend.Video;
 import com.github.mkjensen.dml.provider.DmlContract;
 
 /**

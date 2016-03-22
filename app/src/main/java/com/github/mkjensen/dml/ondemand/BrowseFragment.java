@@ -40,6 +40,7 @@ import android.util.SparseArray;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.github.mkjensen.dml.backend.Video;
 import com.github.mkjensen.dml.provider.DmlContract;
 import com.github.mkjensen.dml.sync.AccountHelper;
 import com.github.mkjensen.dml.sync.SyncHelper;

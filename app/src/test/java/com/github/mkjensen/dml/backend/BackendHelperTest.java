@@ -26,7 +26,6 @@ import static org.mockito.Mockito.when;
 import static org.powermock.api.mockito.PowerMockito.mock;
 
 import com.github.mkjensen.dml.ResourceUtils;
-import com.github.mkjensen.dml.ondemand.Video;
 import com.github.mkjensen.dml.test.PowerMockRobolectricTest;
 
 import org.junit.Test;

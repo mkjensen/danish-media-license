@@ -24,6 +24,7 @@ import android.view.ViewGroup;
 
 import com.bumptech.glide.Glide;
 import com.github.mkjensen.dml.R;
+import com.github.mkjensen.dml.backend.Video;
 
 /**
  * Presenter for {@link Video}.

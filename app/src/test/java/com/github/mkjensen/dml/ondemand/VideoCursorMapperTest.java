@@ -26,6 +26,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
 
+import com.github.mkjensen.dml.backend.Video;
 import com.github.mkjensen.dml.provider.DmlContract;
 import com.github.mkjensen.dml.test.ContentUtils;
 import com.github.mkjensen.dml.test.PowerMockRobolectricTest;

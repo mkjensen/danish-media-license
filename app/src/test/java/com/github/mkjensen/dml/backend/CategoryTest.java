@@ -21,7 +21,6 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
-import com.github.mkjensen.dml.ondemand.Video;
 import com.github.mkjensen.dml.test.TestUtils;
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;

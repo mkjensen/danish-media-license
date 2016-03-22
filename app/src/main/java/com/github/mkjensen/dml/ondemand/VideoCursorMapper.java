@@ -19,6 +19,7 @@ package com.github.mkjensen.dml.ondemand;
 import android.database.Cursor;
 import android.support.v17.leanback.database.CursorMapper;
 
+import com.github.mkjensen.dml.backend.Video;
 import com.github.mkjensen.dml.provider.DmlContract;
 
 /**

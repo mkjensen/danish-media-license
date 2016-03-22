@@ -34,6 +34,7 @@ import android.support.v17.leanback.widget.SparseArrayObjectAdapter;
 import android.util.Log;
 
 import com.github.mkjensen.dml.R;
+import com.github.mkjensen.dml.backend.Video;
 
 /**
  * Details screen for on-demand videos.

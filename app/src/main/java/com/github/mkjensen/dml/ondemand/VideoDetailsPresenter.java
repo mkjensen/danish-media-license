@@ -18,6 +18,8 @@ package com.github.mkjensen.dml.ondemand;
 
 import android.support.v17.leanback.widget.AbstractDetailsDescriptionPresenter;
 
+import com.github.mkjensen.dml.backend.Video;
+
 /**
  * Details presenter for {@link Video}.
  */

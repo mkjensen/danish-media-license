@@ -42,6 +42,7 @@ import android.view.Surface;
 import android.view.TextureView;
 
 import com.github.mkjensen.dml.R;
+import com.github.mkjensen.dml.backend.Video;
 import com.github.mkjensen.dml.exoplayer.DemoPlayer;
 import com.github.mkjensen.dml.exoplayer.HlsRendererBuilder;
 

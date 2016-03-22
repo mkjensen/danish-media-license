@@ -16,7 +16,6 @@
 
 package com.github.mkjensen.dml.backend;
 
-import com.github.mkjensen.dml.ondemand.Video;
 import com.squareup.moshi.Json;
 
 import java.util.Collections;
