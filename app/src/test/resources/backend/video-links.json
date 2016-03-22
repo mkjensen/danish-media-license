@@ -1,0 +1,12 @@
+{
+  "Links": [
+    {
+      "Uri": "http://download.com",
+      "Target": "Download"
+    },
+    {
+      "Uri": "http://hls.com",
+      "Target": "HLS"
+    }
+  ]
+}

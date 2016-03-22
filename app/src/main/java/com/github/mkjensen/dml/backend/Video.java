@@ -74,6 +74,10 @@ public final class Video implements Parcelable {
     return id;
   }
 
+  /* Testing */ void setId(String id) {
+    this.id = id;
+  }
+
   public String getTitle() {
     return title;
   }
@@ -92,6 +96,10 @@ public final class Video implements Parcelable {
 
   public String getLinksUrl() {
     return asset.linksUrl;
+  }
+
+  /* Testing */ void setLinksUrl(String linksUrl) {
+    asset.linksUrl = linksUrl;
   }
 
   public String getUrl() {

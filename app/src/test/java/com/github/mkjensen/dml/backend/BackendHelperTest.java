@@ -131,7 +131,7 @@ public class BackendHelperTest extends PowerMockRobolectricTest {
         .withError(HttpURLConnection.HTTP_NOT_FOUND)
         .build();
     BackendHelper backendHelper = new BackendHelper(callFactory);
-    Video video = createVideo("id");
+    Video video = createVideo();
 
     // When/Then
     try {
@@ -152,7 +152,7 @@ public class BackendHelperTest extends PowerMockRobolectricTest {
         .withJsonResponseBody(ResourceUtils.loadAsString("backend/videos-details.json"))
         .build();
     BackendHelper backendHelper = new BackendHelper(callFactory);
-    Video video = createVideo("id");
+    Video video = createVideo();
 
     // When
     backendHelper.loadVideoDetails(video);
@@ -161,13 +161,53 @@ public class BackendHelperTest extends PowerMockRobolectricTest {
     assertEquals("description", video.getDescription());
   }
 
+  @Test
+  public void loadVideoUrl_whenHttpNotFound_thenThrowsIoException() throws Exception {
+
+    // Given
+    LocalCallFactory callFactory = new LocalCallFactory.Builder()
+        .withError(HttpURLConnection.HTTP_NOT_FOUND)
+        .build();
+    BackendHelper backendHelper = new BackendHelper(callFactory);
+    Video video = createVideo();
+    video.setLinksUrl("http://dummy.com");
+
+    // When/Then
+    try {
+      backendHelper.loadVideoUrl(video);
+      fail();
+      assertNotNull(video); // Hi PMD!
+    } catch (IOException ex) {
+      // Expected.
+    }
+  }
+
+  @Test
+  public void loadVideoUrl_whenHttpOk_thenSetsVideoUrl() throws Exception {
+
+    // Given
+    LocalCallFactory callFactory = new LocalCallFactory.Builder()
+        .withCode(HttpURLConnection.HTTP_OK)
+        .withJsonResponseBody(ResourceUtils.loadAsString("backend/video-links.json"))
+        .build();
+    BackendHelper backendHelper = new BackendHelper(callFactory);
+    Video video = createVideo();
+    video.setLinksUrl("http://dummy.com");
+
+    // When
+    backendHelper.loadVideoUrl(video);
+
+    // Then
+    assertEquals("http://hls.com", video.getUrl());
+  }
+
   private static Category createCategory() throws Exception {
     return PowerMockito.defaultConstructorIn(Category.class).newInstance();
   }
 
-  private static Video createVideo(String id) throws Exception {
+  private static Video createVideo() throws Exception {
     Video video = PowerMockito.defaultConstructorIn(Video.class).newInstance();
-    PowerMockito.field(Video.class, "id").set(video, id);
+    video.setId("some-dummy-id");
     return video;
   }
 }
