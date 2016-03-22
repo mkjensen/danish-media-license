@@ -29,21 +29,17 @@ public final class CursorUtils {
   }
 
   /**
-   * Delegates to {@link Cursor#getColumnIndex(String)}. Also asserts that the returned index is not
-   * {@code -1}.
-   */
-  public static int getColumnIndex(Cursor cursor, String columnName) {
-    int columnIndex = cursor.getColumnIndex(columnName);
-    assertFalse(columnIndex == -1);
-    return columnIndex;
-  }
-
-  /**
    * Delegates to {@link Cursor#getString(int)}, using {@link #getColumnIndex(Cursor, String)} to
    * get the column index for the specified column name.
    */
   public static String getString(Cursor cursor, String columnName) {
     int columnIndex = getColumnIndex(cursor, columnName);
     return cursor.getString(columnIndex);
+  }
+
+  private static int getColumnIndex(Cursor cursor, String columnName) {
+    int columnIndex = cursor.getColumnIndex(columnName);
+    assertFalse(columnIndex == -1);
+    return columnIndex;
   }
 }
