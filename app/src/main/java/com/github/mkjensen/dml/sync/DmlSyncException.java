@@ -21,7 +21,7 @@ import com.github.mkjensen.dml.DmlException;
 /**
  * Thrown when a sync issue occurs.
  */
-public class DmlSyncException extends DmlException {
+class DmlSyncException extends DmlException {
 
   private static final long serialVersionUID = -6766437545060713221L;
 
