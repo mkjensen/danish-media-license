@@ -24,7 +24,6 @@ import static org.powermock.api.mockito.PowerMockito.spy;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.database.Cursor;
-import android.net.Uri;
 
 import com.github.mkjensen.dml.backend.Video;
 import com.github.mkjensen.dml.provider.DmlContract;
@@ -125,8 +124,8 @@ public class VideoCursorMapperTest extends PowerMockRobolectricTest {
     }
   }
 
-  private Uri insertVideo(String id) {
+  private void insertVideo(String id) {
     ContentValues values = VideoUtils.createContentValues(id);
-    return contentResolver.insert(DmlContract.Video.CONTENT_URI, values);
+    contentResolver.insert(DmlContract.Video.CONTENT_URI, values);
   }
 }
