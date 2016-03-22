@@ -55,7 +55,7 @@ public class VideoTest extends RobolectricTest {
     assertEquals(VideoUtils.getVideoTitle(id), video.getTitle());
     assertEquals(VideoUtils.getVideoImageUrl(id), video.getImageUrl());
     assertEquals(VideoUtils.getVideoDescription(id), video.getDescription());
-    assertEquals(VideoUtils.getVideoListUrl(id), video.getListUrl());
+    assertEquals(VideoUtils.getVideoLinksUrl(id), video.getLinksUrl());
     assertEquals(VideoUtils.getVideoUrl(id), video.getUrl());
   }
 
@@ -122,7 +122,7 @@ public class VideoTest extends RobolectricTest {
     assertEquals(input.getTitle(), output.getTitle());
     assertEquals(input.getImageUrl(), output.getImageUrl());
     assertEquals(input.getDescription(), output.getDescription());
-    assertEquals(input.getListUrl(), output.getListUrl());
+    assertEquals(input.getLinksUrl(), output.getLinksUrl());
     assertEquals(input.getUrl(), output.getUrl());
   }
 }

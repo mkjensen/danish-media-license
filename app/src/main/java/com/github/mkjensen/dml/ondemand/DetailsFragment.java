@@ -33,6 +33,7 @@ import android.support.v17.leanback.widget.RowPresenter;
 import android.support.v17.leanback.widget.SparseArrayObjectAdapter;
 import android.util.Log;
 
+import com.github.mkjensen.dml.DmlException;
 import com.github.mkjensen.dml.R;
 import com.github.mkjensen.dml.backend.Video;
 
@@ -42,35 +43,44 @@ import com.github.mkjensen.dml.backend.Video;
 public class DetailsFragment extends DetailsSupportFragment {
 
   private static final String TAG = "DetailsFragment";
+
   private static final int ACTION_PLAY = 0;
 
   private Video video;
-  private ArrayObjectAdapter rowsAdapter;
+
+  private ArrayObjectAdapter rows;
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
     Log.d(TAG, "onCreate");
     super.onCreate(savedInstanceState);
-    video = getActivity().getIntent().getParcelableExtra(DetailsActivity.VIDEO);
-    createRowsAdapter();
-    createDetails();
-    createListeners();
+    initVideo();
+    initAdapter();
+    initDetails();
+    initListeners();
   }
 
-  private void createRowsAdapter() {
+  private void initVideo() {
+    video = getActivity().getIntent().getParcelableExtra(DetailsActivity.VIDEO);
+    if (video == null) {
+      throw new DmlException("Intent did not include argument: " + DetailsActivity.VIDEO);
+    }
+  }
+
+  private void initAdapter() {
     FullWidthDetailsOverviewRowPresenter detailsPresenter =
         new FullWidthDetailsOverviewRowPresenter(new VideoDetailsPresenter());
     ClassPresenterSelector selector = new ClassPresenterSelector();
     selector.addClassPresenter(DetailsOverviewRow.class, detailsPresenter);
     selector.addClassPresenter(ListRow.class, new ListRowPresenter());
-    rowsAdapter = new ArrayObjectAdapter(selector);
-    setAdapter(rowsAdapter);
+    rows = new ArrayObjectAdapter(selector);
+    setAdapter(rows);
   }
 
-  private void createDetails() {
-    DetailsOverviewRow detailsRow = new DetailsOverviewRow(video);
-    createActions(detailsRow);
-    rowsAdapter.add(detailsRow);
+  private void initDetails() {
+    DetailsOverviewRow details = new DetailsOverviewRow(video);
+    createActions(details);
+    rows.add(details);
   }
 
   private void createActions(DetailsOverviewRow detailsRow) {
@@ -80,7 +90,7 @@ public class DetailsFragment extends DetailsSupportFragment {
     detailsRow.setActionsAdapter(actionsAdapter);
   }
 
-  private void createListeners() {
+  private void initListeners() {
     setOnItemViewClickedListener(new OnItemViewClickedListener() {
 
       @Override

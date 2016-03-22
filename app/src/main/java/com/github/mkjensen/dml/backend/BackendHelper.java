@@ -67,13 +67,37 @@ public final class BackendHelper {
   }
 
   /**
-   * Returns the associated videos for the specified on-demand category.
+   * Loads the associated videos for the specified on-demand category without some details which
+   * must be loaded per video by calling {@link #loadVideoDetails(Video)} and/or {@link
+   * #loadVideoUrl(Video)}.
    */
   public void loadVideos(Category category) throws IOException {
     Log.v(TAG, "loadVideos " + category.getId());
     Call<VideoContainer> call = webService.getVideos(category.getUrl());
     VideoContainer videoContainer = executeCall(call);
     category.setVideos(videoContainer.getVideos());
+  }
+
+  /**
+   * Loads details for the specified on-demand video.
+   */
+  public void loadVideoDetails(Video video) throws IOException {
+    String id = video.getId();
+    Log.v(TAG, "loadVideoDetails " + id);
+    Call<Video> call = webService.getVideo(id);
+    Video detailedVideo = executeCall(call);
+    video.setDescription(detailedVideo.getDescription());
+  }
+
+  /**
+   * Loads the URL for the specified on-demand video.
+   */
+  public void loadVideoUrl(Video video) throws IOException {
+    String linksUrl = video.getLinksUrl();
+    Log.v(TAG, "loadVideoUrl " + linksUrl);
+    Call<VideoLinksContainer> call = webService.getVideoLinks(linksUrl);
+    VideoLinksContainer linksContainer = executeCall(call);
+    video.setUrl(linksContainer.getVideoUrl());
   }
 
   private static <T> T executeCall(Call<T> call) throws IOException {

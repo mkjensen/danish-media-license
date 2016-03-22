@@ -205,8 +205,8 @@ public class DmlProviderTest extends RobolectricTest {
           CursorUtils.getString(cursor, Video.VIDEO_IMAGE_URL));
       assertEquals(VideoUtils.getVideoDescription(actualId),
           CursorUtils.getString(cursor, Video.VIDEO_DESCRIPTION));
-      assertEquals(VideoUtils.getVideoListUrl(actualId),
-          CursorUtils.getString(cursor, Video.VIDEO_LIST_URL));
+      assertEquals(VideoUtils.getVideoLinksUrl(actualId),
+          CursorUtils.getString(cursor, Video.VIDEO_LINKS_URL));
       assertEquals(VideoUtils.getVideoUrl(actualId),
           CursorUtils.getString(cursor, Video.VIDEO_URL));
     }

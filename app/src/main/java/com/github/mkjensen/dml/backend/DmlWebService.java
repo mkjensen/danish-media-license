@@ -18,6 +18,7 @@ package com.github.mkjensen.dml.backend;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
+import retrofit2.http.Path;
 import retrofit2.http.Url;
 
 import java.util.List;
@@ -47,4 +48,16 @@ interface DmlWebService {
    */
   @GET
   Call<VideoContainer> getVideos(@Url String url);
+
+  /**
+   * Returns the on-demand video with the specified id.
+   */
+  @GET("programcard/{id}")
+  Call<Video> getVideo(@Path("id") String id);
+
+  /**
+   * Returns video links for the specified URL.
+   */
+  @GET
+  Call<VideoLinksContainer> getVideoLinks(@Url String url);
 }

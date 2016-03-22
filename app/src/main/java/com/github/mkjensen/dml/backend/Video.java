@@ -34,16 +34,20 @@ public final class Video implements Parcelable {
   @Json(name = "Title")
   private String title;
 
+  @Json(name = "Description")
+  private String description;
+
   @Json(name = "PrimaryImageUri")
   private String imageUrl;
 
-  private String description;
-
-  private String listUrl;
+  @Json(name = "PrimaryAsset")
+  @SuppressWarnings("CanBeFinal")
+  private Asset asset;
 
   private String url;
 
   private Video() {
+    asset = new Asset();
   }
 
   @Override
@@ -62,7 +66,7 @@ public final class Video implements Parcelable {
     dest.writeString(title);
     dest.writeString(imageUrl);
     dest.writeString(description);
-    dest.writeString(listUrl);
+    dest.writeString(asset.linksUrl);
     dest.writeString(url);
   }
 
@@ -82,12 +86,20 @@ public final class Video implements Parcelable {
     return description;
   }
 
-  public String getListUrl() {
-    return listUrl;
+  void setDescription(String description) {
+    this.description = description;
+  }
+
+  public String getLinksUrl() {
+    return asset.linksUrl;
   }
 
   public String getUrl() {
     return url;
+  }
+
+  void setUrl(String url) {
+    this.url = url;
   }
 
   private Video copy() {
@@ -96,7 +108,7 @@ public final class Video implements Parcelable {
     copy.title = title;
     copy.imageUrl = imageUrl;
     copy.description = description;
-    copy.listUrl = listUrl;
+    copy.asset.linksUrl = asset.linksUrl;
     copy.url = url;
     return copy;
   }
@@ -133,8 +145,8 @@ public final class Video implements Parcelable {
       return this;
     }
 
-    public Builder listUrl(String listUrl) {
-      video.listUrl = listUrl;
+    public Builder linksUrl(String linksUrl) {
+      video.asset.linksUrl = linksUrl;
       return this;
     }
 
@@ -153,7 +165,7 @@ public final class Video implements Parcelable {
       video.title = source.readString();
       video.imageUrl = source.readString();
       video.description = source.readString();
-      video.listUrl = source.readString();
+      video.asset.linksUrl = source.readString();
       video.url = source.readString();
       return video;
     }
@@ -162,5 +174,11 @@ public final class Video implements Parcelable {
     public Video[] newArray(int size) {
       return new Video[size];
     }
+  }
+
+  private static final class Asset {
+
+    @Json(name = "Uri")
+    String linksUrl;
   }
 }

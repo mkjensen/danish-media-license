@@ -95,11 +95,22 @@ final class DmlSyncAdapter extends AbstractThreadedSyncAdapter {
       }
       try {
         backendHelper.loadVideos(category);
-        insertAndAddVideosToCategory(operations, category);
       } catch (IOException ex) {
         Log.e(TAG, String.format("Could not load videos for category [%s]", category.getId()), ex);
         syncResult.stats.numIoExceptions++;
       }
+      for (Video video : category.getVideos()) {
+        try {
+          backendHelper.loadVideoDetails(video);
+          backendHelper.loadVideoUrl(video);
+        } catch (IOException ex) {
+          Log.e(TAG, String.format("Could not load video details for video [%s]", video.getId()),
+              ex);
+          syncResult.stats.numIoExceptions++;
+        }
+      }
+      // TODO: Videos that failed to load completely should not be added
+      insertAndAddVideosToCategory(operations, category);
     }
     try {
       Log.d(TAG, "Applying batch");
@@ -160,6 +171,10 @@ final class DmlSyncAdapter extends AbstractThreadedSyncAdapter {
         .withValue(DmlContract.Video.VIDEO_ID, video.getId())
         .withValue(DmlContract.Video.VIDEO_TITLE, video.getTitle())
         .withValue(DmlContract.Video.VIDEO_IMAGE_URL, video.getImageUrl())
+        .withValue(DmlContract.Video.VIDEO_DESCRIPTION, video.getDescription())
+        .withValue(DmlContract.Video.VIDEO_LINKS_URL, video.getLinksUrl())
+        .withValue(DmlContract.Video.VIDEO_URL, video.getUrl())
+
         .build();
     operations.add(operation);
   }

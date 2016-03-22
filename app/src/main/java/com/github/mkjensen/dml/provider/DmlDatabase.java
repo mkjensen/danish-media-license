@@ -22,7 +22,7 @@ import static com.github.mkjensen.dml.provider.DmlDatabase.CategoryColumns.CATEG
 import static com.github.mkjensen.dml.provider.DmlDatabase.VideoColumns.VIDEO_DESCRIPTION;
 import static com.github.mkjensen.dml.provider.DmlDatabase.VideoColumns.VIDEO_ID;
 import static com.github.mkjensen.dml.provider.DmlDatabase.VideoColumns.VIDEO_IMAGE_URL;
-import static com.github.mkjensen.dml.provider.DmlDatabase.VideoColumns.VIDEO_LIST_URL;
+import static com.github.mkjensen.dml.provider.DmlDatabase.VideoColumns.VIDEO_LINKS_URL;
 import static com.github.mkjensen.dml.provider.DmlDatabase.VideoColumns.VIDEO_TITLE;
 import static com.github.mkjensen.dml.provider.DmlDatabase.VideoColumns.VIDEO_URL;
 
@@ -87,7 +87,7 @@ final class DmlDatabase extends SQLiteOpenHelper {
         + VIDEO_TITLE + " TEXT NOT NULL,"
         + VIDEO_IMAGE_URL + " TEXT NOT NULL,"
         + VIDEO_DESCRIPTION + " TEXT,"
-        + VIDEO_LIST_URL + " TEXT,"
+        + VIDEO_LINKS_URL + " TEXT,"
         + VIDEO_URL + " TEXT,"
         + "UNIQUE (" + VIDEO_ID + ") ON CONFLICT REPLACE)");
 
@@ -156,7 +156,7 @@ final class DmlDatabase extends SQLiteOpenHelper {
 
     String VIDEO_DESCRIPTION = "video_description";
 
-    String VIDEO_LIST_URL = "video_list_url";
+    String VIDEO_LINKS_URL = "video_links_url";
 
     String VIDEO_URL = "video_url";
   }
