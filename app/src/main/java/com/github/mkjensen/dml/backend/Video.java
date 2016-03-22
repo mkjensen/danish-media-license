@@ -34,11 +34,11 @@ public final class Video implements Parcelable {
   @Json(name = "Title")
   private String title;
 
-  @Json(name = "Description")
-  private String description;
-
   @Json(name = "PrimaryImageUri")
   private String imageUrl;
+
+  @Json(name = "Description")
+  private String description;
 
   @Json(name = "PrimaryAsset")
   @SuppressWarnings("CanBeFinal")
