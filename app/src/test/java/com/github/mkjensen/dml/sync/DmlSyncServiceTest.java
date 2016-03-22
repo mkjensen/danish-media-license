@@ -17,6 +17,7 @@
 package com.github.mkjensen.dml.sync;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import android.os.IBinder;
 import android.os.RemoteException;
@@ -41,6 +42,7 @@ public class DmlSyncServiceTest extends RobolectricTest {
     IBinder binder = syncService.onBind(null);
 
     // When
+    assertNotNull(binder);
     assertEquals("android.content.ISyncAdapter", binder.getInterfaceDescriptor());
   }
 }
