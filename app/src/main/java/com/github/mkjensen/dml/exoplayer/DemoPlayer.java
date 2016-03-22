@@ -77,8 +77,9 @@ public class DemoPlayer implements ExoPlayer.Listener, ChunkSampleSource.EventLi
     void buildRenderers(DemoPlayer player);
 
     /**
-     * Cancels the current build operation, if there is one. Else does nothing. <p> A canceled build
-     * operation must not invoke {@link DemoPlayer#onRenderers} or {@link
+     * Cancels the current build operation, if there is one. Else does nothing.
+     *
+     * <p>A canceled build operation must not invoke {@link DemoPlayer#onRenderers} or {@link
      * DemoPlayer#onRenderersError} on the player, which may have been released.
      */
     void cancel();
@@ -90,34 +91,35 @@ public class DemoPlayer implements ExoPlayer.Listener, ChunkSampleSource.EventLi
   public interface Listener {
     void onStateChanged(boolean playWhenReady, int playbackState);
 
-    void onError(Exception e);
+    void onError(Exception ex);
 
     void onVideoSizeChanged(int width, int height, int unappliedRotationDegrees,
                             float pixelWidthHeightRatio);
   }
 
   /**
-   * A listener for internal errors. <p> These errors are not visible to the user, and hence this
-   * listener is provided for informational purposes only. Note however that an internal error may
-   * cause a fatal error if the player fails to recover. If this happens, {@link
-   * Listener#onError(Exception)} will be invoked.
+   * A listener for internal errors.
+   *
+   * <p>These errors are not visible to the user, and hence this listener is provided for
+   * informational purposes only. Note however that an internal error may cause a fatal error if the
+   * player fails to recover. If this happens, {@link Listener#onError(Exception)} will be invoked.
    */
   public interface InternalErrorListener {
-    void onRendererInitializationError(Exception e);
+    void onRendererInitializationError(Exception ex);
 
-    void onAudioTrackInitializationError(AudioTrack.InitializationException e);
+    void onAudioTrackInitializationError(AudioTrack.InitializationException ex);
 
-    void onAudioTrackWriteError(AudioTrack.WriteException e);
+    void onAudioTrackWriteError(AudioTrack.WriteException ex);
 
     void onAudioTrackUnderrun(int bufferSize, long bufferSizeMs, long elapsedSinceLastFeedMs);
 
-    void onDecoderInitializationError(DecoderInitializationException e);
+    void onDecoderInitializationError(DecoderInitializationException ex);
 
-    void onCryptoError(CryptoException e);
+    void onCryptoError(CryptoException ex);
 
-    void onLoadError(int sourceId, IOException e);
+    void onLoadError(int sourceId, IOException ex);
 
-    void onDrmSessionManagerError(Exception e);
+    void onDrmSessionManagerError(Exception ex);
   }
 
   /**
@@ -136,7 +138,8 @@ public class DemoPlayer implements ExoPlayer.Listener, ChunkSampleSource.EventLi
                        long mediaStartTimeMs, long mediaEndTimeMs);
 
     void onLoadCompleted(int sourceId, long bytesLoaded, int type, int trigger, Format format,
-                         long mediaStartTimeMs, long mediaEndTimeMs, long elapsedRealtimeMs, long loadDurationMs);
+                         long mediaStartTimeMs, long mediaEndTimeMs, long elapsedRealtimeMs,
+                         long loadDurationMs);
 
     void onDecoderInitialized(String decoderName, long elapsedRealtimeMs,
                               long initializationDurationMs);
@@ -201,6 +204,9 @@ public class DemoPlayer implements ExoPlayer.Listener, ChunkSampleSource.EventLi
   private InternalErrorListener internalErrorListener;
   private InfoListener infoListener;
 
+  /**
+   * Creates a {@link DemoPlayer} instance.
+   */
   public DemoPlayer(RendererBuilder rendererBuilder) {
     this.rendererBuilder = rendererBuilder;
     player = ExoPlayer.Factory.newInstance(RENDERER_COUNT, 1000, 5000);
@@ -268,6 +274,9 @@ public class DemoPlayer implements ExoPlayer.Listener, ChunkSampleSource.EventLi
     return player.getSelectedTrack(type);
   }
 
+  /**
+   * Sets the selected track.
+   */
   public void setSelectedTrack(int type, int index) {
     player.setSelectedTrack(type, index);
     if (type == TYPE_TEXT && index < 0 && captionListener != null) {
@@ -275,10 +284,16 @@ public class DemoPlayer implements ExoPlayer.Listener, ChunkSampleSource.EventLi
     }
   }
 
+  /**
+   * Returns the background.
+   */
   public boolean getBackgrounded() {
     return backgrounded;
   }
 
+  /**
+   * Sets the background.
+   */
   public void setBackgrounded(boolean backgrounded) {
     if (this.backgrounded == backgrounded) {
       return;
@@ -293,6 +308,9 @@ public class DemoPlayer implements ExoPlayer.Listener, ChunkSampleSource.EventLi
     }
   }
 
+  /**
+   * Prepares the player for playback.
+   */
   public void prepare() {
     if (rendererBuildingState == RENDERER_BUILDING_STATE_BUILT) {
       player.stop();
@@ -335,14 +353,14 @@ public class DemoPlayer implements ExoPlayer.Listener, ChunkSampleSource.EventLi
   /**
    * Invoked if a {@link RendererBuilder} encounters an error.
    *
-   * @param e Describes the error.
+   * @param ex Describes the error.
    */
-  /* package */ void onRenderersError(Exception e) {
+  /* package */ void onRenderersError(Exception ex) {
     if (internalErrorListener != null) {
-      internalErrorListener.onRendererInitializationError(e);
+      internalErrorListener.onRendererInitializationError(ex);
     }
     for (Listener listener : listeners) {
-      listener.onError(e);
+      listener.onError(ex);
     }
     rendererBuildingState = RENDERER_BUILDING_STATE_IDLE;
     maybeReportPlayerState();
@@ -356,6 +374,9 @@ public class DemoPlayer implements ExoPlayer.Listener, ChunkSampleSource.EventLi
     player.seekTo(positionMs);
   }
 
+  /**
+   * Releases any resources held by this instance.
+   */
   public void release() {
     rendererBuilder.cancel();
     rendererBuildingState = RENDERER_BUILDING_STATE_IDLE;
@@ -363,6 +384,9 @@ public class DemoPlayer implements ExoPlayer.Listener, ChunkSampleSource.EventLi
     player.release();
   }
 
+  /**
+   * Returns the playback state.
+   */
   public int getPlaybackState() {
     if (rendererBuildingState == RENDERER_BUILDING_STATE_BUILDING) {
       return STATE_PREPARING;
@@ -471,30 +495,30 @@ public class DemoPlayer implements ExoPlayer.Listener, ChunkSampleSource.EventLi
   }
 
   @Override
-  public void onDrmSessionManagerError(Exception e) {
+  public void onDrmSessionManagerError(Exception ex) {
     if (internalErrorListener != null) {
-      internalErrorListener.onDrmSessionManagerError(e);
+      internalErrorListener.onDrmSessionManagerError(ex);
     }
   }
 
   @Override
-  public void onDecoderInitializationError(DecoderInitializationException e) {
+  public void onDecoderInitializationError(DecoderInitializationException ex) {
     if (internalErrorListener != null) {
-      internalErrorListener.onDecoderInitializationError(e);
+      internalErrorListener.onDecoderInitializationError(ex);
     }
   }
 
   @Override
-  public void onAudioTrackInitializationError(AudioTrack.InitializationException e) {
+  public void onAudioTrackInitializationError(AudioTrack.InitializationException ex) {
     if (internalErrorListener != null) {
-      internalErrorListener.onAudioTrackInitializationError(e);
+      internalErrorListener.onAudioTrackInitializationError(ex);
     }
   }
 
   @Override
-  public void onAudioTrackWriteError(AudioTrack.WriteException e) {
+  public void onAudioTrackWriteError(AudioTrack.WriteException ex) {
     if (internalErrorListener != null) {
-      internalErrorListener.onAudioTrackWriteError(e);
+      internalErrorListener.onAudioTrackWriteError(ex);
     }
   }
 
@@ -506,9 +530,9 @@ public class DemoPlayer implements ExoPlayer.Listener, ChunkSampleSource.EventLi
   }
 
   @Override
-  public void onCryptoError(CryptoException e) {
+  public void onCryptoError(CryptoException ex) {
     if (internalErrorListener != null) {
-      internalErrorListener.onCryptoError(e);
+      internalErrorListener.onCryptoError(ex);
     }
   }
 
@@ -521,9 +545,9 @@ public class DemoPlayer implements ExoPlayer.Listener, ChunkSampleSource.EventLi
   }
 
   @Override
-  public void onLoadError(int sourceId, IOException e) {
+  public void onLoadError(int sourceId, IOException ex) {
     if (internalErrorListener != null) {
-      internalErrorListener.onLoadError(sourceId, e);
+      internalErrorListener.onLoadError(sourceId, ex);
     }
   }
 
@@ -569,7 +593,8 @@ public class DemoPlayer implements ExoPlayer.Listener, ChunkSampleSource.EventLi
 
   @Override
   public void onLoadCompleted(int sourceId, long bytesLoaded, int type, int trigger, Format format,
-                              long mediaStartTimeMs, long mediaEndTimeMs, long elapsedRealtimeMs, long loadDurationMs) {
+                              long mediaStartTimeMs, long mediaEndTimeMs, long elapsedRealtimeMs,
+                              long loadDurationMs) {
     if (infoListener != null) {
       infoListener.onLoadCompleted(sourceId, bytesLoaded, type, trigger, format, mediaStartTimeMs,
           mediaEndTimeMs, elapsedRealtimeMs, loadDurationMs);
