@@ -35,6 +35,8 @@ import com.github.mkjensen.dml.provider.DmlContract;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -83,57 +85,28 @@ final class DmlSyncAdapter extends AbstractThreadedSyncAdapter {
   public void onPerformSync(Account account, Bundle extras, String authority,
                             ContentProviderClient provider, SyncResult syncResult) {
     Log.d(TAG, "onPerformSync");
-    sync(provider, syncResult);
-  }
-
-  private void sync(ContentProviderClient provider, SyncResult syncResult) {
-    List<Category> categories;
-    try {
-      categories = backendHelper.loadCategories();
-    } catch (IOException ex) {
-      Log.e(TAG, "Could not load categories", ex);
-      syncResult.stats.numIoExceptions++;
-      return;
-    }
     ArrayList<ContentProviderOperation> operations = new ArrayList<>();
-    for (Category category : categories) {
+    for (Category category : loadCategories(syncResult)) {
+      if (!loadVideos(category, syncResult)) {
+        // TODO: Remove category if it exists
+        continue;
+      }
       if (!hasCategory(provider, category)) {
         addCategory(operations, category);
       }
-      try {
-        backendHelper.loadVideos(category);
-      } catch (IOException ex) {
-        Log.e(TAG, String.format("Could not load videos for category [%s]", category.getId()), ex);
-        syncResult.stats.numIoExceptions++;
-      }
-      for (Video video : category.getVideos()) {
-        try {
-          backendHelper.loadVideoDetails(video);
-        } catch (IOException ex) {
-          Log.e(TAG, String.format("Could not load video details for video [%s]", video.getId()),
-              ex);
-          syncResult.stats.numIoExceptions++;
-        }
-      }
-      for (Video video : category.getVideos()) {
-        try {
-          backendHelper.loadVideoUrl(video);
-        } catch (IOException ex) {
-          Log.e(TAG, String.format("Could not load video URL for video [%s]", video.getId()),
-              ex);
-          syncResult.stats.numIoExceptions++;
-        }
-      }
-      // TODO: Videos that failed to load completely should not be added
       insertAndAddVideosToCategory(operations, category);
     }
+    applyOperations(provider, operations);
+    // TODO: Remove old videos that are no longer associated with a category
+  }
+
+  private List<Category> loadCategories(SyncResult syncResult) {
     try {
-      Log.d(TAG, "Applying batch");
-      provider.applyBatch(operations);
-      // TODO: How to update syncResult.stats?
-    } catch (RemoteException | OperationApplicationException ex) {
-      Log.e(TAG, "Error applying batch", ex);
-      // TODO: Update syncResult.stats?
+      return backendHelper.loadCategories();
+    } catch (IOException ex) {
+      Log.e(TAG, "Could not load categories", ex);
+      syncResult.stats.numIoExceptions++;
+      return Collections.emptyList();
     }
   }
 
@@ -162,10 +135,56 @@ final class DmlSyncAdapter extends AbstractThreadedSyncAdapter {
     operations.add(operation);
   }
 
+  private boolean loadVideos(Category category, SyncResult syncResult) {
+    if (!loadCategoryVideos(category, syncResult)) {
+      return false;
+    }
+    List<Video> videos = category.getVideos();
+    for (Iterator<Video> it = videos.iterator(); it.hasNext(); ) {
+      Video video = it.next();
+      if (!loadVideoDetails(video, syncResult) || !loadVideoUrl(video, syncResult)) {
+        it.remove();
+      }
+    }
+    return !videos.isEmpty();
+  }
+
+  private boolean loadCategoryVideos(Category category, SyncResult syncResult) {
+    try {
+      backendHelper.loadVideos(category);
+      return true;
+    } catch (IOException ex) {
+      Log.e(TAG, String.format("Could not load videos for category [%s]", category.getId()), ex);
+      syncResult.stats.numIoExceptions++;
+      return false;
+    }
+  }
+
+  private boolean loadVideoDetails(Video video, SyncResult syncResult) {
+    try {
+      backendHelper.loadVideoDetails(video);
+      return true;
+    } catch (IOException ex) {
+      Log.e(TAG, String.format("Could not load video details for video [%s]", video.getId()), ex);
+      syncResult.stats.numIoExceptions++;
+      return false;
+    }
+  }
+
+  private boolean loadVideoUrl(Video video, SyncResult syncResult) {
+    try {
+      backendHelper.loadVideoUrl(video);
+      return true;
+    } catch (IOException ex) {
+      Log.e(TAG, String.format("Could not load video URL for video [%s]", video.getId()), ex);
+      syncResult.stats.numIoExceptions++;
+      return false;
+    }
+  }
+
   private static void insertAndAddVideosToCategory(List<ContentProviderOperation> operations,
                                                    Category category) {
-    // TODO: Remove old videos that are no longer associated with a category
-    // TODO: Check if video already exists, possibly update, instead of deleting and inserting
+    // TODO: Check if video already exists, possibly update instead of deleting and inserting
     deleteVideos(operations, category);
     for (Video video : category.getVideos()) {
       insertVideo(operations, video);
@@ -201,5 +220,20 @@ final class DmlSyncAdapter extends AbstractThreadedSyncAdapter {
         .withValue(DmlContract.Video.VIDEO_ID, video.getId())
         .build();
     operations.add(operation);
+  }
+
+  private static void applyOperations(ContentProviderClient provider,
+                                      ArrayList<ContentProviderOperation> operations) {
+    if (operations.isEmpty()) {
+      return;
+    }
+    try {
+      Log.d(TAG, "Applying batch");
+      provider.applyBatch(operations);
+      // TODO: How to update syncResult.stats?
+    } catch (RemoteException | OperationApplicationException ex) {
+      Log.e(TAG, "Error applying batch", ex);
+      // TODO: Update syncResult.stats?
+    }
   }
 }
