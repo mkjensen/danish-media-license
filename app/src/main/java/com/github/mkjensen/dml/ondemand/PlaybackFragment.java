@@ -41,6 +41,7 @@ import android.util.Log;
 import android.view.Surface;
 import android.view.TextureView;
 
+import com.github.mkjensen.dml.DmlException;
 import com.github.mkjensen.dml.R;
 import com.github.mkjensen.dml.backend.Video;
 import com.github.mkjensen.dml.exoplayer.DemoPlayer;
@@ -95,10 +96,17 @@ public class PlaybackFragment extends PlaybackOverlaySupportFragment {
   public void onCreate(Bundle savedInstanceState) {
     Log.d(TAG, "onCreate");
     super.onCreate(savedInstanceState);
-    video = getActivity().getIntent().getParcelableExtra(PlaybackActivity.VIDEO);
+    initVideo();
+    initUi();
     registerTextureViewSurfaceTextureListener();
-    createUi();
     preparePlayer(true);
+  }
+
+  private void initVideo() {
+    video = getActivity().getIntent().getParcelableExtra(PlaybackActivity.VIDEO);
+    if (video == null) {
+      throw new DmlException("Intent did not include argument: " + PlaybackActivity.VIDEO);
+    }
   }
 
   private void registerTextureViewSurfaceTextureListener() {
@@ -109,7 +117,7 @@ public class PlaybackFragment extends PlaybackOverlaySupportFragment {
     textureView.setSurfaceTextureListener(new TextureViewSurfaceTextureListener());
   }
 
-  private void createUi() {
+  private void initUi() {
     PlaybackControlsRowPresenter controlsPresenter =
         new PlaybackControlsRowPresenter(new VideoDetailsPresenter());
     ClassPresenterSelector presenterSelector = new ClassPresenterSelector();
