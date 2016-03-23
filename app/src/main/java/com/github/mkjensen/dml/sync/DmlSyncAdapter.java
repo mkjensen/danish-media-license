@@ -68,8 +68,15 @@ final class DmlSyncAdapter extends AbstractThreadedSyncAdapter {
    * @param context the {@link Context} that the sync adapter is running within
    */
   DmlSyncAdapter(Context context) {
+    this(context, new BackendHelper());
+  }
+
+  /**
+   * For testing.
+   */
+  DmlSyncAdapter(Context context, BackendHelper backendHelper) {
     super(context, AUTO_INITIALIZE, ALLOW_PARALLEL_SYNCS);
-    backendHelper = new BackendHelper();
+    this.backendHelper = backendHelper;
   }
 
   @Override
@@ -102,9 +109,17 @@ final class DmlSyncAdapter extends AbstractThreadedSyncAdapter {
       for (Video video : category.getVideos()) {
         try {
           backendHelper.loadVideoDetails(video);
-          backendHelper.loadVideoUrl(video);
         } catch (IOException ex) {
           Log.e(TAG, String.format("Could not load video details for video [%s]", video.getId()),
+              ex);
+          syncResult.stats.numIoExceptions++;
+        }
+      }
+      for (Video video : category.getVideos()) {
+        try {
+          backendHelper.loadVideoUrl(video);
+        } catch (IOException ex) {
+          Log.e(TAG, String.format("Could not load video URL for video [%s]", video.getId()),
               ex);
           syncResult.stats.numIoExceptions++;
         }

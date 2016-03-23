@@ -42,8 +42,10 @@ public class BackendHelperTest extends PowerMockRobolectricTest {
   public void loadCategories_whenHttpNotFound_thenThrowsIoException() {
 
     // Given
-    LocalCallFactory callFactory = new LocalCallFactory.Builder()
-        .withError(HttpURLConnection.HTTP_NOT_FOUND)
+    LocalCallFactory callFactory = LocalCallFactory.newBuilder()
+        .forAnyUrl()
+        .code(HttpURLConnection.HTTP_NOT_FOUND)
+        .up()
         .build();
     BackendHelper backendHelper = new BackendHelper(callFactory);
 
@@ -61,9 +63,11 @@ public class BackendHelperTest extends PowerMockRobolectricTest {
   public void loadCategories_whenHttpOk_thenReturnsCategories() throws IOException {
 
     // Given
-    LocalCallFactory callFactory = new LocalCallFactory.Builder()
-        .withCode(HttpURLConnection.HTTP_OK)
-        .withJsonResponseBody(ResourceUtils.loadAsString("backend/categories.json"))
+    LocalCallFactory callFactory = LocalCallFactory.newBuilder()
+        .forAnyUrl()
+        .code(HttpURLConnection.HTTP_OK)
+        .responseBody(ResourceUtils.loadAsString("backend/categories.json"))
+        .up()
         .build();
     BackendHelper backendHelper = new BackendHelper(callFactory);
 
@@ -83,8 +87,10 @@ public class BackendHelperTest extends PowerMockRobolectricTest {
   public void loadVideos_whenHttpNotFound_thenThrowsIoException() throws Exception {
 
     // Given
-    LocalCallFactory callFactory = new LocalCallFactory.Builder()
-        .withError(HttpURLConnection.HTTP_NOT_FOUND)
+    LocalCallFactory callFactory = LocalCallFactory.newBuilder()
+        .forAnyUrl()
+        .code(HttpURLConnection.HTTP_NOT_FOUND)
+        .up()
         .build();
     BackendHelper backendHelper = new BackendHelper(callFactory);
     Category category = createCategory();
@@ -103,9 +109,11 @@ public class BackendHelperTest extends PowerMockRobolectricTest {
   public void loadVideos_whenHttpOk_thenVideosAreLoaded() throws Exception {
 
     // Given
-    LocalCallFactory callFactory = new LocalCallFactory.Builder()
-        .withCode(HttpURLConnection.HTTP_OK)
-        .withJsonResponseBody(ResourceUtils.loadAsString("backend/category-videos.json"))
+    LocalCallFactory callFactory = LocalCallFactory.newBuilder()
+        .forAnyUrl()
+        .code(HttpURLConnection.HTTP_OK)
+        .responseBody(ResourceUtils.loadAsString("backend/category-videos.json"))
+        .up()
         .build();
     BackendHelper backendHelper = new BackendHelper(callFactory);
     Category category = createCategory();
@@ -127,8 +135,10 @@ public class BackendHelperTest extends PowerMockRobolectricTest {
   public void loadVideoDetails_whenHttpNotFound_thenThrowsIoException() throws Exception {
 
     // Given
-    LocalCallFactory callFactory = new LocalCallFactory.Builder()
-        .withError(HttpURLConnection.HTTP_NOT_FOUND)
+    LocalCallFactory callFactory = LocalCallFactory.newBuilder()
+        .forAnyUrl()
+        .code(HttpURLConnection.HTTP_NOT_FOUND)
+        .up()
         .build();
     BackendHelper backendHelper = new BackendHelper(callFactory);
     Video video = createVideo();
@@ -147,9 +157,11 @@ public class BackendHelperTest extends PowerMockRobolectricTest {
   public void loadVideoDetails_whenHttpOk_thenSetsVideoDetails() throws Exception {
 
     // Given
-    LocalCallFactory callFactory = new LocalCallFactory.Builder()
-        .withCode(HttpURLConnection.HTTP_OK)
-        .withJsonResponseBody(ResourceUtils.loadAsString("backend/videos-details.json"))
+    LocalCallFactory callFactory = LocalCallFactory.newBuilder()
+        .forAnyUrl()
+        .code(HttpURLConnection.HTTP_OK)
+        .responseBody(ResourceUtils.loadAsString("backend/video-details.json"))
+        .up()
         .build();
     BackendHelper backendHelper = new BackendHelper(callFactory);
     Video video = createVideo();
@@ -165,8 +177,10 @@ public class BackendHelperTest extends PowerMockRobolectricTest {
   public void loadVideoUrl_whenHttpNotFound_thenThrowsIoException() throws Exception {
 
     // Given
-    LocalCallFactory callFactory = new LocalCallFactory.Builder()
-        .withError(HttpURLConnection.HTTP_NOT_FOUND)
+    LocalCallFactory callFactory = LocalCallFactory.newBuilder()
+        .forAnyUrl()
+        .code(HttpURLConnection.HTTP_NOT_FOUND)
+        .up()
         .build();
     BackendHelper backendHelper = new BackendHelper(callFactory);
     Video video = createVideo();
@@ -186,9 +200,11 @@ public class BackendHelperTest extends PowerMockRobolectricTest {
   public void loadVideoUrl_whenHttpOk_thenSetsVideoUrl() throws Exception {
 
     // Given
-    LocalCallFactory callFactory = new LocalCallFactory.Builder()
-        .withCode(HttpURLConnection.HTTP_OK)
-        .withJsonResponseBody(ResourceUtils.loadAsString("backend/video-links.json"))
+    LocalCallFactory callFactory = LocalCallFactory.newBuilder()
+        .forAnyUrl()
+        .code(HttpURLConnection.HTTP_OK)
+        .responseBody(ResourceUtils.loadAsString("backend/video-links.json"))
+        .up()
         .build();
     BackendHelper backendHelper = new BackendHelper(callFactory);
     Video video = createVideo();

@@ -1,0 +1,12 @@
+{
+  "Items": [
+    {
+      "Slug": "id",
+      "Title": "title",
+      "PrimaryImageUri": "http://image.com",
+      "PrimaryAsset": {
+        "Uri": "http://links.com"
+      }
+    }
+  ]
+}
