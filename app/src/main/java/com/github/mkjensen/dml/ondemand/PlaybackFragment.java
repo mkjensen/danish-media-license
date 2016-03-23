@@ -16,27 +16,40 @@
 
 package com.github.mkjensen.dml.ondemand;
 
-import static android.media.session.MediaSession.FLAG_HANDLES_MEDIA_BUTTONS;
-import static android.media.session.MediaSession.FLAG_HANDLES_TRANSPORT_CONTROLS;
+import static android.support.v4.media.MediaMetadataCompat.METADATA_KEY_DISPLAY_DESCRIPTION;
+import static android.support.v4.media.MediaMetadataCompat.METADATA_KEY_DISPLAY_TITLE;
+import static android.support.v4.media.MediaMetadataCompat.METADATA_KEY_DURATION;
+import static android.support.v4.media.MediaMetadataCompat.METADATA_KEY_MEDIA_ID;
+import static android.support.v4.media.session.MediaSessionCompat.Callback;
+import static android.support.v4.media.session.MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS;
+import static android.support.v4.media.session.MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS;
+import static android.support.v4.media.session.PlaybackStateCompat.ACTION_PLAY_PAUSE;
+import static android.support.v4.media.session.PlaybackStateCompat.PLAYBACK_POSITION_UNKNOWN;
+import static android.support.v4.media.session.PlaybackStateCompat.STATE_BUFFERING;
+import static android.support.v4.media.session.PlaybackStateCompat.STATE_ERROR;
+import static android.support.v4.media.session.PlaybackStateCompat.STATE_NONE;
+import static android.support.v4.media.session.PlaybackStateCompat.STATE_PAUSED;
+import static android.support.v4.media.session.PlaybackStateCompat.STATE_PLAYING;
+import static android.support.v4.media.session.PlaybackStateCompat.STATE_STOPPED;
 
 import android.content.Context;
 import android.graphics.SurfaceTexture;
-import android.media.session.MediaController;
-import android.media.session.MediaSession;
-import android.media.session.PlaybackState;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
+import android.support.v17.leanback.app.MediaControllerGlue;
 import android.support.v17.leanback.app.PlaybackOverlaySupportFragment;
 import android.support.v17.leanback.widget.Action;
 import android.support.v17.leanback.widget.ArrayObjectAdapter;
-import android.support.v17.leanback.widget.ClassPresenterSelector;
-import android.support.v17.leanback.widget.ControlButtonPresenterSelector;
-import android.support.v17.leanback.widget.ListRow;
-import android.support.v17.leanback.widget.ListRowPresenter;
-import android.support.v17.leanback.widget.OnActionClickedListener;
+import android.support.v17.leanback.widget.OnItemViewClickedListener;
 import android.support.v17.leanback.widget.PlaybackControlsRow;
-import android.support.v17.leanback.widget.PlaybackControlsRow.PlayPauseAction;
 import android.support.v17.leanback.widget.PlaybackControlsRowPresenter;
+import android.support.v17.leanback.widget.Presenter;
+import android.support.v17.leanback.widget.Row;
+import android.support.v17.leanback.widget.RowPresenter;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.media.MediaMetadataCompat;
+import android.support.v4.media.session.MediaControllerCompat;
+import android.support.v4.media.session.MediaSessionCompat;
+import android.support.v4.media.session.PlaybackStateCompat;
 import android.util.Log;
 import android.view.Surface;
 import android.view.TextureView;
@@ -54,52 +67,26 @@ public class PlaybackFragment extends PlaybackOverlaySupportFragment {
 
   private static final String TAG = "PlaybackFragment";
 
-  private MediaSession mediaSession;
-  private MediaController.Callback mediaControllerCallback;
   private Video video;
-  private TextureView textureView;
+
+  private MediaSessionCompat mediaSession;
+
+  private MediaControllerHelper mediaControllerHelper;
+
   private ArrayObjectAdapter rows;
-  private PlaybackControlsRow controls;
-  private ArrayObjectAdapter primaryActions;
-  private PlayPauseAction playPauseAction;
+
   private DemoPlayer player;
-
-  @Override
-  public void onAttach(Context context) {
-    Log.d(TAG, "onAttach");
-    super.onAttach(context);
-    createMediaSession();
-    registerMediaControllerCallback();
-  }
-
-  private void createMediaSession() {
-    if (mediaSession != null) {
-      return;
-    }
-    mediaSession = new MediaSession(getActivity(), TAG);
-    mediaSession.setCallback(new MediaSessionCallback());
-    mediaSession.setFlags(FLAG_HANDLES_MEDIA_BUTTONS | FLAG_HANDLES_TRANSPORT_CONTROLS);
-    getActivity().setMediaController(
-        new MediaController(getActivity(), mediaSession.getSessionToken()));
-    setPlaybackState(PlaybackState.STATE_NONE);
-  }
-
-  private void registerMediaControllerCallback() {
-    if (mediaControllerCallback != null) {
-      return;
-    }
-    mediaControllerCallback = new MediaControllerCallback();
-    getActivity().getMediaController().registerCallback(mediaControllerCallback);
-  }
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
     Log.d(TAG, "onCreate");
     super.onCreate(savedInstanceState);
     initVideo();
+    initMediaSession();
+    initMediaControllerHelper();
     initUi();
-    registerTextureViewSurfaceTextureListener();
-    preparePlayer(true);
+    initPlayer();
+    initTextureView();
   }
 
   private void initVideo() {
@@ -109,161 +96,90 @@ public class PlaybackFragment extends PlaybackOverlaySupportFragment {
     }
   }
 
-  private void registerTextureViewSurfaceTextureListener() {
-    if (textureView != null) {
-      return;
-    }
-    textureView = (TextureView) getActivity().findViewById(R.id.ondemand_playback_textureview);
-    textureView.setSurfaceTextureListener(new TextureViewSurfaceTextureListener());
+  private void initMediaSession() {
+    FragmentActivity activity = getActivity();
+    mediaSession = new MediaSessionCompat(activity, TAG);
+    mediaSession.setCallback(new MediaSessionCallback());
+    mediaSession.setFlags(FLAG_HANDLES_MEDIA_BUTTONS | FLAG_HANDLES_TRANSPORT_CONTROLS);
+    mediaSession.setActive(true);
+    updateMetadata();
+    setPlaybackState(STATE_NONE);
+    activity.setSupportMediaController(new MediaControllerCompat(activity, mediaSession));
+  }
+
+  private void initMediaControllerHelper() {
+    mediaControllerHelper = new MediaControllerHelper(getActivity());
+    mediaControllerHelper.attachToMediaController(mediaSession.getController());
   }
 
   private void initUi() {
-    PlaybackControlsRowPresenter controlsPresenter =
-        new PlaybackControlsRowPresenter(new VideoDetailsPresenter());
-    ClassPresenterSelector presenterSelector = new ClassPresenterSelector();
-    presenterSelector.addClassPresenter(ListRow.class, new ListRowPresenter());
-    presenterSelector.addClassPresenter(PlaybackControlsRow.class, controlsPresenter);
-    rows = new ArrayObjectAdapter(presenterSelector);
-    createControls(controlsPresenter);
+    PlaybackControlsRowPresenter presenter = mediaControllerHelper.createControlsRowAndPresenter();
+    rows = new ArrayObjectAdapter(presenter);
+    rows.add(mediaControllerHelper.getControlsRow());
     setAdapter(rows);
-  }
-
-  private void createControls(PlaybackControlsRowPresenter controlsPresenter) {
-    controls = new PlaybackControlsRow(video);
-    createActions(controlsPresenter);
-    rows.add(controls);
-  }
-
-  private void createActions(PlaybackControlsRowPresenter controlsPresenter) {
-    ControlButtonPresenterSelector presenterSelector = new ControlButtonPresenterSelector();
-    primaryActions = new ArrayObjectAdapter(presenterSelector);
-    playPauseAction = new PlayPauseAction(getActivity());
-    primaryActions.add(playPauseAction);
-    controls.setPrimaryActionsAdapter(primaryActions);
-    controlsPresenter.setOnActionClickedListener(new OnActionClickedListener() {
+    setOnItemViewClickedListener(new OnItemViewClickedListener() {
 
       @Override
-      public void onActionClicked(Action action) {
-        if (action.getId() == playPauseAction.getId()) {
-          if (playPauseAction.getIndex() == PlayPauseAction.PAUSE) {
-            getActivity().getMediaController().getTransportControls().pause();
-          } else {
-            getActivity().getMediaController().getTransportControls().play();
-          }
+      public void onItemClicked(Presenter.ViewHolder itemViewHolder, Object item,
+                                RowPresenter.ViewHolder rowViewHolder, Row row) {
+        if (item instanceof Action) {
+          mediaControllerHelper.onActionClicked((Action) item);
         }
       }
     });
   }
 
-  private void preparePlayer(boolean playWhenReady) {
-    if (player == null) {
-      HlsRendererBuilder rendererBuilder =
-          new HlsRendererBuilder(getActivity(), TAG, video.getUrl());
-      player = new DemoPlayer(rendererBuilder);
-      player.addListener(new DemoPlayerListener());
-    } else {
-      playPause(false);
-    }
-    player.seekTo(0L);
+  private void initPlayer() {
+    HlsRendererBuilder rendererBuilder = new HlsRendererBuilder(getActivity(), TAG, video.getUrl());
+    player = new DemoPlayer(rendererBuilder);
+    player.addListener(new DemoPlayerListener());
     player.prepare();
-    playPause(playWhenReady);
   }
 
-  private void playPause(boolean play) {
-    if (player == null) {
-      setPlaybackState(PlaybackState.STATE_NONE);
-      return;
-    }
-    if (play && getPlaybackState() != PlaybackState.STATE_PLAYING) {
-      player.setPlayWhenReady(true);
-      setPlaybackState(PlaybackState.STATE_PLAYING);
-    } else {
-      player.setPlayWhenReady(false);
-      setPlaybackState(PlaybackState.STATE_PAUSED);
-    }
+  private void initTextureView() {
+    TextureView textureView = (TextureView) getActivity()
+        .findViewById(R.id.ondemand_playback_textureview);
+    textureView.setSurfaceTextureListener(new TextureViewSurfaceTextureListener());
   }
 
-  private int getPlaybackState() {
-    PlaybackState state = getActivity().getMediaController().getPlaybackState();
-    return state != null ? state.getState() : PlaybackState.STATE_NONE;
+  private void updateMetadata() {
+    MediaMetadataCompat.Builder builder = new MediaMetadataCompat.Builder()
+        .putString(METADATA_KEY_MEDIA_ID, video.getId())
+        .putString(METADATA_KEY_DISPLAY_TITLE, video.getTitle())
+        .putString(METADATA_KEY_DISPLAY_DESCRIPTION, video.getDescription());
+    if (player != null) {
+      builder.putLong(METADATA_KEY_DURATION, player.getDuration());
+    }
+    mediaSession.setMetadata(builder.build());
   }
 
   private void setPlaybackState(int state) {
-    long currentPosition = 0L;
+    PlaybackStateCompat.Builder builder = new PlaybackStateCompat.Builder();
+    if (state == STATE_PAUSED || state == STATE_PLAYING) {
+      builder.setActions(ACTION_PLAY_PAUSE);
+    }
     if (player != null) {
-      currentPosition = player.getCurrentPosition();
+      builder.setBufferedPosition(player.getBufferedPosition());
+      builder.setState(state, player.getCurrentPosition(), state == STATE_PLAYING ? 1f : 0f);
+    } else {
+      builder.setState(state, PLAYBACK_POSITION_UNKNOWN, 0f);
     }
-    PlaybackState.Builder stateBuilder = new PlaybackState.Builder()
-        .setActions(getAvailableActions(state))
-        .setState(state, currentPosition, 1f);
-    mediaSession.setPlaybackState(stateBuilder.build());
+    mediaSession.setPlaybackState(builder.build());
   }
 
-  private long getAvailableActions(int state) {
-    long actions = 0;
-    switch (state) {
-      case PlaybackState.STATE_PAUSED:
-        actions |= PlaybackState.ACTION_PLAY;
-        break;
-      case PlaybackState.STATE_PLAYING:
-        actions |= PlaybackState.ACTION_PAUSE;
-        break;
-      default:
-        Log.w(TAG, "Unhandled playback state: " + state);
-        break;
-    }
-    return actions;
-  }
-
-  @Override
-  public void onResume() {
-    Log.d(TAG, "onResume");
-    super.onResume();
-    if (player == null) {
-      preparePlayer(true);
-    }
-    mediaSession.setActive(true);
-  }
-
-  @Override
-  public void onPause() {
-    Log.d(TAG, "onPause");
-    super.onPause();
-    mediaSession.setActive(false);
-    playPause(false);
+  private void playPause(boolean play) {
+    player.setPlayWhenReady(play && !mediaControllerHelper.isMediaPlaying());
   }
 
   @Override
   public void onDestroy() {
     Log.d(TAG, "onDestroy");
     super.onDestroy();
-    unregisterMediaControllerCallback();
-    releaseMediaSession();
-    releasePlayer();
+    player.release();
+    mediaSession.release();
   }
 
-  private void unregisterMediaControllerCallback() {
-    if (mediaControllerCallback != null) {
-      getActivity().getMediaController().unregisterCallback(mediaControllerCallback);
-      mediaControllerCallback = null;
-    }
-  }
-
-  private void releaseMediaSession() {
-    if (mediaSession != null) {
-      mediaSession.release();
-      mediaSession = null;
-    }
-  }
-
-  private void releasePlayer() {
-    if (player != null) {
-      player.release();
-      player = null;
-    }
-  }
-
-  private final class MediaSessionCallback extends MediaSession.Callback {
+  private final class MediaSessionCallback extends Callback {
 
     @Override
     public void onPlay() {
@@ -276,30 +192,61 @@ public class PlaybackFragment extends PlaybackOverlaySupportFragment {
     }
   }
 
-  private final class MediaControllerCallback extends MediaController.Callback {
+  private final class MediaControllerHelper extends MediaControllerGlue {
+
+    MediaControllerHelper(Context context) {
+      super(context, null, new int[1]);
+    }
 
     @Override
-    public void onPlaybackStateChanged(@NonNull PlaybackState state) {
-      switch (state.getState()) {
-        case PlaybackState.STATE_PAUSED:
-          playPauseAction.setIndex(PlayPauseAction.PLAY);
-          notifyActionChanged(playPauseAction);
+    protected void onRowChanged(PlaybackControlsRow row) {
+      if (rows == null) {
+        return;
+      }
+      int index = rows.indexOf(row);
+      rows.notifyArrayItemRangeChanged(index, 1);
+    }
+  }
+
+  private final class DemoPlayerListener implements DemoPlayer.Listener {
+
+    @Override
+    public void onStateChanged(boolean playWhenReady, int playbackState) {
+      switch (playbackState) {
+        case DemoPlayer.STATE_IDLE:
+          setPlaybackState(STATE_NONE);
           break;
-        case PlaybackState.STATE_PLAYING:
-          playPauseAction.setIndex(PlayPauseAction.PAUSE);
-          notifyActionChanged(playPauseAction);
+        case DemoPlayer.STATE_BUFFERING:
+        case DemoPlayer.STATE_PREPARING:
+          updateMetadata();
+          setPlaybackState(STATE_BUFFERING);
+          break;
+        case DemoPlayer.STATE_READY:
+          setPlaybackState(playWhenReady ? STATE_PLAYING : STATE_PAUSED);
+          break;
+        case DemoPlayer.STATE_ENDED:
+          setPlaybackState(STATE_STOPPED);
           break;
         default:
-          Log.w(TAG, "Unhandled playback state: " + state.getState());
+          Log.w(TAG, String.format("Unhandled state change: %s, %d", playWhenReady, playbackState));
           break;
       }
     }
 
-    private void notifyActionChanged(Action action) {
-      int index = primaryActions.indexOf(action);
-      if (index != -1) {
-        primaryActions.notifyArrayItemRangeChanged(index, 1);
-      }
+    @Override
+    public void onError(Exception ex) {
+      Log.e(TAG, "An error occurred in ExoPlayer", ex);
+      PlaybackStateCompat state = new PlaybackStateCompat.Builder()
+          .setState(STATE_ERROR, PLAYBACK_POSITION_UNKNOWN, 0f)
+          .setErrorMessage(ex.toString())
+          .build();
+      mediaSession.setPlaybackState(state);
+    }
+
+    @Override
+    public void onVideoSizeChanged(int width, int height, int unappliedRotationDegrees,
+                                   float pixelWidthHeightRatio) {
+      // Do nothing.
     }
   }
 
@@ -309,9 +256,8 @@ public class PlaybackFragment extends PlaybackOverlaySupportFragment {
     @Override
     public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
       Log.d(TAG, "onSurfaceTextureAvailable");
-      if (player != null) {
-        player.setSurface(new Surface(surface));
-      }
+      player.setSurface(new Surface(surface));
+      playPause(true);
     }
 
     @Override
@@ -322,33 +268,12 @@ public class PlaybackFragment extends PlaybackOverlaySupportFragment {
     @Override
     public boolean onSurfaceTextureDestroyed(SurfaceTexture surface) {
       Log.d(TAG, "onSurfaceTextureDestroyed");
-      if (player != null) {
-        player.blockingClearSurface();
-      }
+      player.blockingClearSurface();
       return true;
     }
 
     @Override
     public void onSurfaceTextureUpdated(SurfaceTexture surface) {
-      // Do nothing.
-    }
-  }
-
-  private final class DemoPlayerListener implements DemoPlayer.Listener {
-
-    @Override
-    public void onStateChanged(boolean playWhenReady, int playbackState) {
-      // Do nothing.
-    }
-
-    @Override
-    public void onError(Exception ex) {
-      Log.e(TAG, ex.toString());
-    }
-
-    @Override
-    public void onVideoSizeChanged(int width, int height, int unappliedRotationDegrees,
-                                   float pixelWidthHeightRatio) {
       // Do nothing.
     }
   }

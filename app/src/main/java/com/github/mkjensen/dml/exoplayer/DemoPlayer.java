@@ -429,6 +429,10 @@ public class DemoPlayer implements ExoPlayer.Listener, ChunkSampleSource.EventLi
     return player.getBufferedPercentage();
   }
 
+  public long getBufferedPosition() {
+    return player.getBufferedPosition();
+  }
+
   public boolean getPlayWhenReady() {
     return player.getPlayWhenReady();
   }
