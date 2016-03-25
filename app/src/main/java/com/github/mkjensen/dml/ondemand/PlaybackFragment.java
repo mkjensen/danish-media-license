@@ -16,6 +16,8 @@
 
 package com.github.mkjensen.dml.ondemand;
 
+import static android.support.v17.leanback.app.PlaybackControlGlue.PLAYBACK_SPEED_NORMAL;
+import static android.support.v17.leanback.app.PlaybackControlGlue.PLAYBACK_SPEED_PAUSED;
 import static android.support.v4.media.MediaMetadataCompat.METADATA_KEY_DISPLAY_DESCRIPTION;
 import static android.support.v4.media.MediaMetadataCompat.METADATA_KEY_DISPLAY_TITLE;
 import static android.support.v4.media.MediaMetadataCompat.METADATA_KEY_DURATION;
@@ -23,12 +25,16 @@ import static android.support.v4.media.MediaMetadataCompat.METADATA_KEY_MEDIA_ID
 import static android.support.v4.media.session.MediaSessionCompat.Callback;
 import static android.support.v4.media.session.MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS;
 import static android.support.v4.media.session.MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS;
+import static android.support.v4.media.session.PlaybackStateCompat.ACTION_FAST_FORWARD;
 import static android.support.v4.media.session.PlaybackStateCompat.ACTION_PLAY_PAUSE;
+import static android.support.v4.media.session.PlaybackStateCompat.ACTION_REWIND;
 import static android.support.v4.media.session.PlaybackStateCompat.PLAYBACK_POSITION_UNKNOWN;
 import static android.support.v4.media.session.PlaybackStateCompat.STATE_ERROR;
+import static android.support.v4.media.session.PlaybackStateCompat.STATE_FAST_FORWARDING;
 import static android.support.v4.media.session.PlaybackStateCompat.STATE_NONE;
 import static android.support.v4.media.session.PlaybackStateCompat.STATE_PAUSED;
 import static android.support.v4.media.session.PlaybackStateCompat.STATE_PLAYING;
+import static android.support.v4.media.session.PlaybackStateCompat.STATE_REWINDING;
 
 import android.content.Context;
 import android.graphics.SurfaceTexture;
@@ -155,14 +161,32 @@ public class PlaybackFragment extends PlaybackOverlaySupportFragment {
 
   private void setPlaybackState(int state) {
     PlaybackStateCompat.Builder builder = new PlaybackStateCompat.Builder();
-    builder.setActions(ACTION_PLAY_PAUSE);
+    builder.setActions(ACTION_FAST_FORWARD | ACTION_PLAY_PAUSE | ACTION_REWIND);
     if (player != null) {
       builder.setBufferedPosition(player.getBufferedPosition());
-      builder.setState(state, player.getCurrentPosition(), state == STATE_PLAYING ? 1f : 0f);
+      builder.setState(state, player.getCurrentPosition(), getPlaybackSpeed(state));
     } else {
-      builder.setState(state, PLAYBACK_POSITION_UNKNOWN, 0f);
+      builder.setState(state, PLAYBACK_POSITION_UNKNOWN, PLAYBACK_SPEED_PAUSED);
     }
     mediaSession.setPlaybackState(builder.build());
+  }
+
+  private static float getPlaybackSpeed(int state) {
+    float playbackSpeed;
+    switch (state) {
+      case STATE_FAST_FORWARDING:
+        playbackSpeed = MediaControllerHelper.SEEK_PLAYBACK_SPEED;
+        break;
+      case STATE_PLAYING:
+        playbackSpeed = PLAYBACK_SPEED_NORMAL;
+        break;
+      case STATE_REWINDING:
+        playbackSpeed = -MediaControllerHelper.SEEK_PLAYBACK_SPEED;
+        break;
+      default:
+        playbackSpeed = PLAYBACK_SPEED_PAUSED;
+    }
+    return playbackSpeed;
   }
 
   private void playPause(boolean play) {
@@ -173,6 +197,20 @@ public class PlaybackFragment extends PlaybackOverlaySupportFragment {
       setPlaybackState(STATE_PAUSED);
       player.setPlayWhenReady(false);
     }
+  }
+
+  private void forwardRewind(boolean forward) {
+    long position = player.getCurrentPosition();
+    if (forward) {
+      setPlaybackState(STATE_FAST_FORWARDING);
+      position += MediaControllerHelper.SEEK_MILLISECONDS;
+    } else {
+      setPlaybackState(STATE_REWINDING);
+      position -= MediaControllerHelper.SEEK_MILLISECONDS;
+    }
+    position = Math.max(0, Math.min(position, player.getDuration()));
+    player.seekTo(position);
+    mediaControllerHelper.getMediaController().getTransportControls().play();
   }
 
   @Override
@@ -187,24 +225,38 @@ public class PlaybackFragment extends PlaybackOverlaySupportFragment {
   private final class MediaSessionCallback extends Callback {
 
     @Override
-    public void onPlay() {
-      playPause(true);
+    public void onFastForward() {
+      forwardRewind(true);
     }
 
     @Override
     public void onPause() {
       playPause(false);
     }
+
+    @Override
+    public void onPlay() {
+      playPause(true);
+    }
+
+    @Override
+    public void onRewind() {
+      forwardRewind(false);
+    }
   }
 
   private final class MediaControllerHelper extends MediaControllerGlue {
+
+    static final long SEEK_MILLISECONDS = 10000L;
+
+    static final int SEEK_PLAYBACK_SPEED = 2;
 
     final Handler handler;
 
     final Runnable updateProgressRunnable;
 
     MediaControllerHelper(Context context) {
-      super(context, null, new int[1]);
+      super(context, null, new int[] {SEEK_PLAYBACK_SPEED});
       handler = new Handler();
       updateProgressRunnable = createUpdateProgressRunnable();
     }
@@ -274,7 +326,7 @@ public class PlaybackFragment extends PlaybackOverlaySupportFragment {
     public void onError(Exception ex) {
       Log.e(TAG, "An error occurred in ExoPlayer", ex);
       PlaybackStateCompat state = new PlaybackStateCompat.Builder()
-          .setState(STATE_ERROR, PLAYBACK_POSITION_UNKNOWN, 0f)
+          .setState(STATE_ERROR, PLAYBACK_POSITION_UNKNOWN, PLAYBACK_SPEED_PAUSED)
           .setErrorMessage(ex.toString())
           .build();
       mediaSession.setPlaybackState(state);
