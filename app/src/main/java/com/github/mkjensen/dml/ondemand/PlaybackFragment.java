@@ -25,16 +25,15 @@ import static android.support.v4.media.session.MediaSessionCompat.FLAG_HANDLES_M
 import static android.support.v4.media.session.MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS;
 import static android.support.v4.media.session.PlaybackStateCompat.ACTION_PLAY_PAUSE;
 import static android.support.v4.media.session.PlaybackStateCompat.PLAYBACK_POSITION_UNKNOWN;
-import static android.support.v4.media.session.PlaybackStateCompat.STATE_BUFFERING;
 import static android.support.v4.media.session.PlaybackStateCompat.STATE_ERROR;
 import static android.support.v4.media.session.PlaybackStateCompat.STATE_NONE;
 import static android.support.v4.media.session.PlaybackStateCompat.STATE_PAUSED;
 import static android.support.v4.media.session.PlaybackStateCompat.STATE_PLAYING;
-import static android.support.v4.media.session.PlaybackStateCompat.STATE_STOPPED;
 
 import android.content.Context;
 import android.graphics.SurfaceTexture;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v17.leanback.app.MediaControllerGlue;
 import android.support.v17.leanback.app.PlaybackOverlaySupportFragment;
 import android.support.v17.leanback.widget.Action;
@@ -47,7 +46,6 @@ import android.support.v17.leanback.widget.Row;
 import android.support.v17.leanback.widget.RowPresenter;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.media.MediaMetadataCompat;
-import android.support.v4.media.session.MediaControllerCompat;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
 import android.util.Log;
@@ -87,6 +85,7 @@ public class PlaybackFragment extends PlaybackOverlaySupportFragment {
     initUi();
     initPlayer();
     initTextureView();
+    updateMetadata();
   }
 
   private void initVideo() {
@@ -102,9 +101,8 @@ public class PlaybackFragment extends PlaybackOverlaySupportFragment {
     mediaSession.setCallback(new MediaSessionCallback());
     mediaSession.setFlags(FLAG_HANDLES_MEDIA_BUTTONS | FLAG_HANDLES_TRANSPORT_CONTROLS);
     mediaSession.setActive(true);
-    updateMetadata();
     setPlaybackState(STATE_NONE);
-    activity.setSupportMediaController(new MediaControllerCompat(activity, mediaSession));
+    activity.setSupportMediaController(mediaSession.getController());
   }
 
   private void initMediaControllerHelper() {
@@ -157,9 +155,7 @@ public class PlaybackFragment extends PlaybackOverlaySupportFragment {
 
   private void setPlaybackState(int state) {
     PlaybackStateCompat.Builder builder = new PlaybackStateCompat.Builder();
-    if (state == STATE_PAUSED || state == STATE_PLAYING) {
-      builder.setActions(ACTION_PLAY_PAUSE);
-    }
+    builder.setActions(ACTION_PLAY_PAUSE);
     if (player != null) {
       builder.setBufferedPosition(player.getBufferedPosition());
       builder.setState(state, player.getCurrentPosition(), state == STATE_PLAYING ? 1f : 0f);
@@ -170,7 +166,13 @@ public class PlaybackFragment extends PlaybackOverlaySupportFragment {
   }
 
   private void playPause(boolean play) {
-    player.setPlayWhenReady(play && !mediaControllerHelper.isMediaPlaying());
+    if (play && !mediaControllerHelper.isMediaPlaying()) {
+      setPlaybackState(STATE_PLAYING);
+      player.setPlayWhenReady(true);
+    } else {
+      setPlaybackState(STATE_PAUSED);
+      player.setPlayWhenReady(false);
+    }
   }
 
   @Override
@@ -178,6 +180,7 @@ public class PlaybackFragment extends PlaybackOverlaySupportFragment {
     Log.d(TAG, "onDestroy");
     super.onDestroy();
     player.release();
+    mediaControllerHelper.detach();
     mediaSession.release();
   }
 
@@ -196,8 +199,53 @@ public class PlaybackFragment extends PlaybackOverlaySupportFragment {
 
   private final class MediaControllerHelper extends MediaControllerGlue {
 
+    final Handler handler;
+
+    final Runnable updateProgressRunnable;
+
     MediaControllerHelper(Context context) {
       super(context, null, new int[1]);
+      handler = new Handler();
+      updateProgressRunnable = createUpdateProgressRunnable();
+    }
+
+    private Runnable createUpdateProgressRunnable() {
+      return new Runnable() {
+        @Override
+        public void run() {
+          updateProgress();
+          postDelayedUpdateProgressRunnable();
+        }
+      };
+    }
+
+    private void postDelayedUpdateProgressRunnable() {
+      handler.postDelayed(updateProgressRunnable, getUpdatePeriod());
+    }
+
+    @Override
+    public void detach() {
+      enableProgressUpdating(false);
+      super.detach();
+    }
+
+    @Override
+    public void enableProgressUpdating(boolean enable) {
+      if (enable) {
+        postDelayedUpdateProgressRunnable();
+      } else {
+        handler.removeCallbacks(updateProgressRunnable);
+      }
+    }
+
+    @Override
+    public void updateProgress() {
+      if (player == null) {
+        return;
+      }
+      PlaybackControlsRow controlsRow = getControlsRow();
+      controlsRow.setBufferedProgress((int) player.getBufferedPosition());
+      controlsRow.setCurrentTime((int) player.getCurrentPosition());
     }
 
     @Override
@@ -212,26 +260,13 @@ public class PlaybackFragment extends PlaybackOverlaySupportFragment {
 
   private final class DemoPlayerListener implements DemoPlayer.Listener {
 
+    boolean updateMetadataWhenReady = true;
+
     @Override
     public void onStateChanged(boolean playWhenReady, int playbackState) {
-      switch (playbackState) {
-        case DemoPlayer.STATE_IDLE:
-          setPlaybackState(STATE_NONE);
-          break;
-        case DemoPlayer.STATE_BUFFERING:
-        case DemoPlayer.STATE_PREPARING:
-          updateMetadata();
-          setPlaybackState(STATE_BUFFERING);
-          break;
-        case DemoPlayer.STATE_READY:
-          setPlaybackState(playWhenReady ? STATE_PLAYING : STATE_PAUSED);
-          break;
-        case DemoPlayer.STATE_ENDED:
-          setPlaybackState(STATE_STOPPED);
-          break;
-        default:
-          Log.w(TAG, String.format("Unhandled state change: %s, %d", playWhenReady, playbackState));
-          break;
+      if (updateMetadataWhenReady && playbackState == DemoPlayer.STATE_READY) {
+        updateMetadata();
+        updateMetadataWhenReady = false;
       }
     }
 
