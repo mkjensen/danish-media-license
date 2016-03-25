@@ -170,6 +170,7 @@ public class DemoPlayer implements ExoPlayer.Listener, ChunkSampleSource.EventLi
   public static final int STATE_ENDED = ExoPlayer.STATE_ENDED;
   public static final int TRACK_DISABLED = ExoPlayer.TRACK_DISABLED;
   public static final int TRACK_DEFAULT = ExoPlayer.TRACK_DEFAULT;
+  public static final long UNKNOWN_TIME = ExoPlayer.UNKNOWN_TIME;
 
   public static final int RENDERER_COUNT = 4;
   public static final int TYPE_VIDEO = 0;

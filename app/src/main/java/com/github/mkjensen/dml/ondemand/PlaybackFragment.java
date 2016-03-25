@@ -149,6 +149,8 @@ public class PlaybackFragment extends PlaybackOverlaySupportFragment {
         .putString(METADATA_KEY_DISPLAY_DESCRIPTION, video.getDescription());
     if (player != null) {
       builder.putLong(METADATA_KEY_DURATION, player.getDuration());
+    } else {
+      builder.putLong(METADATA_KEY_DURATION, DemoPlayer.UNKNOWN_TIME);
     }
     mediaSession.setMetadata(builder.build());
   }
