@@ -37,6 +37,7 @@ import android.support.v4.content.Loader;
 import android.support.v4.util.ArrayMap;
 import android.util.Log;
 import android.util.SparseArray;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
@@ -97,6 +98,14 @@ public class BrowseFragment extends BrowseSupportFragment
   }
 
   private void initListeners() {
+    setOnSearchClickedListener(new View.OnClickListener() {
+
+      @Override
+      public void onClick(View view) {
+        Intent intent = new Intent(getActivity(), SearchActivity.class);
+        startActivity(intent);
+      }
+    });
     setOnItemViewClickedListener(new OnItemViewClickedListener() {
 
       @Override
