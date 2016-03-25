@@ -23,11 +23,11 @@ import static org.junit.Assert.assertNotNull;
 import android.content.ContentProviderClient;
 import android.content.SyncResult;
 
-import com.github.mkjensen.dml.ResourceUtils;
 import com.github.mkjensen.dml.backend.BackendHelper;
 import com.github.mkjensen.dml.backend.LocalCallFactory;
 import com.github.mkjensen.dml.provider.DmlContract;
 import com.github.mkjensen.dml.test.ContentUtils;
+import com.github.mkjensen.dml.test.ResourceUtils;
 import com.github.mkjensen.dml.test.RobolectricTest;
 
 import org.junit.After;

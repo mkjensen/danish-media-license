@@ -14,7 +14,9 @@
  * limitations under the License.
  */
 
-package com.github.mkjensen.dml;
+package com.github.mkjensen.dml.test;
+
+import com.github.mkjensen.dml.DmlException;
 
 import java.io.BufferedReader;
 import java.io.IOException;

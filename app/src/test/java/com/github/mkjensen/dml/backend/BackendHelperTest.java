@@ -21,8 +21,8 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.fail;
 
-import com.github.mkjensen.dml.ResourceUtils;
 import com.github.mkjensen.dml.test.PowerMockRobolectricTest;
+import com.github.mkjensen.dml.test.ResourceUtils;
 
 import org.junit.Test;
 import org.powermock.api.mockito.PowerMockito;
