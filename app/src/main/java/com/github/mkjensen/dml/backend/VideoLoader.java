@@ -47,4 +47,9 @@ public class VideoLoader extends BackendLoader<Video> {
       return null;
     }
   }
+
+  @NonNull
+  String getVideoId() {
+    return videoId;
+  }
 }
