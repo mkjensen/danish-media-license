@@ -17,6 +17,7 @@
 package com.github.mkjensen.dml.ondemand;
 
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import android.view.View;
 
@@ -52,5 +53,15 @@ public class BrowseActivityTest extends RobolectricTest {
 
     // Then
     assertNotNull(browseFragment);
+  }
+
+  @Test
+  public void onSearchRequested_returnsTrue() {
+
+    // When
+    boolean searchRequested = browseActivity.onSearchRequested();
+
+    // Then
+    assertTrue(searchRequested);
   }
 }
