@@ -47,6 +47,16 @@ public class BackendHelperTest extends RobolectricTest {
       "https://www.dr.dk/mu-online/api/1.3/search/tv/programcards-with-asset/title/test";
 
   @Test
+  public void constructor_whenCalledWithNullContext_thenThrowsIllegalArgumentException() {
+
+    // When/then
+    thrown.expect(IllegalArgumentException.class);
+    @SuppressWarnings("ConstantConditions")
+    BackendHelper backendHelper = new BackendHelper(null);
+    assertNotNull(backendHelper); // For your eyes only, PMD.
+  }
+
+  @Test
   public void loadMostViewedCategory_whenHttpNotFound_thenThrowsIoException() throws IOException {
 
     // Given
