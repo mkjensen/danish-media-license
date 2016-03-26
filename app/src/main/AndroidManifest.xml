@@ -25,22 +25,16 @@
         android:required="false" />
 
     <uses-feature
+        android:name="android.hardware.microphone"
+        android:required="false" />
+
+    <uses-feature
         android:name="android.software.leanback"
         android:required="true" />
 
-    <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
-
-    <uses-permission
-        android:name="android.permission.GET_ACCOUNTS"
-        android:maxSdkVersion="22" />
-
     <uses-permission android:name="android.permission.INTERNET" />
 
-    <uses-permission android:name="android.permission.READ_SYNC_SETTINGS" />
-
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
-
-    <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
 
     <application
         android:allowBackup="false"
@@ -65,46 +59,9 @@
             android:name=".ondemand.DetailsActivity"
             android:theme="@style/Theme.Leanback.Details" />
 
+        <activity android:name=".ondemand.PlaybackActivity" />
+
         <activity android:name=".ondemand.SearchActivity" />
-
-        <activity
-            android:name=".ondemand.PlaybackActivity"
-            android:theme="@style/Theme.Leanback.Details" />
-
-        <provider
-            android:name=".provider.DmlProvider"
-            android:authorities="com.github.mkjensen.dml.provider"
-            android:exported="false"
-            android:syncable="true" />
-
-        <service
-            android:name=".sync.DmlAuthenticatorService"
-            android:exported="false">
-
-            <intent-filter>
-                <action android:name="android.accounts.AccountAuthenticator" />
-            </intent-filter>
-
-            <meta-data
-                android:name="android.accounts.AccountAuthenticator"
-                android:resource="@xml/authenticator" />
-
-        </service>
-
-        <service
-            android:name=".sync.DmlSyncService"
-            android:exported="false"
-            android:process=":sync">
-
-            <intent-filter>
-                <action android:name="android.content.SyncAdapter" />
-            </intent-filter>
-
-            <meta-data
-                android:name="android.content.SyncAdapter"
-                android:resource="@xml/syncadapter" />
-
-        </service>
 
     </application>
 

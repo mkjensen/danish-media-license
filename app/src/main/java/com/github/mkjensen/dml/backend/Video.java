@@ -16,40 +16,42 @@
 
 package com.github.mkjensen.dml.backend;
 
+import static com.github.mkjensen.dml.Defense.notNull;
+
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 
 import com.squareup.moshi.Json;
 
 /**
  * Metadata about an on-demand video.
  */
-public final class Video implements Parcelable {
+public class Video implements Parcelable {
 
   public static final Parcelable.Creator<Video> CREATOR = new ParcelableCreator();
 
+  public static final String NOT_SET = "(not set)";
+
   @Json(name = "Slug")
-  private String id;
+  private String id = NOT_SET;
 
   @Json(name = "Title")
-  private String title;
-
-  @Json(name = "PrimaryImageUri")
-  private String imageUrl;
+  private String title = NOT_SET;
 
   @Json(name = "Description")
-  private String description;
+  private String description = NOT_SET;
+
+  @Json(name = "PrimaryImageUri")
+  private String imageUrl = NOT_SET;
 
   @Json(name = "PrimaryAsset")
   @SuppressWarnings("CanBeFinal")
-  private Asset asset;
+  private Asset asset = new Asset();
 
-  private String url;
+  private String url = NOT_SET;
 
-  private Video() {
-    asset = new Asset();
-  }
-
+  @NonNull
   @Override
   public String toString() {
     return String.format("Video {id=%s}", id);
@@ -64,104 +66,75 @@ public final class Video implements Parcelable {
   public void writeToParcel(Parcel dest, int flags) {
     dest.writeString(id);
     dest.writeString(title);
-    dest.writeString(imageUrl);
     dest.writeString(description);
+    dest.writeString(imageUrl);
     dest.writeString(asset.linksUrl);
     dest.writeString(url);
   }
 
+  @NonNull
   public String getId() {
     return id;
   }
 
-  /* Testing */ void setId(String id) {
-    this.id = id;
+  public void setId(@NonNull String id) {
+    this.id = notNull(id);
   }
 
+  @NonNull
   public String getTitle() {
     return title;
   }
 
-  public String getImageUrl() {
-    return imageUrl;
+  public void setTitle(@NonNull String title) {
+    this.title = notNull(title);
   }
 
+  @NonNull
   public String getDescription() {
     return description;
   }
 
-  void setDescription(String description) {
-    this.description = description;
+  public void setDescription(@NonNull String description) {
+    this.description = notNull(description);
   }
 
+  @NonNull
+  public String getImageUrl() {
+    return notNull(imageUrl);
+  }
+
+  public void setImageUrl(@NonNull String imageUrl) {
+    this.imageUrl = notNull(imageUrl);
+  }
+
+  @NonNull
   public String getLinksUrl() {
     return asset.linksUrl;
   }
 
-  /* Testing */ void setLinksUrl(String linksUrl) {
-    asset.linksUrl = linksUrl;
+  public void setLinksUrl(@NonNull String linksUrl) {
+    asset.linksUrl = notNull(linksUrl);
   }
 
+  @NonNull
   public String getUrl() {
     return url;
   }
 
-  void setUrl(String url) {
-    this.url = url;
+  public void setUrl(@NonNull String url) {
+    this.url = notNull(url);
   }
 
   private Video copy() {
     Video copy = new Video();
     copy.id = id;
     copy.title = title;
-    copy.imageUrl = imageUrl;
     copy.description = description;
+    copy.imageUrl = imageUrl;
     copy.asset.linksUrl = asset.linksUrl;
     copy.url = url;
     return copy;
-  }
-
-  public static final class Builder {
-
-    private final Video video;
-
-    public Builder() {
-      video = new Video();
-    }
-
-    public Video build() {
-      return video.copy();
-    }
-
-    public Builder id(String id) {
-      video.id = id;
-      return this;
-    }
-
-    public Builder title(String title) {
-      video.title = title;
-      return this;
-    }
-
-    public Builder imageUrl(String imageUrl) {
-      video.imageUrl = imageUrl;
-      return this;
-    }
-
-    public Builder description(String description) {
-      video.description = description;
-      return this;
-    }
-
-    public Builder linksUrl(String linksUrl) {
-      video.asset.linksUrl = linksUrl;
-      return this;
-    }
-
-    public Builder url(String url) {
-      video.url = url;
-      return this;
-    }
   }
 
   private static final class ParcelableCreator implements Parcelable.Creator<Video> {
@@ -171,8 +144,8 @@ public final class Video implements Parcelable {
       Video video = new Video();
       video.id = source.readString();
       video.title = source.readString();
-      video.imageUrl = source.readString();
       video.description = source.readString();
+      video.imageUrl = source.readString();
       video.asset.linksUrl = source.readString();
       video.url = source.readString();
       return video;
@@ -187,6 +160,6 @@ public final class Video implements Parcelable {
   private static final class Asset {
 
     @Json(name = "Uri")
-    String linksUrl;
+    String linksUrl = NOT_SET;
   }
 }

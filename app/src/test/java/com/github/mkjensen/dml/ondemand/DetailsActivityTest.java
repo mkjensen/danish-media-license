@@ -22,7 +22,6 @@ import android.content.Intent;
 import android.view.View;
 
 import com.github.mkjensen.dml.R;
-import com.github.mkjensen.dml.backend.Video;
 import com.github.mkjensen.dml.test.RobolectricTest;
 
 import org.junit.Before;
@@ -50,13 +49,8 @@ public class DetailsActivityTest extends RobolectricTest {
 
   private static Intent createIntent() {
     Intent intent = new Intent(RuntimeEnvironment.application, DetailsActivity.class);
-    intent.putExtra(DetailsActivity.VIDEO, createVideo());
+    intent.putExtra(DetailsActivity.VIDEO_ID, "test");
     return intent;
-  }
-
-  private static Video createVideo() {
-    return new Video.Builder()
-        .build();
   }
 
   @Test

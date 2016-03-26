@@ -20,9 +20,10 @@
 
     <string name="app_name">Danish Media License</string>
 
+    <string name="backend_category_most_viewed">Most Viewed</string>
+
     <string name="ondemand_details_action_play">Play</string>
 
-    <string name="ondemand_search_results">Search results for: %1$s</string>
-    <string name="ondemand_search_results_none">No search results found for: %1$s</string>
+    <string name="ondemand_search_no_results">No results</string>
 
 </resources>

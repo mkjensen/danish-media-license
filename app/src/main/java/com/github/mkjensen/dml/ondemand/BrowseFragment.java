@@ -16,14 +16,10 @@
 
 package com.github.mkjensen.dml.ondemand;
 
-import android.accounts.Account;
 import android.content.Intent;
-import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v17.leanback.app.BrowseSupportFragment;
 import android.support.v17.leanback.widget.ArrayObjectAdapter;
-import android.support.v17.leanback.widget.CursorObjectAdapter;
 import android.support.v17.leanback.widget.HeaderItem;
 import android.support.v17.leanback.widget.ListRow;
 import android.support.v17.leanback.widget.ListRowPresenter;
@@ -32,300 +28,99 @@ import android.support.v17.leanback.widget.Presenter;
 import android.support.v17.leanback.widget.Row;
 import android.support.v17.leanback.widget.RowPresenter;
 import android.support.v4.app.LoaderManager;
-import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
-import android.support.v4.util.ArrayMap;
 import android.util.Log;
-import android.util.SparseArray;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
 
+import com.github.mkjensen.dml.backend.CategoriesLoader;
+import com.github.mkjensen.dml.backend.Category;
 import com.github.mkjensen.dml.backend.Video;
-import com.github.mkjensen.dml.provider.DmlContract;
-import com.github.mkjensen.dml.sync.AccountHelper;
-import com.github.mkjensen.dml.sync.SyncHelper;
+
+import java.util.List;
 
 /**
  * Browse screen for on-demand videos.
  */
 public class BrowseFragment extends BrowseSupportFragment
-    implements LoaderManager.LoaderCallbacks<Cursor> {
+    implements LoaderManager.LoaderCallbacks<List<Category>> {
 
   private static final String TAG = "BrowseFragment";
 
-  private static final int CATEGORIES_LOADER_ID = -1;
-
-  private AccountHelper accountHelper;
-
-  private SyncHelper syncHelper;
-
-  private ArrayObjectAdapter categories;
-
-  private ArrayMap<String, Integer> categoryIdToLoaderIdMap;
-
-  private SparseArray<CursorObjectAdapter> loaderIdToAdapterMap;
+  private ArrayObjectAdapter rows;
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
     Log.d(TAG, "onCreate");
     super.onCreate(savedInstanceState);
-    initAdapter();
-    createSyncHelpers();
-    initLoader();
     initUi();
     initListeners();
-  }
-
-  private void initAdapter() {
-    categories = new ArrayObjectAdapter(new ListRowPresenter());
-    setAdapter(categories);
-  }
-
-  private void createSyncHelpers() {
-    accountHelper = new AccountHelper();
-    syncHelper = new SyncHelper();
-  }
-
-  private void initLoader() {
-    categoryIdToLoaderIdMap = new ArrayMap<>();
-    loaderIdToAdapterMap = new SparseArray<>();
-    getLoaderManager().initLoader(CATEGORIES_LOADER_ID, null, this);
+    initLoader();
   }
 
   private void initUi() {
+    rows = new ArrayObjectAdapter(new ListRowPresenter());
+    setAdapter(rows);
     enableRowScaling(false);
   }
 
   private void initListeners() {
-    setOnSearchClickedListener(new View.OnClickListener() {
-
-      @Override
-      public void onClick(View view) {
-        Intent intent = new Intent(getActivity(), SearchActivity.class);
-        startActivity(intent);
-      }
-    });
     setOnItemViewClickedListener(new OnItemViewClickedListener() {
-
       @Override
       public void onItemClicked(Presenter.ViewHolder itemViewHolder, Object item,
                                 RowPresenter.ViewHolder rowViewHolder, Row row) {
         if (item instanceof Video) {
           Video video = (Video) item;
           Intent intent = new Intent(getActivity(), DetailsActivity.class);
-          intent.putExtra(DetailsActivity.VIDEO, video);
+          intent.putExtra(DetailsActivity.VIDEO_ID, video.getId());
           startActivity(intent);
-        } else if (item instanceof DebugItem) {
-          DebugItem debugItem = (DebugItem) item;
-          debugItem.click();
         } else {
-          Log.e(TAG, "Registered click on unsupported item: " + item);
+          Log.w(TAG, "Unhandled item: " + item);
         }
+      }
+    });
+    setOnSearchClickedListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View view) {
+        Intent intent = new Intent(getActivity(), SearchActivity.class);
+        startActivity(intent);
       }
     });
   }
 
-  @Override
-  public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-    Log.d(TAG, "onCreateLoader " + id);
-    Uri uri;
-    switch (id) {
-      case CATEGORIES_LOADER_ID:
-        uri = DmlContract.Category.CONTENT_URI;
-        break;
-      default:
-        String categoryId = args.getString(DmlContract.Category.CATEGORY_ID);
-        uri = DmlContract.Category.buildVideosUri(categoryId);
-        break;
-    }
-    return createCursorLoader(uri);
-  }
-
-  private CursorLoader createCursorLoader(Uri uri) {
-    return new CursorLoader(
-        getActivity(),
-        uri,
-        null, // projection
-        null, // selection
-        null, // selectionArgs
-        null //  sortOrder
-    );
+  private void initLoader() {
+    getLoaderManager().initLoader(0, null, this);
   }
 
   @Override
-  public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-    int loaderId = loader.getId();
-    Log.d(TAG, "onLoadFinished " + loaderId);
-    if (data == null || !data.moveToFirst()) {
-      Log.i(TAG, "No data returned by loader: " + loaderId);
-      if (loaderId == CATEGORIES_LOADER_ID) {
-        categories.clear();
-        createDebugCategory();
-      } else {
-        resetVideoLoader(loaderId);
-      }
+  public Loader<List<Category>> onCreateLoader(int id, Bundle args) {
+    Log.d(TAG, "onCreateLoader");
+    return new CategoriesLoader(getActivity());
+  }
+
+  @Override
+  public void onLoadFinished(Loader<List<Category>> loader, List<Category> data) {
+    Log.d(TAG, "onLoadFinished");
+    rows.clear();
+    if (data == null) {
+      Log.w(TAG, "No data returned by loader");
       return;
     }
-    if (loaderId == CATEGORIES_LOADER_ID) {
-      finishCategoriesLoader(data);
-    } else {
-      finishVideoLoader(loaderId, data);
+    for (Category category : data) {
+      ListRow categoryRow = createCategoryRow(category);
+      rows.add(categoryRow);
     }
   }
 
-  private void finishCategoriesLoader(Cursor cursor) {
-    categories.clear();
-    int idIndex = cursor.getColumnIndex(DmlContract.Category.CATEGORY_ID);
-    int titleIndex = cursor.getColumnIndex(DmlContract.Category.CATEGORY_TITLE);
-    while (!cursor.isAfterLast()) {
-      String id = cursor.getString(idIndex);
-      String title = cursor.getString(titleIndex);
-      ListRow videos = initVideos(id, title);
-      categories.add(videos);
-      cursor.moveToNext();
-    }
-    createDebugCategory();
-  }
-
-  private ListRow initVideos(String categoryId, String categoryTitle) {
-    int loaderId = getOrAssignLoaderId(categoryId);
-    HeaderItem header = new HeaderItem(categoryTitle);
-    CursorObjectAdapter adapter = getOrCreateVideoAdapter(loaderId, categoryId);
+  private ListRow createCategoryRow(Category category) {
+    HeaderItem header = new HeaderItem(category.getTitle());
+    ArrayObjectAdapter adapter = new ArrayObjectAdapter(new VideoPresenter());
+    adapter.addAll(0, category.getVideos());
     return new ListRow(header, adapter);
   }
 
-  private int getOrAssignLoaderId(String categoryId) {
-    Integer loaderId = categoryIdToLoaderIdMap.get(categoryId);
-    if (loaderId == null) {
-      loaderId = categoryIdToLoaderIdMap.size();
-      categoryIdToLoaderIdMap.put(categoryId, loaderId);
-    }
-    return loaderId;
-  }
-
-  private CursorObjectAdapter getOrCreateVideoAdapter(int loaderId, String categoryId) {
-    CursorObjectAdapter adapter = loaderIdToAdapterMap.get(loaderId);
-    if (adapter == null) {
-      adapter = createVideoAdapter(loaderId);
-      initVideoLoader(loaderId, categoryId);
-    }
-    return adapter;
-  }
-
-  private CursorObjectAdapter createVideoAdapter(int loaderId) {
-    CursorObjectAdapter adapter = new CursorObjectAdapter(new VideoPresenter());
-    adapter.setMapper(new VideoCursorMapper());
-    loaderIdToAdapterMap.put(loaderId, adapter);
-    return adapter;
-  }
-
-  private void initVideoLoader(int loaderId, String categoryId) {
-    Bundle args = new Bundle();
-    args.putString(DmlContract.Category.CATEGORY_ID, categoryId);
-    getLoaderManager().initLoader(loaderId, args, this);
-  }
-
-  private void finishVideoLoader(int loaderId, Cursor cursor) {
-    CursorObjectAdapter adapter = loaderIdToAdapterMap.get(loaderId);
-    if (adapter != null) {
-      adapter.changeCursor(cursor);
-    } else {
-      Log.e(TAG, "Was asked to finish nonexistent video loader: " + loaderId);
-    }
-  }
-
   @Override
-  public void onLoaderReset(Loader<Cursor> loader) {
-    int loaderId = loader.getId();
-    Log.d(TAG, "onLoaderReset " + loaderId);
-    if (loaderId == CATEGORIES_LOADER_ID) {
-      categories.clear();
-    } else {
-      resetVideoLoader(loaderId);
-    }
-  }
-
-  private void resetVideoLoader(int loaderId) {
-    CursorObjectAdapter adapter = loaderIdToAdapterMap.get(loaderId);
-    if (adapter != null) {
-      adapter.changeCursor(null);
-    } else {
-      Log.e(TAG, "Was asked to reset nonexistent video loader: " + loaderId);
-    }
-  }
-
-  private void createDebugCategory() {
-    DebugItemPresenter presenter = new DebugItemPresenter();
-    ArrayObjectAdapter adapter = new ArrayObjectAdapter(presenter);
-    adapter.add(new DebugItem("Sync", new DebugItem.OnItemClickedListener() {
-      @Override
-      public void onItemClicked() {
-        requestSync();
-      }
-    }));
-    adapter.add(new DebugItem("Remove all", new DebugItem.OnItemClickedListener() {
-      @Override
-      public void onItemClicked() {
-        removeData();
-      }
-    }));
-    HeaderItem header = new HeaderItem("Debug");
-    ListRow debug = new ListRow(header, adapter);
-    categories.add(debug);
-  }
-
-  private static final class DebugItem {
-
-    final String title;
-
-    final OnItemClickedListener onItemClickedListener;
-
-    DebugItem(String title, OnItemClickedListener onItemClickedListener) {
-      this.title = title;
-      this.onItemClickedListener = onItemClickedListener;
-    }
-
-    void click() {
-      onItemClickedListener.onItemClicked();
-    }
-
-    interface OnItemClickedListener {
-
-      void onItemClicked();
-    }
-  }
-
-  private static final class DebugItemPresenter extends Presenter {
-
-    @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent) {
-      TextView textView = new TextView(parent.getContext());
-      textView.setFocusable(true);
-      textView.setFocusableInTouchMode(true);
-      return new ViewHolder(textView);
-    }
-
-    @Override
-    public void onBindViewHolder(ViewHolder viewHolder, Object item) {
-      DebugItem debugItem = (DebugItem) item;
-      ((TextView) viewHolder.view).setText(debugItem.title);
-    }
-
-    @Override
-    public void onUnbindViewHolder(ViewHolder viewHolder) {
-      // Do nothing.
-    }
-  }
-
-  private void requestSync() {
-    Account account = accountHelper.getOrCreateAccount(getActivity());
-    syncHelper.requestSync(account);
-  }
-
-  private void removeData() {
-    Log.d(TAG, "removeData");
-    getActivity().getContentResolver().delete(DmlContract.Video.CONTENT_URI, null, null);
-    getActivity().getContentResolver().delete(DmlContract.Category.CONTENT_URI, null, null);
+  public void onLoaderReset(Loader<List<Category>> loader) {
+    Log.d(TAG, "onLoaderReset");
+    rows.clear();
   }
 }

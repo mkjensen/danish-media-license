@@ -52,13 +52,8 @@ public class PlaybackActivityTest extends RobolectricTest {
 
   private static Intent createIntent() {
     Intent intent = new Intent(RuntimeEnvironment.application, PlaybackActivity.class);
-    intent.putExtra(PlaybackActivity.VIDEO, createVideo());
+    intent.putExtra(PlaybackActivity.VIDEO, new Video());
     return intent;
-  }
-
-  private static Video createVideo() {
-    return new Video.Builder()
-        .build();
   }
 
   @Test

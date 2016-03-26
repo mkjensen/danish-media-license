@@ -35,6 +35,7 @@ import static android.support.v4.media.session.PlaybackStateCompat.STATE_NONE;
 import static android.support.v4.media.session.PlaybackStateCompat.STATE_PAUSED;
 import static android.support.v4.media.session.PlaybackStateCompat.STATE_PLAYING;
 import static android.support.v4.media.session.PlaybackStateCompat.STATE_REWINDING;
+import static com.github.mkjensen.dml.Defense.intentParcelableExtraNotNull;
 
 import android.content.Context;
 import android.graphics.SurfaceTexture;
@@ -51,6 +52,8 @@ import android.support.v17.leanback.widget.Presenter;
 import android.support.v17.leanback.widget.Row;
 import android.support.v17.leanback.widget.RowPresenter;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
 import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
@@ -58,9 +61,9 @@ import android.util.Log;
 import android.view.Surface;
 import android.view.TextureView;
 
-import com.github.mkjensen.dml.DmlException;
 import com.github.mkjensen.dml.R;
 import com.github.mkjensen.dml.backend.Video;
+import com.github.mkjensen.dml.backend.VideoUrlLoader;
 import com.github.mkjensen.dml.exoplayer.DemoPlayer;
 import com.github.mkjensen.dml.exoplayer.HlsRendererBuilder;
 
@@ -79,6 +82,8 @@ public class PlaybackFragment extends PlaybackOverlaySupportFragment {
 
   private ArrayObjectAdapter rows;
 
+  private TextureView textureView;
+
   private DemoPlayer player;
 
   @Override
@@ -89,16 +94,12 @@ public class PlaybackFragment extends PlaybackOverlaySupportFragment {
     initMediaSession();
     initMediaControllerHelper();
     initUi();
-    initPlayer();
     initTextureView();
     updateMetadata();
   }
 
   private void initVideo() {
-    video = getActivity().getIntent().getParcelableExtra(PlaybackActivity.VIDEO);
-    if (video == null) {
-      throw new DmlException("Intent did not include argument: " + PlaybackActivity.VIDEO);
-    }
+    video = intentParcelableExtraNotNull(getActivity().getIntent(), PlaybackActivity.VIDEO);
   }
 
   private void initMediaSession() {
@@ -133,16 +134,8 @@ public class PlaybackFragment extends PlaybackOverlaySupportFragment {
     });
   }
 
-  private void initPlayer() {
-    HlsRendererBuilder rendererBuilder = new HlsRendererBuilder(getActivity(), TAG, video.getUrl());
-    player = new DemoPlayer(rendererBuilder);
-    player.addListener(new DemoPlayerListener());
-    player.prepare();
-  }
-
   private void initTextureView() {
-    TextureView textureView = (TextureView) getActivity()
-        .findViewById(R.id.ondemand_playback_textureview);
+    textureView = (TextureView) getActivity().findViewById(R.id.ondemand_playback_textureview);
     textureView.setSurfaceTextureListener(new TextureViewSurfaceTextureListener());
   }
 
@@ -190,6 +183,9 @@ public class PlaybackFragment extends PlaybackOverlaySupportFragment {
   }
 
   private void playPause(boolean play) {
+    if (player == null) {
+      return;
+    }
     if (play && !mediaControllerHelper.isMediaPlaying()) {
       setPlaybackState(STATE_PLAYING);
       player.setPlayWhenReady(true);
@@ -200,6 +196,9 @@ public class PlaybackFragment extends PlaybackOverlaySupportFragment {
   }
 
   private void forwardRewind(boolean forward) {
+    if (player == null) {
+      return;
+    }
     long position = player.getCurrentPosition();
     if (forward) {
       setPlaybackState(STATE_FAST_FORWARDING);
@@ -217,7 +216,9 @@ public class PlaybackFragment extends PlaybackOverlaySupportFragment {
   public void onDestroy() {
     Log.d(TAG, "onDestroy");
     super.onDestroy();
-    player.release();
+    if (player != null) {
+      player.release();
+    }
     mediaControllerHelper.detach();
     mediaSession.release();
   }
@@ -345,8 +346,7 @@ public class PlaybackFragment extends PlaybackOverlaySupportFragment {
     @Override
     public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
       Log.d(TAG, "onSurfaceTextureAvailable");
-      player.setSurface(new Surface(surface));
-      playPause(true);
+      getLoaderManager().initLoader(0, null, new LoaderCallbacks());
     }
 
     @Override
@@ -357,12 +357,48 @@ public class PlaybackFragment extends PlaybackOverlaySupportFragment {
     @Override
     public boolean onSurfaceTextureDestroyed(SurfaceTexture surface) {
       Log.d(TAG, "onSurfaceTextureDestroyed");
-      player.blockingClearSurface();
+      if (player != null) {
+        player.blockingClearSurface();
+      }
       return true;
     }
 
     @Override
     public void onSurfaceTextureUpdated(SurfaceTexture surface) {
+      // Do nothing.
+    }
+  }
+
+  private final class LoaderCallbacks implements LoaderManager.LoaderCallbacks<String> {
+
+    @Override
+    public Loader<String> onCreateLoader(int id, Bundle args) {
+      Log.d(TAG, "onCreateLoader");
+      return new VideoUrlLoader(getActivity(), video.getLinksUrl());
+    }
+
+    @Override
+    public void onLoadFinished(Loader<String> loader, String data) {
+      Log.d(TAG, "onLoadFinished");
+      if (data == null) {
+        Log.w(TAG, "No data returned by loader");
+        return;
+      }
+      createPlayer(data);
+    }
+
+    private void createPlayer(String videoUrl) {
+      HlsRendererBuilder rendererBuilder = new HlsRendererBuilder(getActivity(), TAG, videoUrl);
+      player = new DemoPlayer(rendererBuilder);
+      player.addListener(new DemoPlayerListener());
+      player.prepare();
+      player.setSurface(new Surface(textureView.getSurfaceTexture()));
+      playPause(true);
+    }
+
+    @Override
+    public void onLoaderReset(Loader<String> loader) {
+      Log.d(TAG, "onLoaderReset");
       // Do nothing.
     }
   }

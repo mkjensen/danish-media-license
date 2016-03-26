@@ -1,12 +1,26 @@
 {
   "Links": [
     {
-      "Uri": "http://download.com",
-      "Target": "Download"
+      "HardSubtitlesType": "None",
+      "Uri": "http://hds.com/mp4",
+      "EncryptedUri": "1234567890",
+      "FileFormat": "mp4",
+      "Target": "HDS"
     },
     {
-      "Uri": "http://hls.com",
+      "HardSubtitlesType": "None",
+      "Uri": "http://hls.com/mp4",
+      "EncryptedUri": "0987654321",
+      "FileFormat": "mp4",
       "Target": "HLS"
+    }
+  ],
+  "SubtitlesList": [
+    {
+      "Language": "Danish",
+      "MimeType": "text/vtt;charset=utf-8",
+      "Type": "HardOfHearing",
+      "Uri": "http://subtitles.com"
     }
   ]
 }

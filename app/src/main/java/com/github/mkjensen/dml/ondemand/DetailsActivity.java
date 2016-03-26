@@ -27,7 +27,7 @@ import com.github.mkjensen.dml.R;
  */
 public class DetailsActivity extends FragmentActivity {
 
-  public static final String VIDEO = "video";
+  public static final String VIDEO_ID = "com.github.mkjensen.dml.videoId";
 
   private static final String TAG = "DetailsActivity";
 

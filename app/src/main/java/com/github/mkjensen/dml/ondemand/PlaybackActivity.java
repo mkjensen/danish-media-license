@@ -27,7 +27,7 @@ import com.github.mkjensen.dml.R;
  */
 public class PlaybackActivity extends FragmentActivity {
 
-  public static final String VIDEO = "video";
+  public static final String VIDEO = "com.github.mkjensen.dml.video";
 
   private static final String TAG = "PlaybackActivity";
 

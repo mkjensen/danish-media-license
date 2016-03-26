@@ -21,8 +21,6 @@ import retrofit2.http.GET;
 import retrofit2.http.Path;
 import retrofit2.http.Url;
 
-import java.util.List;
-
 /**
  * Web service methods for use with Retrofit.
  *
@@ -38,16 +36,10 @@ interface DmlWebService {
   String BASE_URL = "https://www.dr.dk/mu-online/api/1.3/";
 
   /**
-   * Returns the on-demand categories without videos.
+   * Returns the category containing the most viewed on-demand videos.
    */
-  @GET("https://mkjensen.github.io/danish-media-license/categories.json")
-  Call<List<Category>> getCategories();
-
-  /**
-   * Returns the on-demand videos for the specified URL.
-   */
-  @GET
-  Call<VideoContainer> getVideos(@Url String url);
+  @GET("list/view/mostviewed")
+  Call<Category> getMostViewed();
 
   /**
    * Returns the on-demand video with the specified id.
@@ -60,4 +52,10 @@ interface DmlWebService {
    */
   @GET
   Call<VideoLinksContainer> getVideoLinks(@Url String url);
+
+  /**
+   * Returns a category with on-demand videos relevant for the specified query.
+   */
+  @GET("search/tv/programcards-with-asset/title/{query}")
+  Call<Category> search(@Path("query") String query);
 }
