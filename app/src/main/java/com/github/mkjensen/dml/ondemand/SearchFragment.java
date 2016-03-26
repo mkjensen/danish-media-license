@@ -154,6 +154,13 @@ public class SearchFragment extends SearchSupportFragment
   }
 
   @Override
+  public void startRecognition() {
+    setSearchQuery("", false);
+    clearResults();
+    super.startRecognition();
+  }
+
+  @Override
   public ObjectAdapter getResultsAdapter() {
     return results;
   }

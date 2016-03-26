@@ -29,10 +29,20 @@ public class SearchActivity extends FragmentActivity {
 
   private static final String TAG = "SearchActivity";
 
+  private SearchFragment fragment;
+
   @Override
   public void onCreate(Bundle savedInstanceState) {
     Log.d(TAG, "onCreate");
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_ondemand_search);
+    fragment = (SearchFragment) getSupportFragmentManager()
+        .findFragmentById(R.id.ondemand_search_fragment);
+  }
+
+  @Override
+  public boolean onSearchRequested() {
+    fragment.startRecognition();
+    return true;
   }
 }

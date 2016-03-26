@@ -16,6 +16,7 @@
 
 package com.github.mkjensen.dml.ondemand;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
@@ -36,5 +37,11 @@ public class DetailsActivity extends FragmentActivity {
     Log.d(TAG, "onCreate");
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_ondemand_details);
+  }
+
+  @Override
+  public boolean onSearchRequested() {
+    startActivity(new Intent(this, SearchActivity.class));
+    return true;
   }
 }
