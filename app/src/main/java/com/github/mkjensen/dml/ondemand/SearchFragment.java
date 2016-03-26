@@ -127,6 +127,7 @@ public class SearchFragment extends SearchSupportFragment
         break;
       default:
         Log.w(TAG, "Unhandled request code: " + requestCode);
+        break;
     }
   }
 
@@ -140,6 +141,7 @@ public class SearchFragment extends SearchSupportFragment
         break;
       default:
         Log.w(TAG, "Unhandled result code: " + resultCode);
+        break;
     }
   }
 

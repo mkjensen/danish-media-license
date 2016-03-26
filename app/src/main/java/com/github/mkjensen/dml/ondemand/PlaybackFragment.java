@@ -178,6 +178,7 @@ public class PlaybackFragment extends PlaybackOverlaySupportFragment {
         break;
       default:
         playbackSpeed = PLAYBACK_SPEED_PAUSED;
+        break;
     }
     return playbackSpeed;
   }
