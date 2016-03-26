@@ -126,17 +126,6 @@ public class Video implements Parcelable {
     this.url = notNull(url);
   }
 
-  private Video copy() {
-    Video copy = new Video();
-    copy.id = id;
-    copy.title = title;
-    copy.description = description;
-    copy.imageUrl = imageUrl;
-    copy.asset.linksUrl = asset.linksUrl;
-    copy.url = url;
-    return copy;
-  }
-
   private static final class ParcelableCreator implements Parcelable.Creator<Video> {
 
     @Override
