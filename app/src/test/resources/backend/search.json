@@ -1,0 +1,38 @@
+{
+  "Title": "Title",
+  "Items": [
+    {
+      "Type": "ProgramCard",
+      "SeriesTitle": "Series Title",
+      "SeriesSlug": "series-id",
+      "SeriesUrn": "urn:series:1",
+      "PrimaryChannel": "channel.com",
+      "PrimaryChannelSlug": "channel",
+      "PrePremiere": false,
+      "ExpiresSoon": false,
+      "OnlineGenreText": "Underholdning",
+      "PrimaryAsset": {
+        "Kind": "VideoResource",
+        "Uri": "http://links.com",
+        "DurationInMilliseconds": 1234567,
+        "RestrictedToDenmark": false,
+        "StartPublish": "2099-12-31T23:59:59.99Z",
+        "EndPublish": "2000-01-01T20:00:00Z",
+        "Target": "Default",
+        "Encrypted": false
+      },
+      "HasPublicPrimaryAsset": true,
+      "AssetTargetTypes": "Default SpokenSubtitles",
+      "PrimaryBroadcastStartTime": "2000-01-01T20:00:00Z",
+      "Slug": "id",
+      "Urn": "urn:video:1",
+      "PrimaryImageUri": "http://image.com",
+      "Title": "Title"
+    }
+  ],
+  "Paging": {
+    "Source": "http://source.com",
+    "Next": "http://next.com"
+  },
+  "TotalSize": 42
+}

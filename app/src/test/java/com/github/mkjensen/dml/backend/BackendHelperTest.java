@@ -43,6 +43,9 @@ public class BackendHelperTest extends RobolectricTest {
 
   private static final String VIDEO_URL = "https://www.dr.dk/mu-online/api/1.3/programcard/test";
 
+  private static final String SEARCH_URL =
+      "https://www.dr.dk/mu-online/api/1.3/search/tv/programcards-with-asset/title/test";
+
   @Test
   public void loadMostViewedCategory_whenHttpNotFound_thenThrowsIoException() throws IOException {
 
@@ -169,6 +172,54 @@ public class BackendHelperTest extends RobolectricTest {
 
     // Then
     assertEquals("http://hls.com/mp4", url);
+  }
+
+  @Test
+  public void search_whenHttpNotFound_thenThrowsIoException() throws IOException {
+
+    // Given
+    LocalCallFactory callFactory = LocalCallFactory.newBuilder()
+        .forUrl(SEARCH_URL)
+        .code(HttpURLConnection.HTTP_NOT_FOUND)
+        .up()
+        .build();
+    BackendHelper backendHelper = createBackendHelper(callFactory);
+
+    // When/Then
+    thrown.expect(IOException.class);
+    Category category = backendHelper.search("test");
+    assertNotNull(category); // Hi PMD!
+  }
+
+  @Test
+  public void search_whenHttpOk_thenReturnsCategory() throws IOException {
+
+    // Given
+    LocalCallFactory callFactory = LocalCallFactory.newBuilder()
+        .forUrl(SEARCH_URL)
+        .code(HttpURLConnection.HTTP_OK)
+        .responseBody(ResourceUtils.loadAsString("backend/search.json"))
+        .up()
+        .build();
+    BackendHelper backendHelper = createBackendHelper(callFactory);
+
+    // When
+    Category category = backendHelper.search("test");
+
+    // Then
+    assertNotNull(category);
+    assertEquals("test", category.getTitle());
+    List<Video> videos = category.getVideos();
+    assertNotNull(videos);
+    assertEquals(1, videos.size());
+    Video video = videos.get(0);
+    assertNotNull(video);
+    assertEquals("id", video.getId());
+    assertEquals("Title", video.getTitle());
+    assertEquals(Video.NOT_SET, video.getDescription());
+    assertEquals("http://image.com", video.getImageUrl());
+    assertEquals("http://links.com", video.getLinksUrl());
+    assertEquals(Video.NOT_SET, video.getUrl());
   }
 
   private BackendHelper createBackendHelper(LocalCallFactory callFactory) {
