@@ -16,42 +16,34 @@
 
 package com.github.mkjensen.dml.backend;
 
-import static com.github.mkjensen.dml.Defense.notNull;
-
+import android.content.Context;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
-import com.squareup.moshi.Json;
-
-import java.util.Collections;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
- * An on-demand category which contains its associated on-demand videos.
+ * Loads {@link Category} instances from the backend.
  */
-public class Category {
+public class CategoriesLoader extends BackendLoader<List<Category>> {
 
-  public static final String NOT_SET = "(not set)";
+  private static final String TAG = "CategoriesLoader";
 
-  private String title = NOT_SET;
-
-  @Json(name = "Items")
-  private List<Video> videos = Collections.emptyList();
-
-  @NonNull
-  public String getTitle() {
-    return title;
+  public CategoriesLoader(@NonNull Context context) {
+    super(context);
   }
 
-  public void setTitle(@NonNull String title) {
-    this.title = notNull(title);
-  }
-
-  @NonNull
-  public List<Video> getVideos() {
-    return videos;
-  }
-
-  public void setVideos(@NonNull List<Video> videos) {
-    this.videos = notNull(videos);
+  @Override
+  public List<Category> loadInBackground() {
+    Log.d(TAG, "loadInBackground");
+    List<Category> categories = new ArrayList<>(1);
+    try {
+      categories.add(getBackendHelper().loadMostViewedCategory());
+    } catch (IOException ex) {
+      Log.e(TAG, "Failed to load most viewed category", ex);
+    }
+    return categories;
   }
 }

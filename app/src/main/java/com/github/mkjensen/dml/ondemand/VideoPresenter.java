@@ -62,7 +62,7 @@ class VideoPresenter extends Presenter {
 
   private void setImage(ImageCardView view, Video video) {
     String imageUrl = video.getImageUrl();
-    if (imageUrl != null) {
+    if (!Video.NOT_SET.equals(imageUrl)) {
       Glide.with(view.getContext())
           .load(imageUrl)
           .error(defaultImage)

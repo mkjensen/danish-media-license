@@ -16,6 +16,8 @@
 
 package com.github.mkjensen.dml.backend;
 
+import android.support.annotation.Nullable;
+
 import com.squareup.moshi.Json;
 
 import java.util.Collections;
@@ -34,6 +36,7 @@ final class VideoLinksContainer {
   private VideoLinksContainer() {
   }
 
+  @Nullable
   String getVideoUrl() {
     for (Link link : links) {
       if ("HLS".equals(link.protocol)) {
@@ -46,6 +49,7 @@ final class VideoLinksContainer {
   private static final class Link {
 
     @Json(name = "Target")
+    @SuppressWarnings("unused")
     String protocol;
 
     @Json(name = "Uri")

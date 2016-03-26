@@ -18,40 +18,33 @@ package com.github.mkjensen.dml.backend;
 
 import static com.github.mkjensen.dml.Defense.notNull;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
-import com.squareup.moshi.Json;
-
-import java.util.Collections;
-import java.util.List;
+import java.io.IOException;
 
 /**
- * An on-demand category which contains its associated on-demand videos.
+ * Loads a video URL from the backend.
  */
-public class Category {
+public class VideoUrlLoader extends BackendLoader<String> {
 
-  public static final String NOT_SET = "(not set)";
+  private static final String TAG = "VideoUrlLoader";
 
-  private String title = NOT_SET;
+  private final String linksUrl;
 
-  @Json(name = "Items")
-  private List<Video> videos = Collections.emptyList();
-
-  @NonNull
-  public String getTitle() {
-    return title;
+  public VideoUrlLoader(@NonNull Context context, @NonNull String linksUrl) {
+    super(context);
+    this.linksUrl = notNull(linksUrl);
   }
 
-  public void setTitle(@NonNull String title) {
-    this.title = notNull(title);
-  }
-
-  @NonNull
-  public List<Video> getVideos() {
-    return videos;
-  }
-
-  public void setVideos(@NonNull List<Video> videos) {
-    this.videos = notNull(videos);
+  @Override
+  public String loadInBackground() {
+    try {
+      return getBackendHelper().loadVideoUrl(linksUrl);
+    } catch (IOException ex) {
+      Log.e(TAG, String.format("Failed to load video URL from [%s]", linksUrl), ex);
+      return null;
+    }
   }
 }

@@ -22,7 +22,6 @@ import static org.mockito.Matchers.isA;
 import static org.mockito.Mockito.verify;
 import static org.powermock.api.mockito.PowerMockito.mock;
 import static org.powermock.api.mockito.PowerMockito.spy;
-import static org.powermock.api.mockito.PowerMockito.when;
 import static org.powermock.api.support.membermodification.MemberMatcher.field;
 
 import android.app.Activity;
@@ -38,13 +37,11 @@ import com.github.mkjensen.dml.test.PowerMockRobolectricTest;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.robolectric.Robolectric;
 
 /**
  * Tests for {@link VideoPresenter}.
  */
-@PrepareForTest(Video.class)
 public class VideoPresenterTest extends PowerMockRobolectricTest {
 
   private VideoPresenter videoPresenter;
@@ -72,12 +69,12 @@ public class VideoPresenterTest extends PowerMockRobolectricTest {
     ViewHolder viewHolder = createViewHolder();
     ImageCardView viewMock = (ImageCardView) spy(viewHolder.view);
     setViewHolderView(viewHolder, viewMock);
-    Video videoMock = mock(Video.class);
+    Video video = new Video();
     String title = "title";
-    when(videoMock.getTitle()).thenReturn(title);
+    video.setTitle(title);
 
     // When
-    videoPresenter.onBindViewHolder(viewHolder, videoMock);
+    videoPresenter.onBindViewHolder(viewHolder, video);
 
     // Then
     verify(viewMock).setMainImage(isA(Drawable.class));

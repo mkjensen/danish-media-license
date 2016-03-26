@@ -18,15 +18,13 @@ package com.github.mkjensen.dml.backend;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.fail;
 
-import com.github.mkjensen.dml.test.PowerMockRobolectricTest;
 import com.github.mkjensen.dml.test.ResourceUtils;
+import com.github.mkjensen.dml.test.RobolectricTest;
 
+import org.junit.Rule;
 import org.junit.Test;
-import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.junit.rules.ExpectedException;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
@@ -35,195 +33,145 @@ import java.util.List;
 /**
  * Tests for {@link BackendHelper}.
  */
-@PrepareForTest( {Category.class, Video.class})
-public class BackendHelperTest extends PowerMockRobolectricTest {
+public class BackendHelperTest extends RobolectricTest {
+
+  @Rule
+  public final ExpectedException thrown = ExpectedException.none();
+
+  private static final String MOST_VIEWED_CATEGORY_URL =
+      "https://www.dr.dk/mu-online/api/1.3/list/view/mostviewed";
+
+  private static final String VIDEO_URL = "https://www.dr.dk/mu-online/api/1.3/programcard/test";
 
   @Test
-  public void loadCategories_whenHttpNotFound_thenThrowsIoException() {
+  public void loadMostViewedCategory_whenHttpNotFound_thenThrowsIoException() throws IOException {
 
     // Given
     LocalCallFactory callFactory = LocalCallFactory.newBuilder()
-        .forAnyUrl()
+        .forUrl(MOST_VIEWED_CATEGORY_URL)
         .code(HttpURLConnection.HTTP_NOT_FOUND)
         .up()
         .build();
-    BackendHelper backendHelper = new BackendHelper(callFactory);
+    BackendHelper backendHelper = createBackendHelper(callFactory);
 
     // When/Then
-    try {
-      List<Category> categories = backendHelper.loadCategories();
-      fail();
-      assertNull(categories); // Hi PMD!
-    } catch (IOException ex) {
-      // Expected.
-    }
+    thrown.expect(IOException.class);
+    Category category = backendHelper.loadMostViewedCategory();
+    assertNotNull(category); // Hi PMD!
   }
 
   @Test
-  public void loadCategories_whenHttpOk_thenReturnsCategories() throws IOException {
+  public void loadMostViewedCategory_whenHttpOk_thenReturnsCategory() throws IOException {
 
     // Given
     LocalCallFactory callFactory = LocalCallFactory.newBuilder()
-        .forAnyUrl()
+        .forUrl(MOST_VIEWED_CATEGORY_URL)
         .code(HttpURLConnection.HTTP_OK)
-        .responseBody(ResourceUtils.loadAsString("backend/categories.json"))
+        .responseBody(ResourceUtils.loadAsString("backend/category.json"))
         .up()
         .build();
-    BackendHelper backendHelper = new BackendHelper(callFactory);
+    BackendHelper backendHelper = createBackendHelper(callFactory);
 
     // When
-    List<Category> categories = backendHelper.loadCategories();
+    Category category = backendHelper.loadMostViewedCategory();
 
     // Then
-    assertNotNull(categories);
-    assertEquals(1, categories.size());
-    Category category = categories.get(0);
-    assertEquals("id", category.getId());
-    assertEquals("title", category.getTitle());
-    assertEquals("http://category.com", category.getUrl());
-  }
-
-  @Test
-  public void loadVideos_whenHttpNotFound_thenThrowsIoException() throws Exception {
-
-    // Given
-    LocalCallFactory callFactory = LocalCallFactory.newBuilder()
-        .forAnyUrl()
-        .code(HttpURLConnection.HTTP_NOT_FOUND)
-        .up()
-        .build();
-    BackendHelper backendHelper = new BackendHelper(callFactory);
-    Category category = createCategory();
-
-    // When/Then
-    try {
-      backendHelper.loadVideos(category);
-      fail();
-      assertNotNull(category); // Hi PMD!
-    } catch (IOException ex) {
-      // Expected.
-    }
-  }
-
-  @Test
-  public void loadVideos_whenHttpOk_thenVideosAreLoaded() throws Exception {
-
-    // Given
-    LocalCallFactory callFactory = LocalCallFactory.newBuilder()
-        .forAnyUrl()
-        .code(HttpURLConnection.HTTP_OK)
-        .responseBody(ResourceUtils.loadAsString("backend/category-videos.json"))
-        .up()
-        .build();
-    BackendHelper backendHelper = new BackendHelper(callFactory);
-    Category category = createCategory();
-
-    // When
-    backendHelper.loadVideos(category);
-
-    // Then
-    assertNotNull(category.getVideos());
-    assertEquals(1, category.getVideos().size());
-    Video video = category.getVideos().get(0);
+    assertNotNull(category);
+    assertEquals("Most Viewed", category.getTitle());
+    List<Video> videos = category.getVideos();
+    assertNotNull(videos);
+    assertEquals(1, videos.size());
+    Video video = videos.get(0);
+    assertNotNull(video);
     assertEquals("id", video.getId());
-    assertEquals("title", video.getTitle());
+    assertEquals("Title", video.getTitle());
+    assertEquals(Video.NOT_SET, video.getDescription());
     assertEquals("http://image.com", video.getImageUrl());
     assertEquals("http://links.com", video.getLinksUrl());
+    assertEquals(Video.NOT_SET, video.getUrl());
   }
 
   @Test
-  public void loadVideoDetails_whenHttpNotFound_thenThrowsIoException() throws Exception {
+  public void loadVideo_whenHttpNotFound_thenThrowsIoException() throws IOException {
 
     // Given
     LocalCallFactory callFactory = LocalCallFactory.newBuilder()
-        .forAnyUrl()
+        .forUrl(VIDEO_URL)
         .code(HttpURLConnection.HTTP_NOT_FOUND)
         .up()
         .build();
-    BackendHelper backendHelper = new BackendHelper(callFactory);
-    Video video = createVideo();
+    BackendHelper backendHelper = createBackendHelper(callFactory);
 
     // When/Then
-    try {
-      backendHelper.loadVideoDetails(video);
-      fail();
-      assertNotNull(video); // Hi PMD!
-    } catch (IOException ex) {
-      // Expected.
-    }
+    thrown.expect(IOException.class);
+    Video video = backendHelper.loadVideo("test");
+    assertNotNull(video); // Hi PMD!
   }
 
   @Test
-  public void loadVideoDetails_whenHttpOk_thenSetsVideoDetails() throws Exception {
+  public void loadVideo_whenHttpOk_thenVideosAreLoaded() throws IOException {
 
     // Given
     LocalCallFactory callFactory = LocalCallFactory.newBuilder()
-        .forAnyUrl()
+        .forUrl(VIDEO_URL)
         .code(HttpURLConnection.HTTP_OK)
-        .responseBody(ResourceUtils.loadAsString("backend/video-details.json"))
+        .responseBody(ResourceUtils.loadAsString("backend/video.json"))
         .up()
         .build();
-    BackendHelper backendHelper = new BackendHelper(callFactory);
-    Video video = createVideo();
+    BackendHelper backendHelper = createBackendHelper(callFactory);
 
     // When
-    backendHelper.loadVideoDetails(video);
+    Video video = backendHelper.loadVideo("test");
 
     // Then
-    assertEquals("description", video.getDescription());
+    assertNotNull(video);
+    assertEquals("id", video.getId());
+    assertEquals("Title", video.getTitle());
+    assertEquals("Description", video.getDescription());
+    assertEquals("http://image.com", video.getImageUrl());
+    assertEquals("http://links.com", video.getLinksUrl());
+    assertEquals(Video.NOT_SET, video.getUrl());
   }
 
   @Test
-  public void loadVideoUrl_whenHttpNotFound_thenThrowsIoException() throws Exception {
+  public void loadVideoUrl_whenHttpNotFound_thenThrowsIoException() throws IOException {
 
     // Given
+    String linksUrl = "http://links.com/";
     LocalCallFactory callFactory = LocalCallFactory.newBuilder()
-        .forAnyUrl()
+        .forUrl(linksUrl)
         .code(HttpURLConnection.HTTP_NOT_FOUND)
         .up()
         .build();
-    BackendHelper backendHelper = new BackendHelper(callFactory);
-    Video video = createVideo();
-    video.setLinksUrl("http://dummy.com");
+    BackendHelper backendHelper = createBackendHelper(callFactory);
 
     // When/Then
-    try {
-      backendHelper.loadVideoUrl(video);
-      fail();
-      assertNotNull(video); // Hi PMD!
-    } catch (IOException ex) {
-      // Expected.
-    }
+    thrown.expect(IOException.class);
+    String url = backendHelper.loadVideoUrl(linksUrl);
+    assertNotNull(url); // Hi PMD!
   }
 
   @Test
-  public void loadVideoUrl_whenHttpOk_thenSetsVideoUrl() throws Exception {
+  public void loadVideoUrl_whenHttpOk_thenSetsVideoUrl() throws IOException {
 
     // Given
+    String linksUrl = "http://links.com/";
     LocalCallFactory callFactory = LocalCallFactory.newBuilder()
-        .forAnyUrl()
+        .forUrl(linksUrl)
         .code(HttpURLConnection.HTTP_OK)
         .responseBody(ResourceUtils.loadAsString("backend/video-links.json"))
         .up()
         .build();
-    BackendHelper backendHelper = new BackendHelper(callFactory);
-    Video video = createVideo();
-    video.setLinksUrl("http://dummy.com");
+    BackendHelper backendHelper = createBackendHelper(callFactory);
 
     // When
-    backendHelper.loadVideoUrl(video);
+    String url = backendHelper.loadVideoUrl(linksUrl);
 
     // Then
-    assertEquals("http://hls.com", video.getUrl());
+    assertEquals("http://hls.com/mp4", url);
   }
 
-  private static Category createCategory() throws Exception {
-    return PowerMockito.defaultConstructorIn(Category.class).newInstance();
-  }
-
-  private static Video createVideo() throws Exception {
-    Video video = PowerMockito.defaultConstructorIn(Video.class).newInstance();
-    video.setId("some-dummy-id");
-    return video;
+  private BackendHelper createBackendHelper(LocalCallFactory callFactory) {
+    return new BackendHelper(getContext(), callFactory);
   }
 }

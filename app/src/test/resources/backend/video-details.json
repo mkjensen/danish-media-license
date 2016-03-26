@@ -1,9 +1,0 @@
-{
-  "Slug": "id",
-  "Title": "title",
-  "PrimaryImageUri": "http://image.com",
-  "Description": "description",
-  "PrimaryAsset": {
-    "Uri": "http://links.com"
-  }
-}

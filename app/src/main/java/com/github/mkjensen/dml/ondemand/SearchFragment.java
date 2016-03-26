@@ -20,60 +20,86 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v17.leanback.app.SearchSupportFragment;
-import android.support.v17.leanback.widget.CursorObjectAdapter;
+import android.support.v17.leanback.widget.ArrayObjectAdapter;
 import android.support.v17.leanback.widget.HeaderItem;
 import android.support.v17.leanback.widget.ListRow;
 import android.support.v17.leanback.widget.ListRowPresenter;
 import android.support.v17.leanback.widget.ObjectAdapter;
+import android.support.v17.leanback.widget.OnItemViewClickedListener;
+import android.support.v17.leanback.widget.Presenter;
+import android.support.v17.leanback.widget.Row;
+import android.support.v17.leanback.widget.RowPresenter;
 import android.support.v17.leanback.widget.SparseArrayObjectAdapter;
 import android.support.v17.leanback.widget.SpeechRecognitionCallback;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.text.TextUtils;
 import android.util.Log;
 
 import com.github.mkjensen.dml.R;
-import com.github.mkjensen.dml.provider.DmlContract;
+import com.github.mkjensen.dml.backend.Category;
+import com.github.mkjensen.dml.backend.QueryLoader;
+import com.github.mkjensen.dml.backend.Video;
 
 /**
  * Search screen for on-demand videos.
  */
 public class SearchFragment extends SearchSupportFragment
-    implements SearchSupportFragment.SearchResultProvider, LoaderManager.LoaderCallbacks<Cursor> {
+    implements SearchSupportFragment.SearchResultProvider, LoaderManager.LoaderCallbacks<Category> {
 
   private static final String TAG = "SearchFragment";
 
+  private static final int QUERY_DELAY_IN_MILLISECONDS = 300;
+
+  private static final String QUERY_ARGUMENT = "query";
+
+  private static final int QUERY_LOADER_ID = 0;
+
   private static final int SPEECH_REQUEST_CODE = 0;
 
-  private static final String QUERY_LIKE_FORMAT = "%%%s%%";
+  private Handler handler;
 
   private SparseArrayObjectAdapter results;
 
-  private CursorObjectAdapter videos;
+  private ArrayObjectAdapter videos;
 
-  private SparseArrayObjectAdapter empty;
-
-  private String currentQuery;
+  private Runnable queryRunnable;
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
     Log.d(TAG, "onCreate");
     super.onCreate(savedInstanceState);
+    handler = new Handler();
     initUi();
+    initListeners();
     setSearchResultProvider(this);
     ensureSpeechPermission();
   }
 
   private void initUi() {
     results = new SparseArrayObjectAdapter(new ListRowPresenter());
-    videos = new CursorObjectAdapter(new VideoPresenter());
-    videos.setMapper(new VideoCursorMapper());
-    empty = new SparseArrayObjectAdapter();
+    videos = new ArrayObjectAdapter(new VideoPresenter());
+  }
+
+  private void initListeners() {
+    setOnItemViewClickedListener(new OnItemViewClickedListener() {
+      @Override
+      public void onItemClicked(Presenter.ViewHolder itemViewHolder, Object item,
+                                RowPresenter.ViewHolder rowViewHolder, Row row) {
+        if (item instanceof Video) {
+          Video video = (Video) item;
+          Intent intent = new Intent(getActivity(), DetailsActivity.class);
+          intent.putExtra(DetailsActivity.VIDEO_ID, video.getId());
+          startActivity(intent);
+        } else {
+          Log.w(TAG, "Unhandled item: " + item);
+        }
+      }
+    });
   }
 
   private void ensureSpeechPermission() {
@@ -118,6 +144,16 @@ public class SearchFragment extends SearchSupportFragment
   }
 
   @Override
+  public void onDestroy() {
+    super.onDestroy();
+    removePendingQuery();
+  }
+
+  private void removePendingQuery() {
+    handler.removeCallbacks(queryRunnable);
+  }
+
+  @Override
   public ObjectAdapter getResultsAdapter() {
     return results;
   }
@@ -136,46 +172,62 @@ public class SearchFragment extends SearchSupportFragment
 
   private void performQuery(String query) {
     if (TextUtils.isEmpty(query)) {
+      clearResults();
       return;
     }
-    currentQuery = query;
-    getLoaderManager().restartLoader(0, null, this);
+    removePendingQuery();
+    createPendingQuery(query);
+  }
+
+  private void clearResults() {
+    removePendingQuery();
+    results.clear();
+    videos.clear();
+    HeaderItem header = new HeaderItem(getString(R.string.ondemand_search_no_results));
+    results.set(0, new ListRow(header, videos));
+  }
+
+  private void createPendingQuery(final String query) {
+    queryRunnable = new Runnable() {
+      @Override
+      public void run() {
+        Bundle args = new Bundle();
+        args.putString(QUERY_ARGUMENT, query);
+        getLoaderManager().restartLoader(QUERY_LOADER_ID, args, SearchFragment.this);
+      }
+    };
+    handler.postDelayed(queryRunnable, QUERY_DELAY_IN_MILLISECONDS);
   }
 
   @Override
-  public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+  public Loader<Category> onCreateLoader(int id, Bundle args) {
     Log.d(TAG, "onCreateLoader");
-    String selectionArgs = String.format(QUERY_LIKE_FORMAT, currentQuery);
-    return new CursorLoader(
-        getActivity(),
-        DmlContract.Video.CONTENT_URI,
-        null, // projection
-        String.format("%s LIKE ? OR %s LIKE ?", DmlContract.Video.VIDEO_TITLE,
-            DmlContract.Video.VIDEO_DESCRIPTION),
-        new String[] {selectionArgs, selectionArgs},
-        null // String sortOrder
-    );
+    String query = args.getString(QUERY_ARGUMENT);
+    //noinspection ConstantConditions
+    return new QueryLoader(getActivity(), query);
   }
 
   @Override
-  public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+  public void onLoadFinished(Loader<Category> loader, Category data) {
     Log.d(TAG, "onLoadFinished");
-    HeaderItem header;
-    ObjectAdapter adapter;
-    if (data != null && data.moveToFirst()) {
-      header = new HeaderItem(getString(R.string.ondemand_search_results, currentQuery));
-      adapter = videos;
-    } else {
-      header = new HeaderItem(getString(R.string.ondemand_search_results_none, currentQuery));
-      adapter = empty;
+    if (data == null || data.getVideos().isEmpty()) {
+      clearResults();
+      return;
     }
-    videos.changeCursor(data);
-    results.set(0, new ListRow(header, adapter));
+    addResults(data);
+  }
+
+  private void addResults(Category category) {
+    results.clear();
+    videos.clear();
+    videos.addAll(0, category.getVideos());
+    HeaderItem header = new HeaderItem(category.getTitle());
+    results.set(0, new ListRow(header, videos));
   }
 
   @Override
-  public void onLoaderReset(Loader<Cursor> loader) {
+  public void onLoaderReset(Loader<Category> loader) {
     Log.d(TAG, "onLoaderReset");
-    videos.changeCursor(null);
+    videos.clear();
   }
 }

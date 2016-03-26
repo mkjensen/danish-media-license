@@ -27,12 +27,10 @@ import com.github.mkjensen.dml.backend.Video;
 import com.github.mkjensen.dml.test.PowerMockTest;
 
 import org.junit.Test;
-import org.powermock.core.classloader.annotations.PrepareForTest;
 
 /**
  * Tests for {@link VideoDetailsPresenter}.
  */
-@PrepareForTest(Video.class)
 public class VideoDetailsPresenterTest extends PowerMockTest {
 
   @Test
@@ -40,14 +38,14 @@ public class VideoDetailsPresenterTest extends PowerMockTest {
 
     // Given
     ViewHolder viewHolderMock = createViewHolderMock();
-    Video videoMock = mock(Video.class);
+    Video video = new Video();
     String description = "description";
-    when(videoMock.getDescription()).thenReturn(description);
+    video.setDescription(description);
     String title = "title";
-    when(videoMock.getTitle()).thenReturn(title);
+    video.setTitle(title);
 
     // When
-    new VideoDetailsPresenter().onBindDescription(viewHolderMock, videoMock);
+    new VideoDetailsPresenter().onBindDescription(viewHolderMock, video);
 
     // Then
     verify(viewHolderMock.getBody()).setText(description);

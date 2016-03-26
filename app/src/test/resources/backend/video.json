@@ -1,0 +1,57 @@
+{
+  "Description": "Description",
+  "ProductionNumber": "12345678901",
+  "PrimaryBroadcastStartTime": "2000-01-01T20:00:00Z",
+  "PrimaryBroadcast": {
+    "BroadcastDate": "2000-01-01T00:00:00Z",
+    "AnnouncedStartTime": "2000-01-01T20:00:00Z",
+    "AnnouncedEndTime": "2000-01-01T21:00:00Z",
+    "ProductionCountry": "DANMARK",
+    "ProductionYear": 2000,
+    "VideoWidescreen": true,
+    "SubtitlesTTV": true,
+    "VideoHD": true,
+    "WhatsOnUri": "whatson.com",
+    "Channel": "channel.com",
+    "ChannelSlug": "channel"
+  },
+  "Chapters": [],
+  "SecondaryAssets": [
+    {
+      "Kind": "VideoResource",
+      "Uri": "http://links2.com",
+      "DurationInMilliseconds": 7654321,
+      "RestrictedToDenmark": false,
+      "StartPublish": "1990-01-01T00:00:00.00Z",
+      "EndPublish": "1999-12-31T23:59:59Z",
+      "Target": "SpokenSubtitles",
+      "Encrypted": false
+    }
+  ],
+  "Type": "ProgramCard",
+  "SeriesTitle": "Series Title",
+  "SeriesSlug": "series-id",
+  "SeriesUrn": "urn:series:1",
+  "PrimaryChannel": "channel.com",
+  "PrimaryChannelSlug": "channel",
+  "PrePremiere": false,
+  "ExpiresSoon": false,
+  "OnlineGenreText": "Underholdning",
+  "PrimaryAsset": {
+    "Kind": "VideoResource",
+    "Uri": "http://links.com",
+    "DurationInMilliseconds": 1234567,
+    "RestrictedToDenmark": false,
+    "StartPublish": "2099-12-31T23:59:59.99Z",
+    "EndPublish": "2000-01-01T20:00:00Z",
+    "Target": "Default",
+    "Encrypted": false
+  },
+  "HasPublicPrimaryAsset": true,
+  "AssetTargetTypes": "Default SpokenSubtitles",
+  "Slug": "id",
+  "Urn": "urn:video:1",
+  "PrimaryImageUri": "http://image.com",
+  "Title": "Title",
+  "Subtitle": "Subtitle"
+}

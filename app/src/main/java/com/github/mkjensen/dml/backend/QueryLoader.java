@@ -18,40 +18,38 @@ package com.github.mkjensen.dml.backend;
 
 import static com.github.mkjensen.dml.Defense.notNull;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
-import com.squareup.moshi.Json;
-
-import java.util.Collections;
-import java.util.List;
+import java.io.IOException;
 
 /**
- * An on-demand category which contains its associated on-demand videos.
+ * Executes a query and returns the results from the backend.
  */
-public class Category {
+public class QueryLoader extends BackendLoader<Category> {
 
-  public static final String NOT_SET = "(not set)";
+  private static final String TAG = "QueryLoader";
 
-  private String title = NOT_SET;
+  private final String query;
 
-  @Json(name = "Items")
-  private List<Video> videos = Collections.emptyList();
+  public QueryLoader(@NonNull Context context, @NonNull String query) {
+    super(context);
+    this.query = notNull(query);
+  }
+
+  @Override
+  public Category loadInBackground() {
+    try {
+      return getBackendHelper().search(query);
+    } catch (IOException ex) {
+      Log.e(TAG, String.format("Failed to perform query [%s]", query), ex);
+      return null;
+    }
+  }
 
   @NonNull
-  public String getTitle() {
-    return title;
-  }
-
-  public void setTitle(@NonNull String title) {
-    this.title = notNull(title);
-  }
-
-  @NonNull
-  public List<Video> getVideos() {
-    return videos;
-  }
-
-  public void setVideos(@NonNull List<Video> videos) {
-    this.videos = notNull(videos);
+  public String getQuery() {
+    return query;
   }
 }

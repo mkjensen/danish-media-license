@@ -18,19 +18,14 @@ package com.github.mkjensen.dml.backend;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertTrue;
 
-import com.github.mkjensen.dml.test.TestUtils;
-import com.squareup.moshi.JsonAdapter;
-import com.squareup.moshi.Moshi;
-
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -41,84 +36,70 @@ public class CategoryTest {
   @Rule
   public final ExpectedException thrown = ExpectedException.none();
 
-  private static final String ID = "id";
+  private Category category;
 
-  private static final String TITLE = "title";
-
-  private static final String URL = "url";
-
-  private static final String JSON = String.format("{\n"
-      + "  \"id\": \"%s\",\n"
-      + "  \"title\": \"%s\",\n"
-      + "  \"url\": \"%s\"\n"
-      + "}", ID, TITLE, URL);
-
-  private static final String JSON_EMPTY_OBJECT = "{}";
-
-  @Test
-  public void category_constructorMustBePrivateAndParameterless() {
-    assertTrue(TestUtils.hasPrivateParameterlessConstructor(Category.class));
+  @Before
+  public void before() {
+    category = new Category();
   }
 
   @Test
-  public void givenEmptyCategoryFromJson_whenGettersCalled_thenDoNotReturnNull()
-      throws IOException {
-
-    // Given
-    Category category = createFromJson(JSON_EMPTY_OBJECT);
-
-    // When/Then
-    assertNotNull(category);
-    assertNotNull(category.getId());
-    assertNotNull(category.getTitle());
-    assertNotNull(category.getUrl());
-    assertNotNull(category.getVideos());
-  }
-
-  @Test
-  public void givenCategoryFromJson_whenGettersCalled_thenReturnValuesFromJson()
-      throws IOException {
-
-    // Given
-    Category category = createFromJson(JSON);
-
-    // When/Then
-    assertNotNull(category);
-    assertEquals(ID, category.getId());
-    assertEquals(TITLE, category.getTitle());
-    assertEquals(URL, category.getUrl());
-    assertNotNull(category.getVideos());
-  }
-
-  @Test
-  public void setVideos_whenNullArgument_thenIllegalArgumentExceptionIsThrown() throws IOException {
-
-    // Given
-    Category category = createFromJson(JSON_EMPTY_OBJECT);
+  public void givenEmptyCategory_whenGettersCalled_thenTheyReturnNotSet() {
 
     // When/then
-    assertNotNull(category);
-    thrown.expect(IllegalArgumentException.class);
-    category.setVideos(null);
+    assertEquals(Category.NOT_SET, category.getTitle());
+    assertEquals(Collections.emptyList(), category.getVideos());
   }
 
   @Test
-  public void setVideos_whenNonNullArgument_thenGetVideosReturnThatArgument() throws IOException {
+  public void setTitle_whenNullArgument_thenIllegalArgumentExceptionIsThrown() {
 
     // Given
-    Category category = createFromJson(JSON_EMPTY_OBJECT);
+    String title = null;
+
+    // When/then
+    thrown.expect(IllegalArgumentException.class);
+    //noinspection ConstantConditions
+    category.setTitle(title);
+    assertNotNull(title); // Hi PMD!
+  }
+
+  @Test
+  public void setTitle_whenNonNullArgument_thenGetVideosReturnThatArgument() {
+
+    // Given
+    String title = "title";
+
+    // When
+    category.setTitle(title);
+
+    // Then
+    assertEquals(title, category.getTitle());
+  }
+
+  @Test
+  public void setVideos_whenNullArgument_thenIllegalArgumentExceptionIsThrown() {
+
+    // Given
+    List<Video> videos = null;
+
+    // When/then
+    thrown.expect(IllegalArgumentException.class);
+    //noinspection ConstantConditions
+    category.setVideos(videos);
+    assertNotNull(videos); // Hi PMD!
+  }
+
+  @Test
+  public void setVideos_whenNonNullArgument_thenGetVideosReturnThatArgument() {
+
+    // Given
     List<Video> videos = new ArrayList<>();
 
     // When
     category.setVideos(videos);
 
     // Then
-    assertSame(videos, category.getVideos());
-  }
-
-  private static Category createFromJson(String json) throws IOException {
-    Moshi moshi = new Moshi.Builder().build();
-    JsonAdapter<Category> adapter = moshi.adapter(Category.class);
-    return adapter.fromJson(json);
+    assertEquals(videos, category.getVideos());
   }
 }
