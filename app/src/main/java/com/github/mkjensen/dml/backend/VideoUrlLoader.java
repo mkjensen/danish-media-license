@@ -47,4 +47,9 @@ public class VideoUrlLoader extends BackendLoader<String> {
       return null;
     }
   }
+
+  @NonNull
+  String getLinksUrl() {
+    return linksUrl;
+  }
 }
