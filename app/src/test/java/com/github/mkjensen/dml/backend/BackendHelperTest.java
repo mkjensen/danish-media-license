@@ -16,6 +16,8 @@
 
 package com.github.mkjensen.dml.backend;
 
+import static java.net.HttpURLConnection.HTTP_NOT_FOUND;
+import static java.net.HttpURLConnection.HTTP_OK;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
@@ -28,11 +30,11 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
+import retrofit2.Converter;
 import retrofit2.Retrofit;
 import retrofit2.converter.moshi.MoshiConverterFactory;
 
 import java.io.IOException;
-import java.net.HttpURLConnection;
 import java.util.List;
 
 /**
@@ -40,12 +42,16 @@ import java.util.List;
  */
 public class BackendHelperTest extends RobolectricTest {
 
+  private static final Converter.Factory CONVERTER_FACTORY = MoshiConverterFactory.create();
+
   @Rule
   public final ExpectedException thrown = ExpectedException.none();
 
   private static final String BASE_URL = "http://test.com/";
 
   private static final String MOST_VIEWED_CATEGORY_URL = BASE_URL + "list/view/mostviewed";
+
+  private static final String SELECTED_CATEGORY_URL = BASE_URL + "list/view/selectedlist";
 
   private static final String VIDEO_URL = BASE_URL + "programcard/test";
 
@@ -75,12 +81,7 @@ public class BackendHelperTest extends RobolectricTest {
   public void loadMostViewedCategory_whenHttpNotFound_thenThrowsIoException() throws IOException {
 
     // Given
-    LocalCallFactory callFactory = LocalCallFactory.newBuilder()
-        .forUrl(MOST_VIEWED_CATEGORY_URL)
-        .code(HttpURLConnection.HTTP_NOT_FOUND)
-        .up()
-        .build();
-    BackendHelper backendHelper = createBackendHelper(callFactory);
+    BackendHelper backendHelper = createBackendHelper(MOST_VIEWED_CATEGORY_URL, HTTP_NOT_FOUND);
 
     // When/Then
     thrown.expect(IOException.class);
@@ -92,13 +93,8 @@ public class BackendHelperTest extends RobolectricTest {
   public void loadMostViewedCategory_whenHttpOk_thenReturnsCategory() throws IOException {
 
     // Given
-    LocalCallFactory callFactory = LocalCallFactory.newBuilder()
-        .forUrl(MOST_VIEWED_CATEGORY_URL)
-        .code(HttpURLConnection.HTTP_OK)
-        .responseBody(ResourceUtils.loadAsString("backend/category.json"))
-        .up()
-        .build();
-    BackendHelper backendHelper = createBackendHelper(callFactory);
+    BackendHelper backendHelper =
+        createBackendHelper(MOST_VIEWED_CATEGORY_URL, HTTP_OK, "category");
 
     // When
     Category category = backendHelper.loadMostViewedCategory();
@@ -120,15 +116,47 @@ public class BackendHelperTest extends RobolectricTest {
   }
 
   @Test
+  public void loadSelectedCategory_whenHttpNotFound_thenThrowsIoException() throws IOException {
+
+    // Given
+    BackendHelper backendHelper = createBackendHelper(SELECTED_CATEGORY_URL, HTTP_NOT_FOUND);
+
+    // When/Then
+    thrown.expect(IOException.class);
+    Category category = backendHelper.loadSelectedCategory();
+    assertNotNull(category); // Hi PMD!
+  }
+
+  @Test
+  public void loadSelectedCategory_whenHttpOk_thenReturnsCategory() throws IOException {
+
+    // Given
+    BackendHelper backendHelper = createBackendHelper(SELECTED_CATEGORY_URL, HTTP_OK, "category");
+
+    // When
+    Category category = backendHelper.loadSelectedCategory();
+
+    // Then
+    assertNotNull(category);
+    assertEquals("Selected", category.getTitle());
+    List<Video> videos = category.getVideos();
+    assertNotNull(videos);
+    assertEquals(1, videos.size());
+    Video video = videos.get(0);
+    assertNotNull(video);
+    assertEquals("id", video.getId());
+    assertEquals("Title", video.getTitle());
+    assertEquals(Video.NOT_SET, video.getDescription());
+    assertEquals("http://image.com", video.getImageUrl());
+    assertEquals("http://links.com", video.getLinksUrl());
+    assertEquals(Video.NOT_SET, video.getUrl());
+  }
+
+  @Test
   public void loadVideo_whenHttpNotFound_thenThrowsIoException() throws IOException {
 
     // Given
-    LocalCallFactory callFactory = LocalCallFactory.newBuilder()
-        .forUrl(VIDEO_URL)
-        .code(HttpURLConnection.HTTP_NOT_FOUND)
-        .up()
-        .build();
-    BackendHelper backendHelper = createBackendHelper(callFactory);
+    BackendHelper backendHelper = createBackendHelper(VIDEO_URL, HTTP_NOT_FOUND);
 
     // When/Then
     thrown.expect(IOException.class);
@@ -140,13 +168,7 @@ public class BackendHelperTest extends RobolectricTest {
   public void loadVideo_whenHttpOk_thenVideosAreLoaded() throws IOException {
 
     // Given
-    LocalCallFactory callFactory = LocalCallFactory.newBuilder()
-        .forUrl(VIDEO_URL)
-        .code(HttpURLConnection.HTTP_OK)
-        .responseBody(ResourceUtils.loadAsString("backend/video.json"))
-        .up()
-        .build();
-    BackendHelper backendHelper = createBackendHelper(callFactory);
+    BackendHelper backendHelper = createBackendHelper(VIDEO_URL, HTTP_OK, "video");
 
     // When
     Video video = backendHelper.loadVideo("test");
@@ -166,12 +188,7 @@ public class BackendHelperTest extends RobolectricTest {
 
     // Given
     String linksUrl = "http://links.com/";
-    LocalCallFactory callFactory = LocalCallFactory.newBuilder()
-        .forUrl(linksUrl)
-        .code(HttpURLConnection.HTTP_NOT_FOUND)
-        .up()
-        .build();
-    BackendHelper backendHelper = createBackendHelper(callFactory);
+    BackendHelper backendHelper = createBackendHelper(linksUrl, HTTP_NOT_FOUND);
 
     // When/Then
     thrown.expect(IOException.class);
@@ -184,13 +201,7 @@ public class BackendHelperTest extends RobolectricTest {
 
     // Given
     String linksUrl = "http://links.com/";
-    LocalCallFactory callFactory = LocalCallFactory.newBuilder()
-        .forUrl(linksUrl)
-        .code(HttpURLConnection.HTTP_OK)
-        .responseBody(ResourceUtils.loadAsString("backend/video-links.json"))
-        .up()
-        .build();
-    BackendHelper backendHelper = createBackendHelper(callFactory);
+    BackendHelper backendHelper = createBackendHelper(linksUrl, HTTP_OK, "video-links");
 
     // When
     String url = backendHelper.loadVideoUrl(linksUrl);
@@ -203,12 +214,7 @@ public class BackendHelperTest extends RobolectricTest {
   public void search_whenHttpNotFound_thenThrowsIoException() throws IOException {
 
     // Given
-    LocalCallFactory callFactory = LocalCallFactory.newBuilder()
-        .forUrl(SEARCH_URL)
-        .code(HttpURLConnection.HTTP_NOT_FOUND)
-        .up()
-        .build();
-    BackendHelper backendHelper = createBackendHelper(callFactory);
+    BackendHelper backendHelper = createBackendHelper(SEARCH_URL, HTTP_NOT_FOUND);
 
     // When/Then
     thrown.expect(IOException.class);
@@ -220,13 +226,7 @@ public class BackendHelperTest extends RobolectricTest {
   public void search_whenHttpOk_thenReturnsCategory() throws IOException {
 
     // Given
-    LocalCallFactory callFactory = LocalCallFactory.newBuilder()
-        .forUrl(SEARCH_URL)
-        .code(HttpURLConnection.HTTP_OK)
-        .responseBody(ResourceUtils.loadAsString("backend/search.json"))
-        .up()
-        .build();
-    BackendHelper backendHelper = createBackendHelper(callFactory);
+    BackendHelper backendHelper = createBackendHelper(SEARCH_URL, HTTP_OK, "search");
 
     // When
     Category category = backendHelper.search("q");
@@ -247,13 +247,27 @@ public class BackendHelperTest extends RobolectricTest {
     assertEquals(Video.NOT_SET, video.getUrl());
   }
 
+  private BackendHelper createBackendHelper(String url, int code) {
+    return createBackendHelper(url, code, null);
+  }
+
+  private BackendHelper createBackendHelper(String url, int code, String jsonResource) {
+    LocalCallFactory.Builder.ForUrlBuilder builder = LocalCallFactory.newBuilder()
+        .forUrl(url)
+        .code(code);
+    if (jsonResource != null) {
+      builder.responseBody(ResourceUtils.loadAsString("backend/" + jsonResource + ".json"));
+    }
+    return createBackendHelper(builder.up().build());
+  }
+
   private BackendHelper createBackendHelper(Call.Factory callFactory) {
     return new BackendHelper(getContext(), createRetrofit(callFactory));
   }
 
   private static Retrofit createRetrofit(Call.Factory callFactory) {
     Retrofit.Builder builder = new Retrofit.Builder()
-        .addConverterFactory(MoshiConverterFactory.create())
+        .addConverterFactory(CONVERTER_FACTORY)
         .baseUrl(BASE_URL);
     if (callFactory != null) {
       builder.callFactory(callFactory);

@@ -35,6 +35,12 @@ public interface DmlWebService {
   Call<Category> getMostViewed();
 
   /**
+   * Returns the category containing selected on-demand videos.
+   */
+  @GET("list/view/selectedlist")
+  Call<Category> getSelected();
+
+  /**
    * Returns the on-demand video with the specified id.
    */
   @GET("programcard/{id}")

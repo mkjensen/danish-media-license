@@ -49,7 +49,7 @@ public final class BackendHelper {
   }
 
   /**
-   * Loads the most viewed on-demand category.
+   * Loads the category containing the most viewed on-demand videos.
    */
   @NonNull
   Category loadMostViewedCategory() throws IOException {
@@ -57,6 +57,18 @@ public final class BackendHelper {
     Call<Category> call = webService.getMostViewed();
     Category category = executeCall(call);
     category.setTitle(context.getString(R.string.backend_category_most_viewed));
+    return category;
+  }
+
+  /**
+   * Loads the category containing selected on-demand videos.
+   */
+  @NonNull
+  Category loadSelectedCategory() throws IOException {
+    Log.d(TAG, "loadSelectedCategory");
+    Call<Category> call = webService.getSelected();
+    Category category = executeCall(call);
+    category.setTitle(context.getString(R.string.backend_category_selected));
     return category;
   }
 

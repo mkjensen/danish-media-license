@@ -39,11 +39,24 @@ public class CategoriesLoader extends BackendLoader<List<Category>> {
   public List<Category> loadInBackground() {
     Log.d(TAG, "loadInBackground");
     List<Category> categories = new ArrayList<>(1);
+    loadMostViewedCategory(categories);
+    loadSelectedCategory(categories);
+    return categories;
+  }
+
+  private void loadMostViewedCategory(List<Category> categories) {
     try {
       categories.add(backendHelper.loadMostViewedCategory());
     } catch (IOException ex) {
       Log.e(TAG, "Failed to load most viewed category", ex);
     }
-    return categories;
+  }
+
+  private void loadSelectedCategory(List<Category> categories) {
+    try {
+      categories.add(backendHelper.loadSelectedCategory());
+    } catch (IOException ex) {
+      Log.e(TAG, "Failed to load selected category", ex);
+    }
   }
 }
