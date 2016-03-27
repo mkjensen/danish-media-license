@@ -41,7 +41,7 @@ public class VideoLoader extends BackendLoader<Video> {
   @Override
   public Video loadInBackground() {
     try {
-      return getBackendHelper().loadVideo(videoId);
+      return backendHelper.loadVideo(videoId);
     } catch (IOException ex) {
       Log.e(TAG, String.format("Failed to load video [%s]", videoId), ex);
       return null;

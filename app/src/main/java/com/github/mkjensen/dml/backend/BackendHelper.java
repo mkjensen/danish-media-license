@@ -20,7 +20,6 @@ import static com.github.mkjensen.dml.Defense.notNull;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.github.mkjensen.dml.R;
@@ -28,7 +27,6 @@ import com.github.mkjensen.dml.R;
 import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.Retrofit;
-import retrofit2.converter.moshi.MoshiConverterFactory;
 
 import java.io.IOException;
 import java.util.Locale;
@@ -37,7 +35,7 @@ import java.util.Locale;
  * A helper class that manages communication with backend web services. Methods on this class should
  * not be called from the UI thread as operations may take a while.
  */
-final class BackendHelper {
+public final class BackendHelper {
 
   private static final String TAG = "BackendHelper";
 
@@ -45,23 +43,9 @@ final class BackendHelper {
 
   private final DmlWebService webService;
 
-  BackendHelper(@NonNull Context context) {
-    this(context, null);
-  }
-
-  BackendHelper(@NonNull Context context, @Nullable okhttp3.Call.Factory callFactory) {
+  public BackendHelper(@NonNull Context context, @NonNull Retrofit retrofit) {
     this.context = notNull(context);
-    this.webService = createWebService(callFactory);
-  }
-
-  private static DmlWebService createWebService(okhttp3.Call.Factory callFactory) {
-    Retrofit.Builder builder = new Retrofit.Builder()
-        .addConverterFactory(MoshiConverterFactory.create())
-        .baseUrl(DmlWebService.BASE_URL);
-    if (callFactory != null) {
-      builder.callFactory(callFactory);
-    }
-    return builder.build().create(DmlWebService.class);
+    this.webService = notNull(retrofit).create(DmlWebService.class);
   }
 
   /**

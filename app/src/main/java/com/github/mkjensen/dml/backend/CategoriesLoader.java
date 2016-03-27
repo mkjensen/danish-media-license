@@ -40,7 +40,7 @@ public class CategoriesLoader extends BackendLoader<List<Category>> {
     Log.d(TAG, "loadInBackground");
     List<Category> categories = new ArrayList<>(1);
     try {
-      categories.add(getBackendHelper().loadMostViewedCategory());
+      categories.add(backendHelper.loadMostViewedCategory());
     } catch (IOException ex) {
       Log.e(TAG, "Failed to load most viewed category", ex);
     }

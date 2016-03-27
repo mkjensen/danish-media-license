@@ -37,12 +37,21 @@
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
     <application
+        android:name=".DmlApplication"
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/Theme.Leanback"
         tools:ignore="GoogleAppIndexingWarning,MissingTvBanner">
+
+        <meta-data
+            android:name="com.bumptech.glide.integration.okhttp3.OkHttpGlideModule"
+            tools:node="remove" />
+
+        <meta-data
+            android:name="com.github.mkjensen.dml.backend.DmlOkHttpGlideModule"
+            android:value="GlideModule" />
 
         <activity
             android:name=".ondemand.BrowseActivity"

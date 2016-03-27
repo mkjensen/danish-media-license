@@ -48,8 +48,6 @@ import android.os.Handler;
 
 import com.github.mkjensen.dml.exoplayer.DemoPlayer.RendererBuilder;
 
-import okhttp3.OkHttpClient;
-
 import java.io.IOException;
 import java.util.List;
 
@@ -63,8 +61,6 @@ public class HlsRendererBuilder implements RendererBuilder {
   private static final int BUFFER_SEGMENT_SIZE = 64 * 1024;
   private static final int MAIN_BUFFER_SEGMENTS = 256;
   private static final int TEXT_BUFFER_SEGMENTS = 2;
-
-  private static OkHttpClient httpClient;
 
   private final Context context;
   private final String userAgent;
@@ -175,14 +171,7 @@ public class HlsRendererBuilder implements RendererBuilder {
     return new DefaultUriDataSource(
         context,
         transferListener,
-        new OkHttpDataSource(getHttpClient(), userAgent, null, transferListener)
+        new OkHttpDataSource(userAgent, null, transferListener)
     );
-  }
-
-  private static synchronized OkHttpClient getHttpClient() {
-    if (httpClient == null) {
-      httpClient = new OkHttpClient();
-    }
-    return httpClient;
   }
 }

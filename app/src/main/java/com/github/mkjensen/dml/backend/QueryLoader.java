@@ -41,7 +41,7 @@ public class QueryLoader extends BackendLoader<Category> {
   @Override
   public Category loadInBackground() {
     try {
-      return getBackendHelper().search(query);
+      return backendHelper.search(query);
     } catch (IOException ex) {
       Log.e(TAG, String.format("Failed to perform query [%s]", query), ex);
       return null;

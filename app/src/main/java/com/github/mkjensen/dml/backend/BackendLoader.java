@@ -21,20 +21,31 @@ import android.support.annotation.NonNull;
 import android.support.v4.content.AsyncTaskLoader;
 import android.util.Log;
 
+import com.github.mkjensen.dml.DmlApplication;
+
+import javax.inject.Inject;
+
 /**
  * Superclass for convenient loading of backend data.
  */
-abstract class BackendLoader<T> extends AsyncTaskLoader<T> {
+public abstract class BackendLoader<T> extends AsyncTaskLoader<T> {
 
   private static final String TAG = "BackendLoader";
 
-  private final BackendHelper backendHelper;
+  @Inject
+  protected BackendHelper backendHelper;
 
   private T data;
 
+
   BackendLoader(@NonNull Context context) {
     super(context);
-    backendHelper = new BackendHelper(context);
+    inject(context);
+  }
+
+  @SuppressWarnings("unchecked")
+  private void inject(Context context) {
+    DmlApplication.from(context).getBackendComponent().inject((BackendLoader<Object>) this);
   }
 
   @Override
@@ -54,10 +65,5 @@ abstract class BackendLoader<T> extends AsyncTaskLoader<T> {
     } else {
       forceLoad();
     }
-  }
-
-  @NonNull
-  BackendHelper getBackendHelper() {
-    return backendHelper;
   }
 }

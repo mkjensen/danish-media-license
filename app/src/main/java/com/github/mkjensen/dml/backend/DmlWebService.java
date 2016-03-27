@@ -26,7 +26,7 @@ import retrofit2.http.Url;
  *
  * @see <a href="https://github.com/square/retrofit">Retrofit</a>
  */
-interface DmlWebService {
+public interface DmlWebService {
 
   /**
    * The API base URL.

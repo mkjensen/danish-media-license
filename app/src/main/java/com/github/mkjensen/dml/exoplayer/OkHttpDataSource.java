@@ -23,6 +23,8 @@ import com.google.android.exoplayer.upstream.TransferListener;
 import com.google.android.exoplayer.util.Assertions;
 import com.google.android.exoplayer.util.Predicate;
 
+import com.github.mkjensen.dml.DmlApplication;
+
 import okhttp3.CacheControl;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
@@ -39,16 +41,20 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
+import javax.inject.Inject;
+
 /**
  * An {@link HttpDataSource} that delegates to Square's {@link OkHttpClient}.
  *
  * @see <a href="https://goo.gl/m9KY6I">ExoPlayer OkHttpDataSource</a>
  */
-final class OkHttpDataSource implements HttpDataSource {
+public final class OkHttpDataSource implements HttpDataSource {
 
   private static final AtomicReference<byte[]> skipBufferReference = new AtomicReference<>();
 
-  private final OkHttpClient okHttpClient;
+  @Inject
+  OkHttpClient okHttpClient;
+
   private final String userAgent;
   private final Predicate<String> contentTypePredicate;
   private final TransferListener listener;
@@ -67,32 +73,29 @@ final class OkHttpDataSource implements HttpDataSource {
   private long bytesRead;
 
   /**
-   * @param client               An {@link OkHttpClient} for use by the source.
    * @param userAgent            The User-Agent string that should be used.
    * @param contentTypePredicate An optional {@link Predicate}. If a content type is rejected by the
    *                             predicate then a {@link HttpDataSource.InvalidContentTypeException}
    *                             is thrown from {@link #open(DataSpec)}.
    */
-  public OkHttpDataSource(OkHttpClient client, String userAgent,
+  public OkHttpDataSource(String userAgent,
                           Predicate<String> contentTypePredicate) {
-    this(client, userAgent, contentTypePredicate, null);
+    this(userAgent, contentTypePredicate, null);
   }
 
   /**
-   * @param client               An {@link OkHttpClient} for use by the source.
    * @param userAgent            The User-Agent string that should be used.
    * @param contentTypePredicate An optional {@link Predicate}. If a content type is rejected by the
    *                             predicate then a {@link HttpDataSource.InvalidContentTypeException}
    *                             is thrown from {@link #open(DataSpec)}.
    * @param listener             An optional listener.
    */
-  public OkHttpDataSource(OkHttpClient client, String userAgent,
+  public OkHttpDataSource(String userAgent,
                           Predicate<String> contentTypePredicate, TransferListener listener) {
-    this(client, userAgent, contentTypePredicate, listener, null);
+    this(userAgent, contentTypePredicate, listener, null);
   }
 
   /**
-   * @param client               An {@link OkHttpClient} for use by the source.
    * @param userAgent            The User-Agent string that should be used.
    * @param contentTypePredicate An optional {@link Predicate}. If a content type is rejected by the
    *                             predicate then a {@link HttpDataSource.InvalidContentTypeException}
@@ -102,10 +105,10 @@ final class OkHttpDataSource implements HttpDataSource {
    *                             Cache-Control header. For example, you could force the network
    *                             response for all requests.
    */
-  private OkHttpDataSource(OkHttpClient client, String userAgent,
-                           Predicate<String> contentTypePredicate, TransferListener listener,
-                           CacheControl cacheControl) {
-    this.okHttpClient = Assertions.checkNotNull(client);
+  private OkHttpDataSource(String userAgent, Predicate<String> contentTypePredicate,
+                           TransferListener listener, CacheControl cacheControl) {
+    DmlApplication.getInstance().getBackendComponent().inject(this);
+    Assertions.checkNotNull(okHttpClient);
     this.userAgent = Assertions.checkNotEmpty(userAgent);
     this.contentTypePredicate = contentTypePredicate;
     this.listener = listener;

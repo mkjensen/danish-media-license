@@ -57,6 +57,8 @@
             <emptyLine />
             <package name="cybervillains" withSubpackages="true" static="false" />
             <emptyLine />
+            <package name="dagger" withSubpackages="true" static="false" />
+            <emptyLine />
             <package name="dalvik" withSubpackages="true" static="false" />
             <emptyLine />
             <package name="danbikel" withSubpackages="true" static="false" />

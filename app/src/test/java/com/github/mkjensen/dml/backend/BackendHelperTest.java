@@ -22,9 +22,14 @@ import static org.junit.Assert.assertNotNull;
 import com.github.mkjensen.dml.test.ResourceUtils;
 import com.github.mkjensen.dml.test.RobolectricTest;
 
+import okhttp3.Call;
+
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+
+import retrofit2.Retrofit;
+import retrofit2.converter.moshi.MoshiConverterFactory;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
@@ -52,7 +57,17 @@ public class BackendHelperTest extends RobolectricTest {
     // When/then
     thrown.expect(IllegalArgumentException.class);
     @SuppressWarnings("ConstantConditions")
-    BackendHelper backendHelper = new BackendHelper(null);
+    BackendHelper backendHelper = new BackendHelper(null, createRetrofit(null));
+    assertNotNull(backendHelper); // For your eyes only, PMD.
+  }
+
+  @Test
+  public void constructor_whenCalledWithNullRetrofit_thenThrowsIllegalArgumentException() {
+
+    // When/then
+    thrown.expect(IllegalArgumentException.class);
+    @SuppressWarnings("ConstantConditions")
+    BackendHelper backendHelper = new BackendHelper(getContext(), null);
     assertNotNull(backendHelper); // For your eyes only, PMD.
   }
 
@@ -232,7 +247,17 @@ public class BackendHelperTest extends RobolectricTest {
     assertEquals(Video.NOT_SET, video.getUrl());
   }
 
-  private BackendHelper createBackendHelper(LocalCallFactory callFactory) {
-    return new BackendHelper(getContext(), callFactory);
+  private BackendHelper createBackendHelper(Call.Factory callFactory) {
+    return new BackendHelper(getContext(), createRetrofit(callFactory));
+  }
+
+  private static Retrofit createRetrofit(Call.Factory callFactory) {
+    Retrofit.Builder builder = new Retrofit.Builder()
+        .addConverterFactory(MoshiConverterFactory.create())
+        .baseUrl(DmlWebService.BASE_URL);
+    if (callFactory != null) {
+      builder.callFactory(callFactory);
+    }
+    return builder.build();
   }
 }
