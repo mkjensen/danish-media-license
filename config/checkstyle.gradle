@@ -20,7 +20,7 @@ checkstyle {
   configFile = rootProject.file('config/checkstyle.xml')
   ignoreFailures false
   showViolations true
-  toolVersion = '6.15'
+  toolVersion = '6.17'
 }
 
 task checkstyle(type: Checkstyle) {
