@@ -16,11 +16,12 @@
 
 package com.github.mkjensen.dml.inject;
 
+import static com.github.mkjensen.dml.Defense.notNull;
+
 import android.app.Application;
 import android.content.Context;
 
 import com.github.mkjensen.dml.backend.BackendHelper;
-import com.github.mkjensen.dml.backend.DmlWebService;
 
 import dagger.Module;
 import dagger.Provides;
@@ -39,6 +40,12 @@ import javax.inject.Singleton;
  */
 @Module
 public class BackendModule {
+
+  private final String apiBaseUrl;
+
+  public BackendModule(String apiBaseUrl) {
+    this.apiBaseUrl = notNull(apiBaseUrl);
+  }
 
   @Provides
   @Singleton
@@ -72,7 +79,7 @@ public class BackendModule {
   Retrofit retrofit(Converter.Factory converterFactory, OkHttpClient okHttpClient) {
     return new Retrofit.Builder()
         .addConverterFactory(converterFactory)
-        .baseUrl(DmlWebService.BASE_URL)
+        .baseUrl(apiBaseUrl)
         .client(okHttpClient)
         .build();
   }

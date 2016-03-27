@@ -42,7 +42,7 @@ public class DmlApplication extends Application {
     application = this;
     backendComponent = DaggerBackendComponent.builder()
         .applicationModule(new ApplicationModule(this))
-        .backendModule(new BackendModule())
+        .backendModule(new BackendModule(getString(R.string.backend_api_base_url)))
         .build();
   }
 

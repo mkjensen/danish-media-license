@@ -29,13 +29,6 @@ import retrofit2.http.Url;
 public interface DmlWebService {
 
   /**
-   * The API base URL.
-   *
-   * @see retrofit2.Retrofit.Builder#baseUrl(String)
-   */
-  String BASE_URL = "https://www.dr.dk/mu-online/api/1.3/";
-
-  /**
    * Returns the category containing the most viewed on-demand videos.
    */
   @GET("list/view/mostviewed")

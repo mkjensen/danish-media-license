@@ -21,6 +21,7 @@ import static org.junit.Assert.assertEquals;
 import com.github.mkjensen.dml.test.RobolectricTest;
 
 import org.junit.Test;
+import org.robolectric.RuntimeEnvironment;
 
 /**
  * Tests for {@link DmlApplication}.
@@ -31,8 +32,7 @@ public class DmlApplicationRobolectricTest extends RobolectricTest {
   public void getInstance_whenCalledAfterOnCreate_thenReturnsDmlApplication() {
 
     // Given
-    DmlApplication application = new DmlApplication();
-    application.onCreate();
+    DmlApplication application = (DmlApplication) RuntimeEnvironment.application;
 
     // When
     DmlApplication instance = DmlApplication.getInstance();

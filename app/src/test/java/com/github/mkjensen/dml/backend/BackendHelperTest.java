@@ -43,13 +43,13 @@ public class BackendHelperTest extends RobolectricTest {
   @Rule
   public final ExpectedException thrown = ExpectedException.none();
 
-  private static final String MOST_VIEWED_CATEGORY_URL =
-      "https://www.dr.dk/mu-online/api/1.3/list/view/mostviewed";
+  private static final String BASE_URL = "http://test.com/";
 
-  private static final String VIDEO_URL = "https://www.dr.dk/mu-online/api/1.3/programcard/test";
+  private static final String MOST_VIEWED_CATEGORY_URL = BASE_URL + "list/view/mostviewed";
 
-  private static final String SEARCH_URL =
-      "https://www.dr.dk/mu-online/api/1.3/search/tv/programcards-with-asset/title/test";
+  private static final String VIDEO_URL = BASE_URL + "programcard/test";
+
+  private static final String SEARCH_URL = BASE_URL + "search/tv/programcards-with-asset/title/q";
 
   @Test
   public void constructor_whenCalledWithNullContext_thenThrowsIllegalArgumentException() {
@@ -229,11 +229,11 @@ public class BackendHelperTest extends RobolectricTest {
     BackendHelper backendHelper = createBackendHelper(callFactory);
 
     // When
-    Category category = backendHelper.search("test");
+    Category category = backendHelper.search("q");
 
     // Then
     assertNotNull(category);
-    assertEquals("test", category.getTitle());
+    assertEquals("q", category.getTitle());
     List<Video> videos = category.getVideos();
     assertNotNull(videos);
     assertEquals(1, videos.size());
@@ -254,7 +254,7 @@ public class BackendHelperTest extends RobolectricTest {
   private static Retrofit createRetrofit(Call.Factory callFactory) {
     Retrofit.Builder builder = new Retrofit.Builder()
         .addConverterFactory(MoshiConverterFactory.create())
-        .baseUrl(DmlWebService.BASE_URL);
+        .baseUrl(BASE_URL);
     if (callFactory != null) {
       builder.callFactory(callFactory);
     }
