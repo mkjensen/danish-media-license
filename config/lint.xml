@@ -19,7 +19,7 @@
 <lint>
     <issue id="InvalidPackage">
         <!-- https://github.com/square/okio/issues/58 -->
-        <ignore regexp="okio-1.6.0.jar" />
-        <ignore regexp="retrofit-2.0.0.jar" />
+        <ignore regexp=".*okio.*" />
+        <ignore regexp=".*retrofit.*" />
     </issue>
 </lint>
