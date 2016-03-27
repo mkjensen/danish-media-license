@@ -33,7 +33,19 @@ import javax.inject.Inject;
 /**
  * Extension of {@link OkHttpGlideModule} that supplies the {@link OkHttpClient} via injection.
  *
- * <p>Note that this class is configured for use via the Android manifest file.
+ * <p>Note that this class must be configured for use via the Android manifest file. Also note that
+ * {@link OkHttpGlideModule} must be excluded to avoid conflicts.
+ *
+ * <p>Configuration that must be added to the {@code application} section of {@code
+ * AndroidManifest.xml}: <pre><code>
+ * &lt;meta-data
+ *     android:name="com.bumptech.glide.integration.okhttp3.OkHttpGlideModule"
+ *     tools:node="remove" /&gt;
+ *
+ * &lt;meta-data
+ *     android:name="com.github.mkjensen.dml.backend.DmlOkHttpGlideModule"
+ *     android:value="GlideModule" /&gt;
+ * </code></pre>
  */
 public final class DmlOkHttpGlideModule extends OkHttpGlideModule {
 
