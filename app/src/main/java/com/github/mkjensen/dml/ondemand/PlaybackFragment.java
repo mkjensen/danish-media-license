@@ -392,11 +392,18 @@ public class PlaybackFragment extends PlaybackOverlaySupportFragment {
     }
 
     private void createPlayer(String videoUrl) {
+      SurfaceTexture surfaceTexture = textureView.getSurfaceTexture();
+      if (surfaceTexture == null) {
+        // Temporary fix: The surface texture is no longer available because the user left the
+        // playback fragment early. The flow of this class needs to be rethought to fix
+        // https://github.com/mkjensen/danish-media-license/issues/29.
+        return;
+      }
       HlsRendererBuilder rendererBuilder = new HlsRendererBuilder(getActivity(), TAG, videoUrl);
       player = new DemoPlayer(rendererBuilder);
       player.addListener(new DemoPlayerListener());
       player.prepare();
-      player.setSurface(new Surface(textureView.getSurfaceTexture()));
+      player.setSurface(new Surface(surfaceTexture));
       playPause(true);
     }
 
