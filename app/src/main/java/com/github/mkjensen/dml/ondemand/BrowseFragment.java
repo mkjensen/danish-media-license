@@ -16,25 +16,19 @@
 
 package com.github.mkjensen.dml.ondemand;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v17.leanback.app.BrowseSupportFragment;
 import android.support.v17.leanback.widget.ArrayObjectAdapter;
 import android.support.v17.leanback.widget.HeaderItem;
 import android.support.v17.leanback.widget.ListRow;
 import android.support.v17.leanback.widget.ListRowPresenter;
-import android.support.v17.leanback.widget.OnItemViewClickedListener;
-import android.support.v17.leanback.widget.Presenter;
-import android.support.v17.leanback.widget.Row;
-import android.support.v17.leanback.widget.RowPresenter;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.util.Log;
-import android.view.View;
 
 import com.github.mkjensen.dml.backend.CategoriesLoader;
 import com.github.mkjensen.dml.backend.Category;
-import com.github.mkjensen.dml.backend.Video;
 
 import java.util.List;
 
@@ -64,27 +58,10 @@ public class BrowseFragment extends BrowseSupportFragment
   }
 
   private void initListeners() {
-    setOnItemViewClickedListener(new OnItemViewClickedListener() {
-      @Override
-      public void onItemClicked(Presenter.ViewHolder itemViewHolder, Object item,
-                                RowPresenter.ViewHolder rowViewHolder, Row row) {
-        if (item instanceof Video) {
-          Video video = (Video) item;
-          Intent intent = new Intent(getActivity(), DetailsActivity.class);
-          intent.putExtra(DetailsActivity.VIDEO_ID, video.getId());
-          startActivity(intent);
-        } else {
-          Log.w(TAG, "Unhandled item: " + item);
-        }
-      }
-    });
-    setOnSearchClickedListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View view) {
-        Intent intent = new Intent(getActivity(), SearchActivity.class);
-        startActivity(intent);
-      }
-    });
+    FragmentActivity activity = getActivity();
+    setOnItemViewClickedListener(Listeners.createOnItemViewClickedListener(activity));
+    setOnItemViewSelectedListener(Listeners.createOnItemViewSelectedListener(activity));
+    setOnSearchClickedListener(Listeners.createOnSearchClickedListener(activity));
   }
 
   private void initLoader() {

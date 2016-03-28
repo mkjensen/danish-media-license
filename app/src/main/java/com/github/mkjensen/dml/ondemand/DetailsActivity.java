@@ -16,9 +16,7 @@
 
 package com.github.mkjensen.dml.ondemand;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 
 import com.github.mkjensen.dml.R;
@@ -26,9 +24,9 @@ import com.github.mkjensen.dml.R;
 /**
  * Host activity for {@link DetailsFragment}.
  */
-public class DetailsActivity extends FragmentActivity {
+public class DetailsActivity extends BaseActivity {
 
-  public static final String VIDEO_ID = "com.github.mkjensen.dml.videoId";
+  public static final String VIDEO_ID = "com.github.mkjensen.dml.ondemand.videoId";
 
   private static final String TAG = "DetailsActivity";
 
@@ -37,11 +35,5 @@ public class DetailsActivity extends FragmentActivity {
     Log.d(TAG, "onCreate");
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_ondemand_details);
-  }
-
-  @Override
-  public boolean onSearchRequested() {
-    startActivity(new Intent(this, SearchActivity.class));
-    return true;
   }
 }

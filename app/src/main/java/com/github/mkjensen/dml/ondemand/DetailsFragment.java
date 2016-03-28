@@ -40,6 +40,7 @@ import android.util.Log;
 import com.github.mkjensen.dml.R;
 import com.github.mkjensen.dml.backend.Video;
 import com.github.mkjensen.dml.backend.VideoLoader;
+import com.github.mkjensen.dml.util.BackgroundHelper;
 
 /**
  * Details screen for on-demand videos.
@@ -131,6 +132,7 @@ public class DetailsFragment extends DetailsSupportFragment
       Log.w(TAG, "No data returned by loader");
       return;
     }
+    BackgroundHelper.setBackground(getActivity(), data.getImageUrl());
     createDetailsRow(data);
   }
 

@@ -19,7 +19,6 @@ package com.github.mkjensen.dml.ondemand;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v17.leanback.widget.SpeechRecognitionCallback;
-import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 
 import com.github.mkjensen.dml.R;
@@ -27,7 +26,7 @@ import com.github.mkjensen.dml.R;
 /**
  * Host activity for {@link SearchFragment}.
  */
-public class SearchActivity extends FragmentActivity {
+public class SearchActivity extends BaseActivity {
 
   private static final String TAG = "SearchActivity";
 

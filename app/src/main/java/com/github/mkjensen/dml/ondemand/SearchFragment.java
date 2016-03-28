@@ -16,7 +16,6 @@
 
 package com.github.mkjensen.dml.ondemand;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v17.leanback.app.SearchSupportFragment;
@@ -25,19 +24,14 @@ import android.support.v17.leanback.widget.HeaderItem;
 import android.support.v17.leanback.widget.ListRow;
 import android.support.v17.leanback.widget.ListRowPresenter;
 import android.support.v17.leanback.widget.ObjectAdapter;
-import android.support.v17.leanback.widget.OnItemViewClickedListener;
-import android.support.v17.leanback.widget.Presenter;
-import android.support.v17.leanback.widget.Row;
-import android.support.v17.leanback.widget.RowPresenter;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.github.mkjensen.dml.R;
 import com.github.mkjensen.dml.backend.Category;
 import com.github.mkjensen.dml.backend.QueryLoader;
-import com.github.mkjensen.dml.backend.Video;
+import com.github.mkjensen.dml.util.BackgroundHelper;
 
 /**
  * Search screen for on-demand videos.
@@ -77,20 +71,8 @@ public class SearchFragment extends SearchSupportFragment
   }
 
   private void initListeners() {
-    setOnItemViewClickedListener(new OnItemViewClickedListener() {
-      @Override
-      public void onItemClicked(Presenter.ViewHolder itemViewHolder, Object item,
-                                RowPresenter.ViewHolder rowViewHolder, Row row) {
-        if (item instanceof Video) {
-          Video video = (Video) item;
-          Intent intent = new Intent(getActivity(), DetailsActivity.class);
-          intent.putExtra(DetailsActivity.VIDEO_ID, video.getId());
-          startActivity(intent);
-        } else {
-          Log.w(TAG, "Unhandled item: " + item);
-        }
-      }
-    });
+    setOnItemViewClickedListener(Listeners.createOnItemViewClickedListener(getActivity()));
+    setOnItemViewSelectedListener(Listeners.createOnItemViewSelectedListener(getActivity()));
   }
 
   @Override
@@ -130,10 +112,9 @@ public class SearchFragment extends SearchSupportFragment
 
   private void clearResults() {
     removePendingQuery();
+    BackgroundHelper.clearBackground(getActivity());
     results.clear();
     videos.clear();
-    HeaderItem header = new HeaderItem(getString(R.string.ondemand_search_no_results));
-    results.add(new ListRow(header, videos));
   }
 
   private void createPendingQuery(final String query) {
