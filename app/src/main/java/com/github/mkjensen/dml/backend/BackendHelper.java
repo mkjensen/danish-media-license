@@ -23,6 +23,8 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.github.mkjensen.dml.R;
+import com.github.mkjensen.dml.model.Category;
+import com.github.mkjensen.dml.model.Video;
 
 import retrofit2.Call;
 import retrofit2.Response;

@@ -22,7 +22,7 @@ import android.content.Intent;
 import android.view.View;
 
 import com.github.mkjensen.dml.R;
-import com.github.mkjensen.dml.backend.Video;
+import com.github.mkjensen.dml.model.Video;
 import com.github.mkjensen.dml.test.RobolectricTest;
 
 import org.junit.Before;

@@ -32,7 +32,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
-import com.github.mkjensen.dml.backend.Video;
+import com.github.mkjensen.dml.model.Video;
 import com.github.mkjensen.dml.test.PowerMockRobolectricTest;
 
 import org.junit.Before;

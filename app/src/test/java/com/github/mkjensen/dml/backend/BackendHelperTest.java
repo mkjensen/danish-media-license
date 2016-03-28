@@ -21,6 +21,8 @@ import static java.net.HttpURLConnection.HTTP_OK;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
+import com.github.mkjensen.dml.model.Category;
+import com.github.mkjensen.dml.model.Video;
 import com.github.mkjensen.dml.test.ResourceUtils;
 import com.github.mkjensen.dml.test.RobolectricTest;
 

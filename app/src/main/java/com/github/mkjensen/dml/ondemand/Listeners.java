@@ -28,7 +28,7 @@ import android.support.v17.leanback.widget.RowPresenter;
 import android.util.Log;
 import android.view.View;
 
-import com.github.mkjensen.dml.backend.Video;
+import com.github.mkjensen.dml.model.Video;
 import com.github.mkjensen.dml.util.BackgroundHelper;
 
 /**

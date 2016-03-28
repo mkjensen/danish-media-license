@@ -18,6 +18,7 @@ package com.github.mkjensen.dml.backend;
 
 import android.support.annotation.Nullable;
 
+import com.github.mkjensen.dml.model.Video;
 import com.squareup.moshi.Json;
 
 import java.util.Collections;

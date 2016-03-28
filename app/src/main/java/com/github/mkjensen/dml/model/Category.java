@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.github.mkjensen.dml.backend;
+package com.github.mkjensen.dml.model;
 
 import static com.github.mkjensen.dml.Defense.notNull;
 

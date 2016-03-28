@@ -16,6 +16,9 @@
 
 package com.github.mkjensen.dml.backend;
 
+import com.github.mkjensen.dml.model.Category;
+import com.github.mkjensen.dml.model.Video;
+
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Path;

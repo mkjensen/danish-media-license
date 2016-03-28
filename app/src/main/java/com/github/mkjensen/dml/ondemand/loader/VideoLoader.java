@@ -23,7 +23,7 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.github.mkjensen.dml.backend.BackendLoader;
-import com.github.mkjensen.dml.backend.Video;
+import com.github.mkjensen.dml.model.Video;
 
 import java.io.IOException;
 

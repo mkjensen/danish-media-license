@@ -21,7 +21,7 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.github.mkjensen.dml.backend.BackendLoader;
-import com.github.mkjensen.dml.backend.Category;
+import com.github.mkjensen.dml.model.Category;
 
 import java.io.IOException;
 import java.util.ArrayList;
