@@ -83,6 +83,7 @@ public class SearchFragment extends SearchSupportFragment
   }
 
   private void removePendingQuery() {
+    LoadingHelper.hideLoading(this);
     handler.removeCallbacks(queryRunnable);
   }
 
