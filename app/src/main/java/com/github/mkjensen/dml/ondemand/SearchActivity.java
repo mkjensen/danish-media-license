@@ -16,7 +16,9 @@
 
 package com.github.mkjensen.dml.ondemand;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v17.leanback.widget.SpeechRecognitionCallback;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 
@@ -29,6 +31,8 @@ public class SearchActivity extends FragmentActivity {
 
   private static final String TAG = "SearchActivity";
 
+  private static final int SPEECH_REQUEST_CODE = 0;
+
   private SearchFragment fragment;
 
   @Override
@@ -36,13 +40,50 @@ public class SearchActivity extends FragmentActivity {
     Log.d(TAG, "onCreate");
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_ondemand_search);
+    initFragment();
+  }
+
+  private void initFragment() {
     fragment = (SearchFragment) getSupportFragmentManager()
         .findFragmentById(R.id.ondemand_search_fragment);
+    fragment.setSpeechRecognitionCallback(new SpeechRecognitionCallback() {
+      @Override
+      public void recognizeSpeech() {
+        Log.d(TAG, "recognizeSpeech");
+        startActivityForResult(fragment.getRecognizerIntent(), SPEECH_REQUEST_CODE);
+      }
+    });
   }
 
   @Override
   public boolean onSearchRequested() {
     fragment.startRecognition();
     return true;
+  }
+
+  @Override
+  protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    switch (requestCode) {
+      case SPEECH_REQUEST_CODE:
+        handleSpeechResult(resultCode, data);
+        break;
+      default:
+        Log.w(TAG, "Unhandled request code: " + requestCode);
+        break;
+    }
+  }
+
+  private void handleSpeechResult(int resultCode, Intent data) {
+    switch (resultCode) {
+      case RESULT_CANCELED:
+        // Do nothing.
+        break;
+      case RESULT_OK:
+        fragment.setSearchQuery(data, true);
+        break;
+      default:
+        Log.w(TAG, "Unhandled result code: " + resultCode);
+        break;
+    }
   }
 }

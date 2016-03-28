@@ -16,10 +16,7 @@
 
 package com.github.mkjensen.dml.ondemand;
 
-import android.Manifest;
-import android.app.Activity;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v17.leanback.app.SearchSupportFragment;
@@ -32,10 +29,7 @@ import android.support.v17.leanback.widget.OnItemViewClickedListener;
 import android.support.v17.leanback.widget.Presenter;
 import android.support.v17.leanback.widget.Row;
 import android.support.v17.leanback.widget.RowPresenter;
-import android.support.v17.leanback.widget.SparseArrayObjectAdapter;
-import android.support.v17.leanback.widget.SpeechRecognitionCallback;
 import android.support.v4.app.LoaderManager;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.content.Loader;
 import android.text.TextUtils;
 import android.util.Log;
@@ -53,17 +47,15 @@ public class SearchFragment extends SearchSupportFragment
 
   private static final String TAG = "SearchFragment";
 
-  private static final int QUERY_DELAY_IN_MILLISECONDS = 300;
-
   private static final String QUERY_ARGUMENT = "query";
+
+  private static final int QUERY_DELAY_IN_MILLISECONDS = 300;
 
   private static final int QUERY_LOADER_ID = 0;
 
-  private static final int SPEECH_REQUEST_CODE = 0;
-
   private Handler handler;
 
-  private SparseArrayObjectAdapter results;
+  private ArrayObjectAdapter results;
 
   private ArrayObjectAdapter videos;
 
@@ -73,15 +65,14 @@ public class SearchFragment extends SearchSupportFragment
   public void onCreate(Bundle savedInstanceState) {
     Log.d(TAG, "onCreate");
     super.onCreate(savedInstanceState);
+    setSearchResultProvider(this);
     handler = new Handler();
     initUi();
     initListeners();
-    setSearchResultProvider(this);
-    ensureSpeechPermission();
   }
 
   private void initUi() {
-    results = new SparseArrayObjectAdapter(new ListRowPresenter());
+    results = new ArrayObjectAdapter(new ListRowPresenter());
     videos = new ArrayObjectAdapter(new VideoPresenter());
   }
 
@@ -102,49 +93,6 @@ public class SearchFragment extends SearchSupportFragment
     });
   }
 
-  private void ensureSpeechPermission() {
-    if (hasSpeechPermission()) {
-      return;
-    }
-    setSpeechRecognitionCallback(new SpeechRecognitionCallback() {
-      @Override
-      public void recognizeSpeech() {
-        startActivityForResult(getRecognizerIntent(), SPEECH_REQUEST_CODE);
-      }
-    });
-  }
-
-  private boolean hasSpeechPermission() {
-    return ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.RECORD_AUDIO)
-        == PackageManager.PERMISSION_GRANTED;
-  }
-
-  @Override
-  public void onActivityResult(int requestCode, int resultCode, Intent data) {
-    switch (requestCode) {
-      case SPEECH_REQUEST_CODE:
-        handleSpeechResult(resultCode, data);
-        break;
-      default:
-        Log.w(TAG, "Unhandled request code: " + requestCode);
-        break;
-    }
-  }
-
-  private void handleSpeechResult(int resultCode, Intent data) {
-    switch (resultCode) {
-      case Activity.RESULT_CANCELED:
-        // Do nothing.
-        break;
-      case Activity.RESULT_OK:
-        setSearchQuery(data, true);
-        break;
-      default:
-        Log.w(TAG, "Unhandled result code: " + resultCode);
-        break;
-    }
-  }
-
   @Override
   public void onDestroy() {
     super.onDestroy();
@@ -153,13 +101,6 @@ public class SearchFragment extends SearchSupportFragment
 
   private void removePendingQuery() {
     handler.removeCallbacks(queryRunnable);
-  }
-
-  @Override
-  public void startRecognition() {
-    setSearchQuery("", false);
-    clearResults();
-    super.startRecognition();
   }
 
   @Override
@@ -184,7 +125,6 @@ public class SearchFragment extends SearchSupportFragment
       clearResults();
       return;
     }
-    removePendingQuery();
     createPendingQuery(query);
   }
 
@@ -193,10 +133,11 @@ public class SearchFragment extends SearchSupportFragment
     results.clear();
     videos.clear();
     HeaderItem header = new HeaderItem(getString(R.string.ondemand_search_no_results));
-    results.set(0, new ListRow(header, videos));
+    results.add(new ListRow(header, videos));
   }
 
   private void createPendingQuery(final String query) {
+    removePendingQuery();
     queryRunnable = new Runnable() {
       @Override
       public void run() {
@@ -231,7 +172,7 @@ public class SearchFragment extends SearchSupportFragment
     videos.clear();
     videos.addAll(0, category.getVideos());
     HeaderItem header = new HeaderItem(category.getTitle());
-    results.set(0, new ListRow(header, videos));
+    results.add(new ListRow(header, videos));
   }
 
   @Override
