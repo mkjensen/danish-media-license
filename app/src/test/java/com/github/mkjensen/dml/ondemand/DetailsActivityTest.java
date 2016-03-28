@@ -44,7 +44,7 @@ public class DetailsActivityTest extends RobolectricTest {
   public void before() {
     detailsActivity = Robolectric.buildActivity(DetailsActivity.class)
         .withIntent(createIntent())
-        .create()
+        .setup()
         .get();
   }
 
