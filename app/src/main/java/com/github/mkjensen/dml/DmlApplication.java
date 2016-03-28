@@ -20,6 +20,7 @@ import android.app.Application;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
+import com.facebook.stetho.Stetho;
 import com.github.mkjensen.dml.inject.ApplicationModule;
 import com.github.mkjensen.dml.inject.BackendComponent;
 import com.github.mkjensen.dml.inject.BackendModule;
@@ -40,6 +41,15 @@ public class DmlApplication extends Application {
   public void onCreate() {
     super.onCreate();
     application = this;
+    initStetho();
+    initDagger();
+  }
+
+  private void initStetho() {
+    Stetho.initializeWithDefaults(this);
+  }
+
+  private void initDagger() {
     backendComponent = DaggerBackendComponent.builder()
         .applicationModule(new ApplicationModule(this))
         .backendModule(new BackendModule(getString(R.string.backend_api_base_url)))

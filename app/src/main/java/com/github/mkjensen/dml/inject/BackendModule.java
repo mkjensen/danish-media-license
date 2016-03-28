@@ -21,6 +21,7 @@ import static com.github.mkjensen.dml.Defense.notNull;
 import android.app.Application;
 import android.content.Context;
 
+import com.facebook.stetho.okhttp3.StethoInterceptor;
 import com.github.mkjensen.dml.backend.BackendHelper;
 
 import dagger.Module;
@@ -70,6 +71,7 @@ public class BackendModule {
   @Singleton
   OkHttpClient okHttpClient(Cache cache) {
     return new OkHttpClient.Builder()
+        .addNetworkInterceptor(new StethoInterceptor())
         .cache(cache)
         .build();
   }
