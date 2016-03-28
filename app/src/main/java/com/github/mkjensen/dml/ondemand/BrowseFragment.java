@@ -29,6 +29,7 @@ import android.util.Log;
 
 import com.github.mkjensen.dml.backend.CategoriesLoader;
 import com.github.mkjensen.dml.backend.Category;
+import com.github.mkjensen.dml.util.LoadingHelper;
 
 import java.util.List;
 
@@ -46,6 +47,7 @@ public class BrowseFragment extends BrowseSupportFragment
   public void onCreate(Bundle savedInstanceState) {
     Log.d(TAG, "onCreate");
     super.onCreate(savedInstanceState);
+    LoadingHelper.showLoading(this);
     initUi();
     initListeners();
     initLoader();
@@ -77,6 +79,7 @@ public class BrowseFragment extends BrowseSupportFragment
   @Override
   public void onLoadFinished(Loader<List<Category>> loader, List<Category> data) {
     Log.d(TAG, "onLoadFinished");
+    LoadingHelper.hideLoading(this);
     rows.clear();
     if (data == null) {
       Log.w(TAG, "No data returned by loader");

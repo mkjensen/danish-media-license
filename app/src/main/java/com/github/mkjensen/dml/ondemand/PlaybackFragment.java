@@ -66,6 +66,7 @@ import com.github.mkjensen.dml.backend.Video;
 import com.github.mkjensen.dml.backend.VideoUrlLoader;
 import com.github.mkjensen.dml.exoplayer.DemoPlayer;
 import com.github.mkjensen.dml.exoplayer.HlsRendererBuilder;
+import com.github.mkjensen.dml.util.LoadingHelper;
 
 /**
  * Playback screen for on-demand videos.
@@ -90,6 +91,7 @@ public class PlaybackFragment extends PlaybackOverlaySupportFragment {
   public void onCreate(Bundle savedInstanceState) {
     Log.d(TAG, "onCreate");
     super.onCreate(savedInstanceState);
+    LoadingHelper.showLoading(this);
     initVideo();
     initMediaSession();
     initMediaControllerHelper();
@@ -319,6 +321,7 @@ public class PlaybackFragment extends PlaybackOverlaySupportFragment {
     @Override
     public void onStateChanged(boolean playWhenReady, int playbackState) {
       if (updateMetadataWhenReady && playbackState == DemoPlayer.STATE_READY) {
+        LoadingHelper.hideLoading(PlaybackFragment.this);
         updateMetadata();
         updateMetadataWhenReady = false;
       }

@@ -32,6 +32,7 @@ import android.util.Log;
 import com.github.mkjensen.dml.backend.Category;
 import com.github.mkjensen.dml.backend.QueryLoader;
 import com.github.mkjensen.dml.util.BackgroundHelper;
+import com.github.mkjensen.dml.util.LoadingHelper;
 
 /**
  * Search screen for on-demand videos.
@@ -133,6 +134,7 @@ public class SearchFragment extends SearchSupportFragment
   @Override
   public Loader<Category> onCreateLoader(int id, Bundle args) {
     Log.d(TAG, "onCreateLoader");
+    LoadingHelper.showLoading(this);
     String query = args.getString(QUERY_ARGUMENT);
     //noinspection ConstantConditions
     return new QueryLoader(getActivity(), query);
@@ -141,6 +143,7 @@ public class SearchFragment extends SearchSupportFragment
   @Override
   public void onLoadFinished(Loader<Category> loader, Category data) {
     Log.d(TAG, "onLoadFinished");
+    LoadingHelper.hideLoading(this);
     if (data == null || data.getVideos().isEmpty()) {
       clearResults();
       return;

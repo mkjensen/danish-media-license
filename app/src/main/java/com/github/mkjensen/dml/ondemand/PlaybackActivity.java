@@ -16,9 +16,7 @@
 
 package com.github.mkjensen.dml.ondemand;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 
 import com.github.mkjensen.dml.R;
@@ -26,7 +24,7 @@ import com.github.mkjensen.dml.R;
 /**
  * Host activity for {@link PlaybackFragment}.
  */
-public class PlaybackActivity extends FragmentActivity {
+public class PlaybackActivity extends BaseActivity {
 
   public static final String VIDEO = "com.github.mkjensen.dml.ondemand.video";
 
@@ -37,11 +35,5 @@ public class PlaybackActivity extends FragmentActivity {
     Log.d(TAG, "onCreate");
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_ondemand_playback);
-  }
-
-  @Override
-  public boolean onSearchRequested() {
-    startActivity(new Intent(this, SearchActivity.class));
-    return true;
   }
 }

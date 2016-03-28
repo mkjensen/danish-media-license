@@ -41,6 +41,7 @@ import com.github.mkjensen.dml.R;
 import com.github.mkjensen.dml.backend.Video;
 import com.github.mkjensen.dml.backend.VideoLoader;
 import com.github.mkjensen.dml.util.BackgroundHelper;
+import com.github.mkjensen.dml.util.LoadingHelper;
 
 /**
  * Details screen for on-demand videos.
@@ -60,6 +61,7 @@ public class DetailsFragment extends DetailsSupportFragment
   public void onCreate(Bundle savedInstanceState) {
     Log.d(TAG, "onCreate");
     super.onCreate(savedInstanceState);
+    LoadingHelper.showLoading(this);
     initVideoId();
     initUi();
     initListeners();
@@ -127,6 +129,7 @@ public class DetailsFragment extends DetailsSupportFragment
   @Override
   public void onLoadFinished(Loader<Video> loader, Video data) {
     Log.d(TAG, "onLoadFinished");
+    LoadingHelper.hideLoading(this);
     rows.clear();
     if (data == null) {
       Log.w(TAG, "No data returned by loader");
