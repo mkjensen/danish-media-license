@@ -14,11 +14,14 @@
  * limitations under the License.
  */
 
-package com.github.mkjensen.dml.backend;
+package com.github.mkjensen.dml.ondemand.loader;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.util.Log;
+
+import com.github.mkjensen.dml.backend.BackendLoader;
+import com.github.mkjensen.dml.backend.Category;
 
 import java.io.IOException;
 import java.util.ArrayList;

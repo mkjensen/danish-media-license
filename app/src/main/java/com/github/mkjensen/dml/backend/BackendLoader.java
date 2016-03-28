@@ -37,8 +37,7 @@ public abstract class BackendLoader<T> extends AsyncTaskLoader<T> {
 
   private T data;
 
-
-  BackendLoader(@NonNull Context context) {
+  public BackendLoader(@NonNull Context context) {
     super(context);
     inject(context);
   }

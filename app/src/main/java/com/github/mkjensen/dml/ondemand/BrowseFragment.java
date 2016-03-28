@@ -27,8 +27,8 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.util.Log;
 
-import com.github.mkjensen.dml.backend.CategoriesLoader;
 import com.github.mkjensen.dml.backend.Category;
+import com.github.mkjensen.dml.ondemand.loader.CategoriesLoader;
 import com.github.mkjensen.dml.util.LoadingHelper;
 
 import java.util.List;

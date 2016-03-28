@@ -30,7 +30,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.github.mkjensen.dml.backend.Category;
-import com.github.mkjensen.dml.backend.QueryLoader;
+import com.github.mkjensen.dml.ondemand.loader.QueryLoader;
 import com.github.mkjensen.dml.util.BackgroundHelper;
 import com.github.mkjensen.dml.util.LoadingHelper;
 

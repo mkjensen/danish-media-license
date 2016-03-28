@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.github.mkjensen.dml.backend;
+package com.github.mkjensen.dml.ondemand.loader;
 
 import static com.github.mkjensen.dml.Defense.notNull;
 
@@ -22,34 +22,37 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import com.github.mkjensen.dml.backend.BackendLoader;
+import com.github.mkjensen.dml.backend.Video;
+
 import java.io.IOException;
 
 /**
- * Executes a query and returns the results from the backend.
+ * Loads a {@link Video} instance from the backend.
  */
-public class QueryLoader extends BackendLoader<Category> {
+public class VideoLoader extends BackendLoader<Video> {
 
-  private static final String TAG = "QueryLoader";
+  private static final String TAG = "VideoLoader";
 
-  private final String query;
+  private final String videoId;
 
-  public QueryLoader(@NonNull Context context, @NonNull String query) {
+  public VideoLoader(@NonNull Context context, @NonNull String videoId) {
     super(context);
-    this.query = notNull(query);
+    this.videoId = notNull(videoId);
   }
 
   @Override
-  public Category loadInBackground() {
+  public Video loadInBackground() {
     try {
-      return backendHelper.search(query);
+      return backendHelper.loadVideo(videoId);
     } catch (IOException ex) {
-      Log.e(TAG, String.format("Failed to perform query [%s]", query), ex);
+      Log.e(TAG, String.format("Failed to load video [%s]", videoId), ex);
       return null;
     }
   }
 
   @NonNull
-  public String getQuery() {
-    return query;
+  String getVideoId() {
+    return videoId;
   }
 }

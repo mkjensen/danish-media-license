@@ -39,7 +39,7 @@ import android.util.Log;
 
 import com.github.mkjensen.dml.R;
 import com.github.mkjensen.dml.backend.Video;
-import com.github.mkjensen.dml.backend.VideoLoader;
+import com.github.mkjensen.dml.ondemand.loader.VideoLoader;
 import com.github.mkjensen.dml.util.BackgroundHelper;
 import com.github.mkjensen.dml.util.LoadingHelper;
 

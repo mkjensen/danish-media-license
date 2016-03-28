@@ -52,7 +52,7 @@ public final class BackendHelper {
    * Loads the category containing the most viewed on-demand videos.
    */
   @NonNull
-  Category loadMostViewedCategory() throws IOException {
+  public Category loadMostViewedCategory() throws IOException {
     Log.d(TAG, "loadMostViewedCategory");
     Call<Category> call = webService.getMostViewed();
     Category category = executeCall(call);
@@ -64,7 +64,7 @@ public final class BackendHelper {
    * Loads the category containing selected on-demand videos.
    */
   @NonNull
-  Category loadSelectedCategory() throws IOException {
+  public Category loadSelectedCategory() throws IOException {
     Log.d(TAG, "loadSelectedCategory");
     Call<Category> call = webService.getSelected();
     Category category = executeCall(call);
@@ -76,7 +76,7 @@ public final class BackendHelper {
    * Loads the specified on-demand video.
    */
   @NonNull
-  Video loadVideo(@NonNull String id) throws IOException {
+  public Video loadVideo(@NonNull String id) throws IOException {
     Log.d(TAG, String.format("loadVideoDetails [%s]", id));
     Call<Video> call = webService.getVideo(id);
     return executeCall(call);
@@ -86,7 +86,7 @@ public final class BackendHelper {
    * Loads the URL for the specified on-demand video.
    */
   @NonNull
-  String loadVideoUrl(@NonNull String linksUrl) throws IOException {
+  public String loadVideoUrl(@NonNull String linksUrl) throws IOException {
     Log.d(TAG, String.format("loadVideoUrl [%s]", linksUrl));
     Call<VideoLinksContainer> call = webService.getVideoLinks(linksUrl);
     VideoLinksContainer linksContainer = executeCall(call);
@@ -101,7 +101,7 @@ public final class BackendHelper {
    * Executes the specified query and returns a category containing the relevant on-demand videos.
    */
   @NonNull
-  Category search(@NonNull String query) throws IOException {
+  public Category search(@NonNull String query) throws IOException {
     Log.d(TAG, String.format("search [%s]", query));
     Call<Category> call = webService.search(query);
     Category category = executeCall(call);

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.github.mkjensen.dml.backend;
+package com.github.mkjensen.dml.ondemand.loader;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -26,9 +26,9 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 /**
- * Tests for {@link QueryLoader}.
+ * Tests for {@link VideoUrlLoader}.
  */
-public class QueryLoaderTest extends RobolectricTest {
+public class VideoUrlLoaderTest extends RobolectricTest {
 
   @Rule
   public final ExpectedException thrown = ExpectedException.none();
@@ -39,21 +39,21 @@ public class QueryLoaderTest extends RobolectricTest {
     // When/then
     thrown.expect(IllegalArgumentException.class);
     @SuppressWarnings("ConstantConditions")
-    QueryLoader loader = new QueryLoader(getContext(), null);
+    VideoUrlLoader loader = new VideoUrlLoader(getContext(), null);
     assertNotNull(loader); // For your eyes only, PMD.
   }
 
   @Test
-  public void getQuery_whenCalled_thenReturnsQuerySuppliedToConstructor() {
+  public void getLinksUrl_whenCalled_thenReturnsLinksUrlSuppliedToConstructor() {
 
     // Given
-    String query = "test";
-    QueryLoader loader = new QueryLoader(getContext(), query);
+    String linksUrl = "test";
+    VideoUrlLoader loader = new VideoUrlLoader(getContext(), linksUrl);
 
     // When
-    String actualQuery = loader.getQuery();
+    String actualLinksUrl = loader.getLinksUrl();
 
     // Then
-    assertEquals(query, actualQuery);
+    assertEquals(linksUrl, actualLinksUrl);
   }
 }
