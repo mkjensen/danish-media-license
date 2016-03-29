@@ -33,16 +33,19 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.github.mkjensen.dml.model.Category;
-import com.github.mkjensen.dml.ondemand.loader.QueryLoader;
+import com.github.mkjensen.dml.ondemand.loader.CategoriesLoader;
 import com.github.mkjensen.dml.presenter.VideoPresenter;
 import com.github.mkjensen.dml.util.BackgroundHelper;
 import com.github.mkjensen.dml.util.LoadingHelper;
 
+import java.util.List;
+
 /**
  * Search screen for on-demand videos.
  */
-public final class SearchFragment extends SearchSupportFragment
-    implements SearchSupportFragment.SearchResultProvider, LoaderManager.LoaderCallbacks<Category> {
+public final class SearchFragment extends SearchSupportFragment implements
+    SearchSupportFragment.SearchResultProvider,
+    LoaderManager.LoaderCallbacks<List<Category>> {
 
   private static final String TAG = "SearchFragment";
 
@@ -52,11 +55,9 @@ public final class SearchFragment extends SearchSupportFragment
 
   private static final int QUERY_LOADER_ID = 0;
 
-  private Handler handler;
-
   private ArrayObjectAdapter results;
 
-  private ArrayObjectAdapter videos;
+  private Handler handler;
 
   private Runnable queryRunnable;
 
@@ -64,15 +65,10 @@ public final class SearchFragment extends SearchSupportFragment
   public void onCreate(Bundle savedInstanceState) {
     Log.d(TAG, "onCreate");
     super.onCreate(savedInstanceState);
-    setSearchResultProvider(this);
-    handler = new Handler();
-    initUi();
-    initListeners();
-  }
-
-  private void initUi() {
     results = new ArrayObjectAdapter(new ListRowPresenter());
-    videos = new ArrayObjectAdapter(new VideoPresenter());
+    handler = new Handler();
+    initListeners();
+    setSearchResultProvider(this);
   }
 
   private void initListeners() {
@@ -87,8 +83,10 @@ public final class SearchFragment extends SearchSupportFragment
   }
 
   private void removePendingQuery() {
+    if (queryRunnable != null) {
+      handler.removeCallbacks(queryRunnable);
+    }
     LoadingHelper.hideLoading(this);
-    handler.removeCallbacks(queryRunnable);
   }
 
   @Override
@@ -120,7 +118,6 @@ public final class SearchFragment extends SearchSupportFragment
     removePendingQuery();
     BackgroundHelper.clearBackground(getActivity());
     results.clear();
-    videos.clear();
   }
 
   private void createPendingQuery(final String query) {
@@ -137,36 +134,37 @@ public final class SearchFragment extends SearchSupportFragment
   }
 
   @Override
-  public Loader<Category> onCreateLoader(int id, Bundle args) {
+  public Loader<List<Category>> onCreateLoader(int id, Bundle args) {
     Log.d(TAG, "onCreateLoader");
     LoadingHelper.showLoading(this);
     String query = args.getString(QUERY_ARGUMENT);
     //noinspection ConstantConditions
-    return new QueryLoader(getActivity(), query);
+    return new CategoriesLoader(getActivity(), query);
   }
 
   @Override
-  public void onLoadFinished(Loader<Category> loader, Category data) {
+  public void onLoadFinished(Loader<List<Category>> loader, List<Category> data) {
     Log.d(TAG, "onLoadFinished");
-    LoadingHelper.hideLoading(this);
-    if (data == null || data.getVideos().isEmpty()) {
-      clearResults();
+    clearResults();
+    if (data == null || data.isEmpty()) {
       return;
     }
     addResults(data);
   }
 
-  private void addResults(Category category) {
-    results.clear();
-    videos.clear();
-    videos.addAll(0, category.getVideos());
-    HeaderItem header = new HeaderItem(category.getTitle());
-    results.add(new ListRow(header, videos));
+  private void addResults(List<Category> categories) {
+    VideoPresenter presenter = new VideoPresenter();
+    for (Category category : categories) {
+      HeaderItem header = new HeaderItem(category.getTitle());
+      ArrayObjectAdapter videos = new ArrayObjectAdapter(presenter);
+      videos.addAll(0, category.getVideos());
+      results.add(new ListRow(header, videos));
+    }
   }
 
   @Override
-  public void onLoaderReset(Loader<Category> loader) {
+  public void onLoaderReset(Loader<List<Category>> loader) {
     Log.d(TAG, "onLoaderReset");
-    videos.clear();
+    clearResults();
   }
 }

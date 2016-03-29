@@ -17,7 +17,7 @@
 package com.github.mkjensen.dml.ondemand.loader;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 import com.github.mkjensen.dml.test.RobolectricTest;
 
@@ -26,29 +26,42 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 /**
- * Tests for {@link QueryLoader}.
+ * Tests for {@link CategoriesLoader}.
  */
-public class QueryLoaderTest extends RobolectricTest {
+public class CategoriesLoaderTest extends RobolectricTest {
 
   @Rule
   public final ExpectedException thrown = ExpectedException.none();
 
   @Test
-  public void constructor_whenCalledWithNullQuery_thenThrowsIllegalArgumentException() {
+  public void constructorQuery_whenCalledWithNullQuery_thenThrowsIllegalArgumentException() {
 
     // When/then
     thrown.expect(IllegalArgumentException.class);
     @SuppressWarnings("ConstantConditions")
-    QueryLoader loader = new QueryLoader(getContext(), null);
-    assertNotNull(loader); // For your eyes only, PMD.
+    CategoriesLoader loader = new CategoriesLoader(getContext(), null);
+    assertNull(loader); // For your eyes only, PMD.
   }
 
   @Test
-  public void getQuery_whenCalled_thenReturnsQuerySuppliedToConstructor() {
+  public void getQuery_givenNonQueryLoader_whenCalled_thenReturnsNull() {
+
+    // Given
+    CategoriesLoader loader = new CategoriesLoader(getContext());
+
+    // When
+    String query = loader.getQuery();
+
+    // Then
+    assertNull(query);
+  }
+
+  @Test
+  public void getQuery_givenQueryLoader_whenCalled_thenReturnsQuerySuppliedToConstructor() {
 
     // Given
     String query = "test";
-    QueryLoader loader = new QueryLoader(getContext(), query);
+    CategoriesLoader loader = new CategoriesLoader(getContext(), query);
 
     // When
     String actualQuery = loader.getQuery();
