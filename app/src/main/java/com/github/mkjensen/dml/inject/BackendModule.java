@@ -22,17 +22,22 @@ import android.app.Application;
 import android.content.Context;
 
 import com.facebook.stetho.okhttp3.StethoInterceptor;
+import com.github.mkjensen.dml.BuildConfig;
 import com.github.mkjensen.dml.backend.BackendHelper;
 
 import dagger.Module;
 import dagger.Provides;
 
 import okhttp3.Cache;
+import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 
 import retrofit2.Converter;
 import retrofit2.Retrofit;
 import retrofit2.converter.moshi.MoshiConverterFactory;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Singleton;
 
@@ -69,11 +74,23 @@ public class BackendModule {
 
   @Provides
   @Singleton
-  OkHttpClient okHttpClient(Cache cache) {
-    return new OkHttpClient.Builder()
-        .addNetworkInterceptor(new StethoInterceptor())
-        .cache(cache)
-        .build();
+  List<Interceptor> networkInterceptors(StethoInterceptor stethoInterceptor) {
+    List<Interceptor> interceptors = new ArrayList<>(1);
+    if (stethoInterceptor != null) {
+      interceptors.add(stethoInterceptor);
+    }
+    return interceptors;
+  }
+
+  @Provides
+  @Singleton
+  OkHttpClient okHttpClient(Cache cache, List<Interceptor> networkInterceptors) {
+    OkHttpClient.Builder builder = new OkHttpClient.Builder();
+    builder.cache(cache);
+    for (Interceptor interceptor : networkInterceptors) {
+      builder.addNetworkInterceptor(interceptor);
+    }
+    return builder.build();
   }
 
   @Provides
@@ -84,5 +101,11 @@ public class BackendModule {
         .baseUrl(apiBaseUrl)
         .client(okHttpClient)
         .build();
+  }
+
+  @Provides
+  @Singleton
+  StethoInterceptor stethoInterceptor() {
+    return BuildConfig.DEBUG ? new StethoInterceptor() : null;
   }
 }

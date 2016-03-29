@@ -48,7 +48,9 @@ public class DmlApplication extends Application {
   }
 
   private void initStetho() {
-    Stetho.initializeWithDefaults(this);
+    if (BuildConfig.DEBUG) {
+      Stetho.initializeWithDefaults(this);
+    }
   }
 
   private void initDagger() {
