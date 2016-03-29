@@ -18,15 +18,15 @@ package com.github.mkjensen.dml.backend;
 
 import android.support.annotation.Nullable;
 
-import com.github.mkjensen.dml.model.Video;
 import com.squareup.moshi.Json;
 
 import java.util.Collections;
 import java.util.List;
 
 /**
- * A helper class that enables converting on-demand videos in JSON format to a collection of {@link
- * Video} instances.
+ * A helper class for extracting video URLs from a JSON response.
+ *
+ * @see <a href="http://www.dr.dk/mu-online/Help/1.3/Api/GET-api-apiVersion-manifest-id">API</a>
  */
 final class VideoLinksContainer {
 
