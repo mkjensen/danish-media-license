@@ -29,7 +29,7 @@ import java.io.IOException;
 /**
  * Loads a video URL from the backend.
  */
-public class VideoUrlLoader extends BackendLoader<String> {
+public final class VideoUrlLoader extends BackendLoader<String> {
 
   private static final String TAG = "VideoUrlLoader";
 

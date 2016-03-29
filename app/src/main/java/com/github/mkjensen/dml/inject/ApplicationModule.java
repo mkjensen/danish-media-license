@@ -28,8 +28,7 @@ import javax.inject.Singleton;
  * Dagger module for Android-related dependencies.
  */
 @Module
-@SuppressWarnings("unused")
-public class ApplicationModule {
+public final class ApplicationModule {
 
   private final Application application;
 

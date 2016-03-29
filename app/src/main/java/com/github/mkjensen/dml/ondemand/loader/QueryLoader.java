@@ -30,7 +30,7 @@ import java.io.IOException;
 /**
  * Executes a query and returns the results from the backend.
  */
-public class QueryLoader extends BackendLoader<Category> {
+public final class QueryLoader extends BackendLoader<Category> {
 
   private static final String TAG = "QueryLoader";
 

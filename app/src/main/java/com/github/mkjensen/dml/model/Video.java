@@ -27,7 +27,7 @@ import com.squareup.moshi.Json;
 /**
  * Metadata about an on-demand video.
  */
-public class Video implements Parcelable {
+public final class Video implements Parcelable {
 
   public static final Parcelable.Creator<Video> CREATOR = new ParcelableCreator();
 

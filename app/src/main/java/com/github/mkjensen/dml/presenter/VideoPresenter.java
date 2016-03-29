@@ -29,7 +29,7 @@ import com.github.mkjensen.dml.model.Video;
 /**
  * Presenter for {@link Video}.
  */
-public class VideoPresenter extends Presenter {
+public final class VideoPresenter extends Presenter {
 
   private Drawable defaultImage;
 

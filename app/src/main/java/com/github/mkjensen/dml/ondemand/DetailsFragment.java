@@ -47,7 +47,7 @@ import com.github.mkjensen.dml.util.LoadingHelper;
 /**
  * Details screen for on-demand videos.
  */
-public class DetailsFragment extends DetailsSupportFragment
+public final class DetailsFragment extends DetailsSupportFragment
     implements LoaderManager.LoaderCallbacks<Video> {
 
   private static final String TAG = "DetailsFragment";

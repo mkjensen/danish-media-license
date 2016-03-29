@@ -28,7 +28,7 @@ import java.util.List;
 /**
  * An on-demand category which contains its associated on-demand videos.
  */
-public class Category {
+public final class Category {
 
   public static final String NOT_SET = "(not set)";
 

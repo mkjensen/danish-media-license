@@ -38,7 +38,7 @@ import com.github.mkjensen.dml.util.LoadingHelper;
 /**
  * Search screen for on-demand videos.
  */
-public class SearchFragment extends SearchSupportFragment
+public final class SearchFragment extends SearchSupportFragment
     implements SearchSupportFragment.SearchResultProvider, LoaderManager.LoaderCallbacks<Category> {
 
   private static final String TAG = "SearchFragment";

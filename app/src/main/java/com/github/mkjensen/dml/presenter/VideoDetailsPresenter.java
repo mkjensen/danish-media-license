@@ -23,7 +23,7 @@ import com.github.mkjensen.dml.model.Video;
 /**
  * Details presenter for {@link Video}.
  */
-public class VideoDetailsPresenter extends AbstractDetailsDescriptionPresenter {
+public final class VideoDetailsPresenter extends AbstractDetailsDescriptionPresenter {
 
   @Override
   protected void onBindDescription(ViewHolder vh, Object item) {

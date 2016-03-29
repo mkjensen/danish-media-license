@@ -24,7 +24,7 @@ import com.github.mkjensen.dml.R;
 /**
  * Host activity for {@link BrowseFragment}.
  */
-public class BrowseActivity extends BaseActivity {
+public final class BrowseActivity extends BaseActivity {
 
   private static final String TAG = "BrowseActivity";
 

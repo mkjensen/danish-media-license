@@ -30,7 +30,7 @@ import java.io.IOException;
 /**
  * Loads a {@link Video} instance from the backend.
  */
-public class VideoLoader extends BackendLoader<Video> {
+public final class VideoLoader extends BackendLoader<Video> {
 
   private static final String TAG = "VideoLoader";
 

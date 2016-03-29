@@ -37,7 +37,7 @@ import java.util.List;
 /**
  * Browse screen for on-demand videos.
  */
-public class BrowseFragment extends BrowseSupportFragment
+public final class BrowseFragment extends BrowseSupportFragment
     implements LoaderManager.LoaderCallbacks<List<Category>> {
 
   private static final String TAG = "BrowseFragment";

@@ -45,7 +45,7 @@ import javax.inject.Singleton;
  * Dagger module for backend services.
  */
 @Module
-public class BackendModule {
+public final class BackendModule {
 
   private final String apiBaseUrl;
 

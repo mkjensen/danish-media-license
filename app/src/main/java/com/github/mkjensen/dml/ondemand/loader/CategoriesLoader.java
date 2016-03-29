@@ -30,7 +30,7 @@ import java.util.List;
 /**
  * Loads {@link Category} instances from the backend.
  */
-public class CategoriesLoader extends BackendLoader<List<Category>> {
+public final class CategoriesLoader extends BackendLoader<List<Category>> {
 
   private static final String TAG = "CategoriesLoader";
 

@@ -71,7 +71,7 @@ import com.github.mkjensen.dml.util.LoadingHelper;
 /**
  * Playback screen for on-demand videos.
  */
-public class PlaybackFragment extends PlaybackOverlaySupportFragment {
+public final class PlaybackFragment extends PlaybackOverlaySupportFragment {
 
   private static final String TAG = "PlaybackFragment";
 

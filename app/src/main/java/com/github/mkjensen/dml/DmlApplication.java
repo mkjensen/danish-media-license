@@ -33,7 +33,7 @@ import com.github.mkjensen.dml.inject.DaggerBackendComponent;
  * @see <a href="https://github.com/google/dagger">Dagger</a>
  * @see <a href="https://github.com/facebook/stetho">Stetho</a>
  */
-public class DmlApplication extends Application {
+public final class DmlApplication extends Application {
 
   private static DmlApplication application;
 

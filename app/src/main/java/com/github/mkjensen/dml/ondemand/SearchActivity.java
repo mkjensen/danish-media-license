@@ -26,7 +26,7 @@ import com.github.mkjensen.dml.R;
 /**
  * Host activity for {@link SearchFragment}.
  */
-public class SearchActivity extends BaseActivity {
+public final class SearchActivity extends BaseActivity {
 
   private static final String TAG = "SearchActivity";
 
