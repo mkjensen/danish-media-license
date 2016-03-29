@@ -34,11 +34,11 @@ import com.github.mkjensen.dml.util.BackgroundHelper;
 /**
  * Helper class for creating common listeners.
  */
-final class Listeners {
+final class OnDemandListeners {
 
-  private static final String TAG = "Listeners";
+  private static final String TAG = "OnDemandListeners";
 
-  private Listeners() {
+  private OnDemandListeners() {
   }
 
   static OnItemViewClickedListener createOnItemViewClickedListener(final Activity activity) {

@@ -16,6 +16,9 @@
 
 package com.github.mkjensen.dml.ondemand;
 
+import static com.github.mkjensen.dml.ondemand.OnDemandListeners.createOnItemViewClickedListener;
+import static com.github.mkjensen.dml.ondemand.OnDemandListeners.createOnItemViewSelectedListener;
+
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v17.leanback.app.SearchSupportFragment;
@@ -73,8 +76,8 @@ public final class SearchFragment extends SearchSupportFragment
   }
 
   private void initListeners() {
-    setOnItemViewClickedListener(Listeners.createOnItemViewClickedListener(getActivity()));
-    setOnItemViewSelectedListener(Listeners.createOnItemViewSelectedListener(getActivity()));
+    setOnItemViewClickedListener(createOnItemViewClickedListener(getActivity()));
+    setOnItemViewSelectedListener(createOnItemViewSelectedListener(getActivity()));
   }
 
   @Override

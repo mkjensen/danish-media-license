@@ -16,6 +16,10 @@
 
 package com.github.mkjensen.dml.ondemand;
 
+import static com.github.mkjensen.dml.ondemand.OnDemandListeners.createOnItemViewClickedListener;
+import static com.github.mkjensen.dml.ondemand.OnDemandListeners.createOnItemViewSelectedListener;
+import static com.github.mkjensen.dml.ondemand.OnDemandListeners.createOnSearchClickedListener;
+
 import android.os.Bundle;
 import android.support.v17.leanback.app.BrowseSupportFragment;
 import android.support.v17.leanback.widget.ArrayObjectAdapter;
@@ -62,9 +66,9 @@ public final class BrowseFragment extends BrowseSupportFragment
 
   private void initListeners() {
     FragmentActivity activity = getActivity();
-    setOnItemViewClickedListener(Listeners.createOnItemViewClickedListener(activity));
-    setOnItemViewSelectedListener(Listeners.createOnItemViewSelectedListener(activity));
-    setOnSearchClickedListener(Listeners.createOnSearchClickedListener(activity));
+    setOnItemViewClickedListener(createOnItemViewClickedListener(activity));
+    setOnItemViewSelectedListener(createOnItemViewSelectedListener(activity));
+    setOnSearchClickedListener(createOnSearchClickedListener(activity));
   }
 
   private void initLoader() {
