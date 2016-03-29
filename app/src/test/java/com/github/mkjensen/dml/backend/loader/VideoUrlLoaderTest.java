@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.github.mkjensen.dml.ondemand.loader;
+package com.github.mkjensen.dml.backend.loader;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -26,34 +26,34 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 /**
- * Tests for {@link VideoLoader}.
+ * Tests for {@link VideoUrlLoader}.
  */
-public class VideoLoaderTest extends RobolectricTest {
+public class VideoUrlLoaderTest extends RobolectricTest {
 
   @Rule
   public final ExpectedException thrown = ExpectedException.none();
 
   @Test
-  public void constructor_whenCalledWithNullVideoId_thenThrowsIllegalArgumentException() {
+  public void constructor_whenCalledWithNullQuery_thenThrowsIllegalArgumentException() {
 
     // When/then
     thrown.expect(IllegalArgumentException.class);
     @SuppressWarnings("ConstantConditions")
-    VideoLoader loader = new VideoLoader(getContext(), null);
+    VideoUrlLoader loader = new VideoUrlLoader(getContext(), null);
     assertNotNull(loader); // For your eyes only, PMD.
   }
 
   @Test
-  public void getVideoId_whenCalled_thenReturnsVideoIdSuppliedToConstructor() {
+  public void getLinksUrl_whenCalled_thenReturnsLinksUrlSuppliedToConstructor() {
 
     // Given
-    String id = "test";
-    VideoLoader loader = new VideoLoader(getContext(), id);
+    String linksUrl = "test";
+    VideoUrlLoader loader = new VideoUrlLoader(getContext(), linksUrl);
 
     // When
-    String actualId = loader.getVideoId();
+    String actualLinksUrl = loader.getLinksUrl();
 
     // Then
-    assertEquals(id, actualId);
+    assertEquals(linksUrl, actualLinksUrl);
   }
 }

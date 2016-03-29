@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.github.mkjensen.dml.ondemand.loader;
+package com.github.mkjensen.dml.backend.loader;
 
 import static com.github.mkjensen.dml.util.Preconditions.notNull;
 
@@ -23,7 +23,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
-import com.github.mkjensen.dml.backend.BackendLoader;
+import com.github.mkjensen.dml.backend.loader.BackendLoader;
 import com.github.mkjensen.dml.model.Category;
 
 import java.io.IOException;

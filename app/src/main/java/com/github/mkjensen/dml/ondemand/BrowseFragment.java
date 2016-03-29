@@ -31,8 +31,8 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.util.Log;
 
+import com.github.mkjensen.dml.backend.loader.CategoriesLoader;
 import com.github.mkjensen.dml.model.Category;
-import com.github.mkjensen.dml.ondemand.loader.CategoriesLoader;
 import com.github.mkjensen.dml.presenter.VideoPresenter;
 import com.github.mkjensen.dml.util.LoadingHelper;
 

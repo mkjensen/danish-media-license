@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.github.mkjensen.dml.ondemand.loader;
+package com.github.mkjensen.dml.backend.loader;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;

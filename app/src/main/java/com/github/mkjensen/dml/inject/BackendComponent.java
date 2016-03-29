@@ -16,8 +16,8 @@
 
 package com.github.mkjensen.dml.inject;
 
-import com.github.mkjensen.dml.backend.BackendLoader;
 import com.github.mkjensen.dml.backend.DmlOkHttpGlideModule;
+import com.github.mkjensen.dml.backend.loader.BackendLoader;
 import com.github.mkjensen.dml.exoplayer.OkHttpDataSource;
 
 import dagger.Component;

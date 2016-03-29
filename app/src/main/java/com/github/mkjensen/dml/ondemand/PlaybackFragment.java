@@ -62,10 +62,10 @@ import android.view.Surface;
 import android.view.TextureView;
 
 import com.github.mkjensen.dml.R;
+import com.github.mkjensen.dml.backend.loader.VideoUrlLoader;
 import com.github.mkjensen.dml.exoplayer.DemoPlayer;
 import com.github.mkjensen.dml.exoplayer.HlsRendererBuilder;
 import com.github.mkjensen.dml.model.Video;
-import com.github.mkjensen.dml.ondemand.loader.VideoUrlLoader;
 import com.github.mkjensen.dml.util.LoadingHelper;
 
 /**

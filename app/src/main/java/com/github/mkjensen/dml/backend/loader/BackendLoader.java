@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.github.mkjensen.dml.backend;
+package com.github.mkjensen.dml.backend.loader;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -22,6 +22,7 @@ import android.support.v4.content.AsyncTaskLoader;
 import android.util.Log;
 
 import com.github.mkjensen.dml.DmlApplication;
+import com.github.mkjensen.dml.backend.BackendHelper;
 
 import javax.inject.Inject;
 

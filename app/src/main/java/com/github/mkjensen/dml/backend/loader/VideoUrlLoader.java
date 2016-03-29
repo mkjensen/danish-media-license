@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.github.mkjensen.dml.ondemand.loader;
+package com.github.mkjensen.dml.backend.loader;
 
 import static com.github.mkjensen.dml.util.Preconditions.notNull;
 
@@ -22,37 +22,36 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
-import com.github.mkjensen.dml.backend.BackendLoader;
-import com.github.mkjensen.dml.model.Video;
+import com.github.mkjensen.dml.backend.loader.BackendLoader;
 
 import java.io.IOException;
 
 /**
- * Loads a {@link Video} instance from the backend.
+ * Loads a video URL from the backend.
  */
-public final class VideoLoader extends BackendLoader<Video> {
+public final class VideoUrlLoader extends BackendLoader<String> {
 
-  private static final String TAG = "VideoLoader";
+  private static final String TAG = "VideoUrlLoader";
 
-  private final String videoId;
+  private final String linksUrl;
 
-  public VideoLoader(@NonNull Context context, @NonNull String videoId) {
+  public VideoUrlLoader(@NonNull Context context, @NonNull String linksUrl) {
     super(context);
-    this.videoId = notNull(videoId);
+    this.linksUrl = notNull(linksUrl);
   }
 
   @Override
-  public Video loadInBackground() {
+  public String loadInBackground() {
     try {
-      return backendHelper.loadVideo(videoId);
+      return backendHelper.loadVideoUrl(linksUrl);
     } catch (IOException ex) {
-      Log.e(TAG, String.format("Failed to load video [%s]", videoId), ex);
+      Log.e(TAG, String.format("Failed to load video URL from [%s]", linksUrl), ex);
       return null;
     }
   }
 
   @NonNull
-  String getVideoId() {
-    return videoId;
+  String getLinksUrl() {
+    return linksUrl;
   }
 }
