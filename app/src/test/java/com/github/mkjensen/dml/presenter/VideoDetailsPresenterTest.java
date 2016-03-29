@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.github.mkjensen.dml.ondemand;
+package com.github.mkjensen.dml.presenter;
 
 import static org.mockito.Mockito.verify;
 import static org.powermock.api.mockito.PowerMockito.mock;

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.github.mkjensen.dml.ondemand;
+package com.github.mkjensen.dml.presenter;
 
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
@@ -29,7 +29,7 @@ import com.github.mkjensen.dml.model.Video;
 /**
  * Presenter for {@link Video}.
  */
-class VideoPresenter extends Presenter {
+public class VideoPresenter extends Presenter {
 
   private Drawable defaultImage;
 

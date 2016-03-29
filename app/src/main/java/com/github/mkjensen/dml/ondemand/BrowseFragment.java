@@ -29,6 +29,7 @@ import android.util.Log;
 
 import com.github.mkjensen.dml.model.Category;
 import com.github.mkjensen.dml.ondemand.loader.CategoriesLoader;
+import com.github.mkjensen.dml.presenter.VideoPresenter;
 import com.github.mkjensen.dml.util.LoadingHelper;
 
 import java.util.List;

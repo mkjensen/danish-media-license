@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.github.mkjensen.dml.ondemand;
+package com.github.mkjensen.dml.presenter;
 
 import android.support.v17.leanback.widget.AbstractDetailsDescriptionPresenter;
 
@@ -23,7 +23,7 @@ import com.github.mkjensen.dml.model.Video;
 /**
  * Details presenter for {@link Video}.
  */
-class VideoDetailsPresenter extends AbstractDetailsDescriptionPresenter {
+public class VideoDetailsPresenter extends AbstractDetailsDescriptionPresenter {
 
   @Override
   protected void onBindDescription(ViewHolder vh, Object item) {

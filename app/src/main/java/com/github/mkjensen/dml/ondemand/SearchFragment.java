@@ -31,6 +31,7 @@ import android.util.Log;
 
 import com.github.mkjensen.dml.model.Category;
 import com.github.mkjensen.dml.ondemand.loader.QueryLoader;
+import com.github.mkjensen.dml.presenter.VideoPresenter;
 import com.github.mkjensen.dml.util.BackgroundHelper;
 import com.github.mkjensen.dml.util.LoadingHelper;
 
