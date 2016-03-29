@@ -31,6 +31,7 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.util.Log;
 
+import com.github.mkjensen.dml.R;
 import com.github.mkjensen.dml.backend.loader.CategoriesLoader;
 import com.github.mkjensen.dml.model.Category;
 import com.github.mkjensen.dml.presenter.VideoPresenter;
@@ -61,6 +62,7 @@ public final class BrowseFragment extends BrowseSupportFragment
   private void initUi() {
     rows = new ArrayObjectAdapter(new ListRowPresenter());
     setAdapter(rows);
+    setTitle(getString(R.string.app_name));
     enableRowScaling(false);
   }
 
