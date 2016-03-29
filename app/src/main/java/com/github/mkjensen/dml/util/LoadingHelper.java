@@ -47,12 +47,16 @@ public final class LoadingHelper {
   }
 
   /**
-   * Shows the progress indicator for the specified fragment. If the progress indicator is already
-   * present, {@link IllegalStateException} is thrown.
+   * Shows the progress indicator, if not already present, for the specified fragment.
    */
   public static void showLoading(@NonNull Fragment fragment) {
-    fragment.getActivity().getSupportFragmentManager()
-        .beginTransaction()
+    FragmentManager fragmentManager = fragment.getActivity().getSupportFragmentManager();
+    Fragment loadingFragment = getLoadingFragment(fragmentManager);
+    if (loadingFragment != null) {
+      Log.w(TAG, "Was asked to add progress indicator but it is already present, ignoring");
+      return;
+    }
+    fragmentManager.beginTransaction()
         .add(fragment.getId(), new LoadingFragment(), LOADING_FRAGMENT_TAG)
         .commit();
   }
@@ -62,15 +66,18 @@ public final class LoadingHelper {
    */
   public static void hideLoading(@NonNull Fragment fragment) {
     FragmentManager fragmentManager = fragment.getActivity().getSupportFragmentManager();
-    Fragment loadingFragment = fragmentManager.findFragmentByTag(LOADING_FRAGMENT_TAG);
+    Fragment loadingFragment = getLoadingFragment(fragmentManager);
     if (loadingFragment == null) {
       Log.w(TAG, "Was asked to remove nonexistent progress indicator, ignoring");
       return;
     }
-    fragmentManager
-        .beginTransaction()
+    fragmentManager.beginTransaction()
         .remove(loadingFragment)
         .commitAllowingStateLoss(); // TODO: Is commitAllowingStateLoss okay, can it be avoided?
+  }
+
+  private static LoadingFragment getLoadingFragment(FragmentManager fragmentManager) {
+    return (LoadingFragment) fragmentManager.findFragmentByTag(LOADING_FRAGMENT_TAG);
   }
 
   /**
