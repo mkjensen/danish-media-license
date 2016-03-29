@@ -24,7 +24,7 @@ import com.github.mkjensen.dml.R;
 /**
  * Host activity for {@link PlaybackFragment}.
  */
-public final class PlaybackActivity extends BaseActivity {
+public final class PlaybackActivity extends OnDemandActivity {
 
   public static final String VIDEO = "com.github.mkjensen.dml.ondemand.video";
 

@@ -24,7 +24,7 @@ import com.github.mkjensen.dml.R;
 /**
  * Host activity for {@link DetailsFragment}.
  */
-public final class DetailsActivity extends BaseActivity {
+public final class DetailsActivity extends OnDemandActivity {
 
   public static final String VIDEO_ID = "com.github.mkjensen.dml.ondemand.videoId";
 

@@ -24,12 +24,13 @@ import android.util.Log;
 import com.github.mkjensen.dml.util.BackgroundHelper;
 
 /**
- * Extension of {@link FragmentActivity} that integrates with {@link BackgroundHelper} and
- * implements {@link FragmentActivity#onSearchRequested()}.
+ * Extension of {@link FragmentActivity} that integrates with {@link BackgroundHelper} for
+ * background handling and overrides {@link FragmentActivity#onSearchRequested()} to activate search
+ * functionality.
  */
-abstract class BaseActivity extends FragmentActivity {
+abstract class OnDemandActivity extends FragmentActivity {
 
-  private static final String TAG = "BaseActivity";
+  private static final String TAG = "OnDemandActivity";
 
   private static final int SEARCH_REQUEST_CODE = 0;
 
