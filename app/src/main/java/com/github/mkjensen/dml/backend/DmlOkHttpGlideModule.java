@@ -52,7 +52,7 @@ public final class DmlOkHttpGlideModule extends OkHttpGlideModule {
   @Inject
   OkHttpClient okHttpClient;
 
-  DmlOkHttpGlideModule() {
+  public DmlOkHttpGlideModule() {
     DmlApplication.getInstance().getBackendComponent().inject(this);
   }
 
