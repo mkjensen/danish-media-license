@@ -35,7 +35,7 @@ import static android.support.v4.media.session.PlaybackStateCompat.STATE_NONE;
 import static android.support.v4.media.session.PlaybackStateCompat.STATE_PAUSED;
 import static android.support.v4.media.session.PlaybackStateCompat.STATE_PLAYING;
 import static android.support.v4.media.session.PlaybackStateCompat.STATE_REWINDING;
-import static com.github.mkjensen.dml.Defense.intentParcelableExtraNotNull;
+import static com.github.mkjensen.dml.util.Preconditions.intentParcelableExtraNotNull;
 
 import android.content.Context;
 import android.graphics.SurfaceTexture;

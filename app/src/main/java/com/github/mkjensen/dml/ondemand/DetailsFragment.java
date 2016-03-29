@@ -16,7 +16,7 @@
 
 package com.github.mkjensen.dml.ondemand;
 
-import static com.github.mkjensen.dml.Defense.intentStringExtraNotNull;
+import static com.github.mkjensen.dml.util.Preconditions.intentStringExtraNotNull;
 
 import android.content.Intent;
 import android.os.Bundle;

@@ -14,19 +14,21 @@
  * limitations under the License.
  */
 
-package com.github.mkjensen.dml;
+package com.github.mkjensen.dml.util;
 
 import android.content.Intent;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import com.github.mkjensen.dml.DmlException;
+
 /**
  * Helper methods for ensuring that supplied values meet expectations.
  */
-public final class Defense {
+public final class Preconditions {
 
-  private Defense() {
+  private Preconditions() {
   }
 
   /**

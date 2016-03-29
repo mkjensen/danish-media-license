@@ -16,7 +16,7 @@
 
 package com.github.mkjensen.dml.backend;
 
-import static com.github.mkjensen.dml.Defense.notNull;
+import static com.github.mkjensen.dml.util.Preconditions.notNull;
 
 import android.content.Context;
 import android.support.annotation.NonNull;

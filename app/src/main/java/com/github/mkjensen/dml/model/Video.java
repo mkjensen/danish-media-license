@@ -16,7 +16,7 @@
 
 package com.github.mkjensen.dml.model;
 
-import static com.github.mkjensen.dml.Defense.notNull;
+import static com.github.mkjensen.dml.util.Preconditions.notNull;
 
 import android.os.Parcel;
 import android.os.Parcelable;

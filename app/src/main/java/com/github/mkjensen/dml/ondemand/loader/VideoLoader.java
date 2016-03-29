@@ -16,7 +16,7 @@
 
 package com.github.mkjensen.dml.ondemand.loader;
 
-import static com.github.mkjensen.dml.Defense.notNull;
+import static com.github.mkjensen.dml.util.Preconditions.notNull;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
