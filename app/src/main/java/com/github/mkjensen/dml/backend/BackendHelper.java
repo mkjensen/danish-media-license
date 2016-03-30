@@ -86,14 +86,13 @@ public final class BackendHelper {
   }
 
   /**
-   * Loads the stream URL for the specified on-demand video.
+   * Loads the manifest for the specified on-demand video.
    */
   @NonNull
-  public String loadStreamUrl(@NonNull String manifestUrl) throws IOException {
-    Log.d(TAG, String.format("loadStreamUrl [%s]", manifestUrl));
+  public VideoManifest loadVideoManifest(@NonNull String manifestUrl) throws IOException {
+    Log.d(TAG, String.format("loadVideoManifest [%s]", manifestUrl));
     Call<VideoManifest> call = webService.getVideoManifest(manifestUrl);
-    VideoManifest videoManifest = executeCall(call);
-    return videoManifest.getStreamUrl();
+    return executeCall(call);
   }
 
   /**

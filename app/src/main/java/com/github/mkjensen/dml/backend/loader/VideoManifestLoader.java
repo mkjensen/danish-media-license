@@ -22,28 +22,30 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import com.github.mkjensen.dml.model.VideoManifest;
+
 import java.io.IOException;
 
 /**
- * Loads a stream URL from the backend.
+ * Loads a video manifest from the backend.
  */
-public final class StreamUrlLoader extends BackendLoader<String> {
+public final class VideoManifestLoader extends BackendLoader<VideoManifest> {
 
-  private static final String TAG = "StreamUrlLoader";
+  private static final String TAG = "VideoManifestLoader";
 
   private final String manifestUrl;
 
-  public StreamUrlLoader(@NonNull Context context, @NonNull String manifestUrl) {
+  public VideoManifestLoader(@NonNull Context context, @NonNull String manifestUrl) {
     super(context);
     this.manifestUrl = notNull(manifestUrl);
   }
 
   @Override
-  public String loadInBackground() {
+  public VideoManifest loadInBackground() {
     try {
-      return backendHelper.loadStreamUrl(manifestUrl);
+      return backendHelper.loadVideoManifest(manifestUrl);
     } catch (IOException ex) {
-      Log.e(TAG, String.format("Failed to load stream URL from [%s]", manifestUrl), ex);
+      Log.e(TAG, String.format("Failed to load video manifest from [%s]", manifestUrl), ex);
       return null;
     }
   }

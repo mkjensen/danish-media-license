@@ -16,6 +16,10 @@
 
 package com.github.mkjensen.dml.model;
 
+import static com.github.mkjensen.dml.util.Preconditions.notNull;
+
+import android.support.annotation.NonNull;
+
 import com.squareup.moshi.Json;
 
 import java.util.Collections;
@@ -31,32 +35,87 @@ public final class VideoManifest {
   public static final String NOT_SET = "(not set)";
 
   @Json(name = "Links")
-  @SuppressWarnings("CanBeFinal")
   private List<Stream> streams = Collections.emptyList();
 
   /**
-   * Returns a URL to a stream using the HLS protocol if it exists. Otherwise returns {@link
+   * Returns a URL to a stream using the specified protocol if it exists. Otherwise returns {@link
    * #NOT_SET}.
-   *
-   * @see <a href="https://en.wikipedia.org/wiki/HTTP_Live_Streaming">HLS</a>
    */
-  public String getStreamUrl() {
+  @NonNull
+  public String getUrl(@NonNull Protocol protocol) {
+    notNull(protocol);
     for (Stream stream : streams) {
-      if ("HLS".equals(stream.protocol)) {
-        return stream.url;
+      if (stream.getProtocol() == protocol) {
+        return stream.getUrl();
       }
     }
     return NOT_SET;
   }
 
-  private static final class Stream {
+  @NonNull
+  public List<Stream> getStreams() {
+    return streams;
+  }
+
+  public void setStreams(@NonNull List<Stream> streams) {
+    this.streams = notNull(streams);
+  }
+
+  public enum Protocol {
+
+    /**
+     * Represents a stream that downloads the content via HTTP.
+     */
+    @Json(name = "Download")
+    DOWNLOAD,
+
+    /**
+     * Adobe HTTP Dynamic Streaming (HDS).
+     *
+     * @see <a href="https://goo.gl/hNk8QH">Adobe HTTP Dynamic Streaming</a>
+     */
+    HDS,
+
+    /**
+     * HTTP Live Streaming (HLS).
+     *
+     * @see <a href="https://en.wikipedia.org/wiki/HTTP_Live_Streaming">HTTP Live Streaming</a>
+     */
+    HLS,
+
+    /**
+     * Represents an unknown streaming protocol.
+     */
+    UNKNOWN
+  }
+
+  /**
+   * An on-demand video stream.
+   */
+  public static final class Stream {
 
     @Json(name = "Target")
-    @SuppressWarnings("unused")
-    String protocol = NOT_SET;
+    private Protocol protocol = Protocol.UNKNOWN;
 
     @Json(name = "Uri")
-    @SuppressWarnings("unused")
-    String url = NOT_SET;
+    private String url = NOT_SET;
+
+    @NonNull
+    public Protocol getProtocol() {
+      return protocol;
+    }
+
+    public void setProtocol(@NonNull Protocol protocol) {
+      this.protocol = notNull(protocol);
+    }
+
+    @NonNull
+    public String getUrl() {
+      return url;
+    }
+
+    public void setUrl(@NonNull String url) {
+      this.url = notNull(url);
+    }
   }
 }

@@ -26,9 +26,9 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 /**
- * Tests for {@link StreamUrlLoader}.
+ * Tests for {@link VideoManifestLoader}.
  */
-public class StreamUrlLoaderTest extends RobolectricTest {
+public class VideoManifestLoaderTest extends RobolectricTest {
 
   @Rule
   public final ExpectedException thrown = ExpectedException.none();
@@ -39,7 +39,7 @@ public class StreamUrlLoaderTest extends RobolectricTest {
     // When/then
     thrown.expect(IllegalArgumentException.class);
     @SuppressWarnings("ConstantConditions")
-    StreamUrlLoader loader = new StreamUrlLoader(getContext(), null);
+    VideoManifestLoader loader = new VideoManifestLoader(getContext(), null);
     assertNotNull(loader); // For your eyes only, PMD.
   }
 
@@ -48,7 +48,7 @@ public class StreamUrlLoaderTest extends RobolectricTest {
 
     // Given
     String manifestUrl = "test";
-    StreamUrlLoader loader = new StreamUrlLoader(getContext(), manifestUrl);
+    VideoManifestLoader loader = new VideoManifestLoader(getContext(), manifestUrl);
 
     // When
     String actualManifestUrl = loader.getManifestUrl();

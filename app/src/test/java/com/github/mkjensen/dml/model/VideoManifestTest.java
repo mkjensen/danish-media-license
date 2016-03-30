@@ -17,11 +17,17 @@
 package com.github.mkjensen.dml.model;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Tests for {@link VideoManifest}.
@@ -33,15 +39,149 @@ public class VideoManifestTest {
 
   private VideoManifest manifest;
 
+  private VideoManifest.Stream stream;
+
   @Before
   public void before() {
     manifest = new VideoManifest();
+    stream = new VideoManifest.Stream();
   }
 
   @Test
   public void givenEmptyManifest_whenGettersCalled_thenTheyReturnNotSet() {
 
     // When/then
-    assertEquals(VideoManifest.NOT_SET, manifest.getStreamUrl());
+    assertEquals(VideoManifest.NOT_SET, manifest.getUrl(VideoManifest.Protocol.DOWNLOAD));
+    assertEquals(VideoManifest.NOT_SET, manifest.getUrl(VideoManifest.Protocol.HDS));
+    assertEquals(VideoManifest.NOT_SET, manifest.getUrl(VideoManifest.Protocol.HLS));
+    assertEquals(VideoManifest.NOT_SET, manifest.getUrl(VideoManifest.Protocol.UNKNOWN));
+    assertEquals(Collections.emptyList(), manifest.getStreams());
+    assertEquals(VideoManifest.Protocol.UNKNOWN, stream.getProtocol());
+    assertEquals(VideoManifest.NOT_SET, stream.getUrl());
+  }
+
+  @Test
+  public void getUrl_whenNullArgument_thenIllegalArgumentExceptionIsThrown() {
+
+    // Given
+    VideoManifest.Protocol protocol = null;
+
+    // When/then
+    thrown.expect(IllegalArgumentException.class);
+    //noinspection ConstantConditions
+    manifest.getUrl(protocol);
+    assertNotNull(protocol); // Hi PMD!
+  }
+
+  @Test
+  public void getUrl_whenNonexistentProtocolArgument_thenGetUrlReturnsNotSet() {
+
+    // Given
+    VideoManifest.Protocol protocol = VideoManifest.Protocol.HLS;
+
+    // When
+    String url = manifest.getUrl(protocol);
+
+    // Then
+    assertEquals(VideoManifest.NOT_SET, url);
+  }
+
+  @Test
+  public void getUrl_givenDifferentStreams_whenNonNullArgument_thenGetUrlReturnsCorrectValue() {
+
+    // Given
+    VideoManifest.Protocol protocol = VideoManifest.Protocol.HDS;
+    stream.setProtocol(protocol);
+    String url = "test";
+    stream.setUrl(url);
+    manifest.setStreams(Arrays.asList(
+        new VideoManifest.Stream(),
+        stream,
+        new VideoManifest.Stream())
+    );
+
+    // When
+    String actualUrl = manifest.getUrl(protocol);
+
+    // Then
+    assertEquals(url, actualUrl);
+  }
+
+  @Test
+  public void setStreams_whenNullArgument_thenIllegalArgumentExceptionIsThrown() {
+
+    // Given
+    List<VideoManifest.Stream> streams = null;
+
+    // When/then
+    thrown.expect(IllegalArgumentException.class);
+    //noinspection ConstantConditions
+    manifest.setStreams(streams);
+    assertNotNull(streams); // Hi PMD!
+  }
+
+  @Test
+  public void setStreams_whenNonNullArgument_thenGetStreamsReturnThatArgument() {
+
+    // Given
+    List<VideoManifest.Stream> streams = new ArrayList<>();
+
+    // When
+    manifest.setStreams(streams);
+
+    // Then
+    assertEquals(streams, manifest.getStreams());
+  }
+
+  @Test
+  public void setProtocol_whenNullArgument_thenIllegalArgumentExceptionIsThrown() {
+
+    // Given
+    VideoManifest.Protocol protocol = null;
+
+    // When/then
+    thrown.expect(IllegalArgumentException.class);
+    //noinspection ConstantConditions
+    stream.setProtocol(protocol);
+    assertNotNull(protocol); // Hi PMD!
+  }
+
+  @Test
+  public void setProtocol_whenNonNullArgument_thenGetProtocolReturnThatArgument() {
+
+    // Given
+    VideoManifest.Protocol protocol = VideoManifest.Protocol.DOWNLOAD;
+
+    // When
+    stream.setProtocol(protocol);
+
+    // Then
+    assertEquals(protocol, stream.getProtocol());
+  }
+
+  @Test
+  public void setUrl_whenNullArgument_thenIllegalArgumentExceptionIsThrown() {
+
+    // Given
+    String url = null;
+
+    // When/then
+    thrown.expect(IllegalArgumentException.class);
+    //noinspection ConstantConditions
+    stream.setUrl(url);
+    assertNotNull(url); // Hi PMD!
+  }
+
+  @Test
+  public void setUrl_whenNonNullArgument_thenGetUrlReturnThatArgument() {
+
+    // Given
+    String url = "test";
+
+    // When
+    stream.setUrl(url);
+
+    // Then
+    assertEquals(url, stream.getUrl());
   }
 }

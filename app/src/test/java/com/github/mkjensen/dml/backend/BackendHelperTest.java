@@ -23,6 +23,7 @@ import static org.junit.Assert.assertNotNull;
 
 import com.github.mkjensen.dml.model.Category;
 import com.github.mkjensen.dml.model.Video;
+import com.github.mkjensen.dml.model.VideoManifest;
 import com.github.mkjensen.dml.test.ResourceUtils;
 import com.github.mkjensen.dml.test.RobolectricTest;
 
@@ -183,7 +184,7 @@ public class BackendHelperTest extends RobolectricTest {
   }
 
   @Test
-  public void loadStreamUrl_whenHttpNotFound_thenThrowsIoException() throws IOException {
+  public void loadVideoManifest_whenHttpNotFound_thenThrowsIoException() throws IOException {
 
     // Given
     String manifestUrl = "http://manifest.com/";
@@ -191,22 +192,41 @@ public class BackendHelperTest extends RobolectricTest {
 
     // When/Then
     thrown.expect(IOException.class);
-    String streamUrl = backendHelper.loadStreamUrl(manifestUrl);
-    assertNotNull(streamUrl); // Hi PMD!
+    VideoManifest videoManifest = backendHelper.loadVideoManifest(manifestUrl);
+    assertNotNull(videoManifest); // Hi PMD!
   }
 
   @Test
-  public void loadStreamUrl_whenHttpOk_thenReturnsStreamUrl() throws IOException {
+  public void loadVideoManifest_whenHttpOk_thenReturnsVideoManifest() throws IOException {
 
     // Given
     String manifestUrl = "http://manifest.com/";
     BackendHelper backendHelper = createBackendHelper(manifestUrl, HTTP_OK, "video-manifest");
 
     // When
-    String streamUrl = backendHelper.loadStreamUrl(manifestUrl);
+    VideoManifest videoManifest = backendHelper.loadVideoManifest(manifestUrl);
 
     // Then
-    assertEquals("http://hls.com/mp4", streamUrl);
+    assertNotNull(videoManifest);
+    List<VideoManifest.Stream> streams = videoManifest.getStreams();
+    assertNotNull(streams);
+    assertEquals(4, streams.size());
+    VideoManifest.Stream stream = streams.get(0);
+    assertNotNull(stream);
+    assertEquals(VideoManifest.Protocol.DOWNLOAD, stream.getProtocol());
+    assertEquals("http://download.com/mp4/2048", stream.getUrl());
+    stream = streams.get(1);
+    assertNotNull(stream);
+    assertEquals(VideoManifest.Protocol.DOWNLOAD, stream.getProtocol());
+    assertEquals("http://download.com/mp4/1024", stream.getUrl());
+    stream = streams.get(2);
+    assertNotNull(stream);
+    assertEquals(VideoManifest.Protocol.HDS, stream.getProtocol());
+    assertEquals("http://hds.com/mp4", stream.getUrl());
+    stream = streams.get(3);
+    assertNotNull(stream);
+    assertEquals(VideoManifest.Protocol.HLS, stream.getProtocol());
+    assertEquals("http://hls.com/mp4", stream.getUrl());
   }
 
   @Test

@@ -62,10 +62,11 @@ import android.view.Surface;
 import android.view.TextureView;
 
 import com.github.mkjensen.dml.R;
-import com.github.mkjensen.dml.backend.loader.StreamUrlLoader;
+import com.github.mkjensen.dml.backend.loader.VideoManifestLoader;
 import com.github.mkjensen.dml.exoplayer.DemoPlayer;
 import com.github.mkjensen.dml.exoplayer.HlsRendererBuilder;
 import com.github.mkjensen.dml.model.Video;
+import com.github.mkjensen.dml.model.VideoManifest;
 import com.github.mkjensen.dml.util.LoadingHelper;
 
 /**
@@ -373,16 +374,16 @@ public final class PlaybackFragment extends PlaybackOverlaySupportFragment {
     }
   }
 
-  private final class LoaderCallbacks implements LoaderManager.LoaderCallbacks<String> {
+  private final class LoaderCallbacks implements LoaderManager.LoaderCallbacks<VideoManifest> {
 
     @Override
-    public Loader<String> onCreateLoader(int id, Bundle args) {
+    public Loader<VideoManifest> onCreateLoader(int id, Bundle args) {
       Log.d(TAG, "onCreateLoader");
-      return new StreamUrlLoader(getActivity(), video.getManifestUrl());
+      return new VideoManifestLoader(getActivity(), video.getManifestUrl());
     }
 
     @Override
-    public void onLoadFinished(Loader<String> loader, String data) {
+    public void onLoadFinished(Loader<VideoManifest> loader, VideoManifest data) {
       Log.d(TAG, "onLoadFinished");
       if (data == null) {
         Log.w(TAG, "No data returned by loader");
@@ -391,7 +392,7 @@ public final class PlaybackFragment extends PlaybackOverlaySupportFragment {
       createPlayer(data);
     }
 
-    private void createPlayer(String videoUrl) {
+    private void createPlayer(VideoManifest videoManifest) {
       SurfaceTexture surfaceTexture = textureView.getSurfaceTexture();
       if (surfaceTexture == null) {
         // Temporary fix: The surface texture is no longer available because the user left the
@@ -399,7 +400,8 @@ public final class PlaybackFragment extends PlaybackOverlaySupportFragment {
         // https://github.com/mkjensen/danish-media-license/issues/29.
         return;
       }
-      HlsRendererBuilder rendererBuilder = new HlsRendererBuilder(getActivity(), TAG, videoUrl);
+      String streamUrl = videoManifest.getUrl(VideoManifest.Protocol.HLS);
+      HlsRendererBuilder rendererBuilder = new HlsRendererBuilder(getActivity(), TAG, streamUrl);
       player = new DemoPlayer(rendererBuilder);
       player.addListener(new DemoPlayerListener());
       player.prepare();
@@ -408,7 +410,7 @@ public final class PlaybackFragment extends PlaybackOverlaySupportFragment {
     }
 
     @Override
-    public void onLoaderReset(Loader<String> loader) {
+    public void onLoaderReset(Loader<VideoManifest> loader) {
       Log.d(TAG, "onLoaderReset");
       // Do nothing.
     }
