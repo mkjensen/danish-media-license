@@ -26,6 +26,8 @@ import com.squareup.moshi.Json;
 
 /**
  * Metadata about an on-demand video.
+ *
+ * @see <a href="http://www.dr.dk/mu-online/Help/1.3/Api/GET-api-apiVersion-programcard-id">API</a>
  */
 public final class Video implements Parcelable {
 

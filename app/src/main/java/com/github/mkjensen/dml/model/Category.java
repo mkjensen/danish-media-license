@@ -27,6 +27,8 @@ import java.util.List;
 
 /**
  * An on-demand category which contains its associated on-demand videos.
+ *
+ * @see <a href="http://goo.gl/NhngFV">API</a>
  */
 public final class Category {
 
