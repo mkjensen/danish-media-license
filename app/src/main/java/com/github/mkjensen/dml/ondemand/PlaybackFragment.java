@@ -62,7 +62,7 @@ import android.view.Surface;
 import android.view.TextureView;
 
 import com.github.mkjensen.dml.R;
-import com.github.mkjensen.dml.backend.loader.VideoUrlLoader;
+import com.github.mkjensen.dml.backend.loader.StreamUrlLoader;
 import com.github.mkjensen.dml.exoplayer.DemoPlayer;
 import com.github.mkjensen.dml.exoplayer.HlsRendererBuilder;
 import com.github.mkjensen.dml.model.Video;
@@ -378,7 +378,7 @@ public final class PlaybackFragment extends PlaybackOverlaySupportFragment {
     @Override
     public Loader<String> onCreateLoader(int id, Bundle args) {
       Log.d(TAG, "onCreateLoader");
-      return new VideoUrlLoader(getActivity(), video.getLinksUrl());
+      return new StreamUrlLoader(getActivity(), video.getManifestUrl());
     }
 
     @Override

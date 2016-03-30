@@ -25,6 +25,7 @@ import android.util.Log;
 import com.github.mkjensen.dml.R;
 import com.github.mkjensen.dml.model.Category;
 import com.github.mkjensen.dml.model.Video;
+import com.github.mkjensen.dml.model.VideoManifest;
 
 import retrofit2.Call;
 import retrofit2.Response;
@@ -85,18 +86,14 @@ public final class BackendHelper {
   }
 
   /**
-   * Loads the URL for the specified on-demand video.
+   * Loads the stream URL for the specified on-demand video.
    */
   @NonNull
-  public String loadVideoUrl(@NonNull String linksUrl) throws IOException {
-    Log.d(TAG, String.format("loadVideoUrl [%s]", linksUrl));
-    Call<VideoLinksContainer> call = webService.getVideoLinks(linksUrl);
-    VideoLinksContainer linksContainer = executeCall(call);
-    String videoUrl = linksContainer.getVideoUrl();
-    if (videoUrl == null) {
-      throw new IOException(String.format("Failed to extract video URL from [%s]", linksUrl));
-    }
-    return videoUrl;
+  public String loadStreamUrl(@NonNull String manifestUrl) throws IOException {
+    Log.d(TAG, String.format("loadStreamUrl [%s]", manifestUrl));
+    Call<VideoManifest> call = webService.getVideoManifest(manifestUrl);
+    VideoManifest videoManifest = executeCall(call);
+    return videoManifest.getStreamUrl();
   }
 
   /**

@@ -14,9 +14,7 @@
  * limitations under the License.
  */
 
-package com.github.mkjensen.dml.backend;
-
-import android.support.annotation.Nullable;
+package com.github.mkjensen.dml.model;
 
 import com.squareup.moshi.Json;
 
@@ -24,37 +22,41 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * A helper class for extracting video URLs from a JSON response.
+ * Metadata about on-demand video streams.
  *
  * @see <a href="http://www.dr.dk/mu-online/Help/1.3/Api/GET-api-apiVersion-manifest-id">API</a>
  */
-final class VideoLinksContainer {
+public final class VideoManifest {
+
+  public static final String NOT_SET = "(not set)";
 
   @Json(name = "Links")
   @SuppressWarnings("CanBeFinal")
-  private List<Link> links = Collections.emptyList();
+  private List<Stream> streams = Collections.emptyList();
 
-  private VideoLinksContainer() {
-  }
-
-  @Nullable
-  String getVideoUrl() {
-    for (Link link : links) {
-      if ("HLS".equals(link.protocol)) {
-        return link.url;
+  /**
+   * Returns a URL to a stream using the HLS protocol if it exists. Otherwise returns {@link
+   * #NOT_SET}.
+   *
+   * @see <a href="https://en.wikipedia.org/wiki/HTTP_Live_Streaming">HLS</a>
+   */
+  public String getStreamUrl() {
+    for (Stream stream : streams) {
+      if ("HLS".equals(stream.protocol)) {
+        return stream.url;
       }
     }
-    return null;
+    return NOT_SET;
   }
 
-  private static final class Link {
+  private static final class Stream {
 
     @Json(name = "Target")
     @SuppressWarnings("unused")
-    String protocol;
+    String protocol = NOT_SET;
 
     @Json(name = "Uri")
     @SuppressWarnings("unused")
-    String url;
+    String url = NOT_SET;
   }
 }

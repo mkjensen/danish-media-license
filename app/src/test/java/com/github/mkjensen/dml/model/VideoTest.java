@@ -66,8 +66,7 @@ public class VideoTest extends RobolectricTest {
     assertEquals(Video.NOT_SET, video.getTitle());
     assertEquals(Video.NOT_SET, video.getDescription());
     assertEquals(Video.NOT_SET, video.getImageUrl());
-    assertEquals(Video.NOT_SET, video.getLinksUrl());
-    assertEquals(Video.NOT_SET, video.getUrl());
+    assertEquals(Video.NOT_SET, video.getManifestUrl());
   }
 
   @Test
@@ -175,55 +174,29 @@ public class VideoTest extends RobolectricTest {
   }
 
   @Test
-  public void setLinksUrl_whenNullArgument_thenIllegalArgumentExceptionIsThrown() {
+  public void setManifestUrl_whenNullArgument_thenIllegalArgumentExceptionIsThrown() {
 
     // Given
-    String linksUrl = null;
+    String manifestUrl = null;
 
     // When/then
     thrown.expect(IllegalArgumentException.class);
     //noinspection ConstantConditions
-    video.setLinksUrl(linksUrl);
-    assertNotNull(linksUrl); // Hi PMD!
+    video.setManifestUrl(manifestUrl);
+    assertNotNull(manifestUrl); // Hi PMD!
   }
 
   @Test
-  public void setLinksUrl_whenNonNullArgument_thenGetLinksUrlReturnThatArgument() {
+  public void setManifestUrl_whenNonNullArgument_thenGetLinksUrlReturnThatArgument() {
 
     // Given
-    String linksUrl = "linksUrl";
+    String manifestUrl = "url";
 
     // When
-    video.setLinksUrl(linksUrl);
+    video.setManifestUrl(manifestUrl);
 
     // Then
-    assertEquals(linksUrl, video.getLinksUrl());
-  }
-
-  @Test
-  public void setUrl_whenNullArgument_thenIllegalArgumentExceptionIsThrown() {
-
-    // Given
-    String url = null;
-
-    // When/then
-    thrown.expect(IllegalArgumentException.class);
-    //noinspection ConstantConditions
-    video.setUrl(url);
-    assertNotNull(url); // Hi PMD!
-  }
-
-  @Test
-  public void setUrl_whenNonNullArgument_thenGetUrlReturnThatArgument() {
-
-    // Given
-    String url = "url";
-
-    // When
-    video.setUrl(url);
-
-    // Then
-    assertEquals(url, video.getUrl());
+    assertEquals(manifestUrl, video.getManifestUrl());
   }
 
   @Test
@@ -263,8 +236,7 @@ public class VideoTest extends RobolectricTest {
     video.setTitle("title");
     video.setDescription("description");
     video.setImageUrl("imageUrl");
-    video.setLinksUrl("linksUrl");
-    video.setUrl("url");
+    video.setManifestUrl("manifestUrl");
 
     // When
     Parcel parcel = Parcel.obtain();
@@ -280,7 +252,6 @@ public class VideoTest extends RobolectricTest {
     assertEquals(video.getTitle(), output.getTitle());
     assertEquals(video.getDescription(), output.getDescription());
     assertEquals(video.getImageUrl(), output.getImageUrl());
-    assertEquals(video.getLinksUrl(), output.getLinksUrl());
-    assertEquals(video.getUrl(), output.getUrl());
+    assertEquals(video.getManifestUrl(), output.getManifestUrl());
   }
 }

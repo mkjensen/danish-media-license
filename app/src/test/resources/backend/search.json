@@ -13,7 +13,7 @@
       "OnlineGenreText": "Underholdning",
       "PrimaryAsset": {
         "Kind": "VideoResource",
-        "Uri": "http://links.com",
+        "Uri": "http://manifest.com",
         "DurationInMilliseconds": 1234567,
         "RestrictedToDenmark": false,
         "StartPublish": "2099-12-31T23:59:59.99Z",

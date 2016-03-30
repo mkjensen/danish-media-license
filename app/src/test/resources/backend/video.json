@@ -19,7 +19,7 @@
   "SecondaryAssets": [
     {
       "Kind": "VideoResource",
-      "Uri": "http://links2.com",
+      "Uri": "http://manifest2.com",
       "DurationInMilliseconds": 7654321,
       "RestrictedToDenmark": false,
       "StartPublish": "1990-01-01T00:00:00.00Z",
@@ -39,7 +39,7 @@
   "OnlineGenreText": "Underholdning",
   "PrimaryAsset": {
     "Kind": "VideoResource",
-    "Uri": "http://links.com",
+    "Uri": "http://manifest.com",
     "DurationInMilliseconds": 1234567,
     "RestrictedToDenmark": false,
     "StartPublish": "2099-12-31T23:59:59.99Z",

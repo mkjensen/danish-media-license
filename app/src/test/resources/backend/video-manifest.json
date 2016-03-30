@@ -1,6 +1,22 @@
 {
   "Links": [
     {
+      "HardSubtitlesType": "ForeignLanguage",
+      "Uri": "http://download.com/mp4/2048",
+      "EncryptedUri": "12345",
+      "FileFormat": "mp4",
+      "Target": "Download",
+      "Bitrate": 2048
+    },
+    {
+      "HardSubtitlesType": "ForeignLanguage",
+      "Uri": "http://download.com/mp4/1024",
+      "EncryptedUri": "67890",
+      "FileFormat": "mp4",
+      "Target": "Download",
+      "Bitrate": 1024
+    },
+    {
       "HardSubtitlesType": "None",
       "Uri": "http://hds.com/mp4",
       "EncryptedUri": "1234567890",

@@ -18,6 +18,7 @@ package com.github.mkjensen.dml.backend;
 
 import com.github.mkjensen.dml.model.Category;
 import com.github.mkjensen.dml.model.Video;
+import com.github.mkjensen.dml.model.VideoManifest;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -50,10 +51,10 @@ public interface DmlWebService {
   Call<Video> getVideo(@Path("id") String id);
 
   /**
-   * Returns video links for the specified URL.
+   * Returns the on-demand video manifest for the specified URL.
    */
   @GET
-  Call<VideoLinksContainer> getVideoLinks(@Url String url);
+  Call<VideoManifest> getVideoManifest(@Url String url);
 
   /**
    * Returns a category with on-demand videos relevant for the specified query.

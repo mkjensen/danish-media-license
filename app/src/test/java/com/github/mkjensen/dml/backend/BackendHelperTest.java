@@ -113,8 +113,7 @@ public class BackendHelperTest extends RobolectricTest {
     assertEquals("Title", video.getTitle());
     assertEquals(Video.NOT_SET, video.getDescription());
     assertEquals("http://image.com", video.getImageUrl());
-    assertEquals("http://links.com", video.getLinksUrl());
-    assertEquals(Video.NOT_SET, video.getUrl());
+    assertEquals("http://manifest.com", video.getManifestUrl());
   }
 
   @Test
@@ -150,8 +149,7 @@ public class BackendHelperTest extends RobolectricTest {
     assertEquals("Title", video.getTitle());
     assertEquals(Video.NOT_SET, video.getDescription());
     assertEquals("http://image.com", video.getImageUrl());
-    assertEquals("http://links.com", video.getLinksUrl());
-    assertEquals(Video.NOT_SET, video.getUrl());
+    assertEquals("http://manifest.com", video.getManifestUrl());
   }
 
   @Test
@@ -181,35 +179,34 @@ public class BackendHelperTest extends RobolectricTest {
     assertEquals("Title", video.getTitle());
     assertEquals("Description", video.getDescription());
     assertEquals("http://image.com", video.getImageUrl());
-    assertEquals("http://links.com", video.getLinksUrl());
-    assertEquals(Video.NOT_SET, video.getUrl());
+    assertEquals("http://manifest.com", video.getManifestUrl());
   }
 
   @Test
-  public void loadVideoUrl_whenHttpNotFound_thenThrowsIoException() throws IOException {
+  public void loadStreamUrl_whenHttpNotFound_thenThrowsIoException() throws IOException {
 
     // Given
-    String linksUrl = "http://links.com/";
-    BackendHelper backendHelper = createBackendHelper(linksUrl, HTTP_NOT_FOUND);
+    String manifestUrl = "http://manifest.com/";
+    BackendHelper backendHelper = createBackendHelper(manifestUrl, HTTP_NOT_FOUND);
 
     // When/Then
     thrown.expect(IOException.class);
-    String url = backendHelper.loadVideoUrl(linksUrl);
-    assertNotNull(url); // Hi PMD!
+    String streamUrl = backendHelper.loadStreamUrl(manifestUrl);
+    assertNotNull(streamUrl); // Hi PMD!
   }
 
   @Test
-  public void loadVideoUrl_whenHttpOk_thenSetsVideoUrl() throws IOException {
+  public void loadStreamUrl_whenHttpOk_thenReturnsStreamUrl() throws IOException {
 
     // Given
-    String linksUrl = "http://links.com/";
-    BackendHelper backendHelper = createBackendHelper(linksUrl, HTTP_OK, "video-links");
+    String manifestUrl = "http://manifest.com/";
+    BackendHelper backendHelper = createBackendHelper(manifestUrl, HTTP_OK, "video-manifest");
 
     // When
-    String url = backendHelper.loadVideoUrl(linksUrl);
+    String streamUrl = backendHelper.loadStreamUrl(manifestUrl);
 
     // Then
-    assertEquals("http://hls.com/mp4", url);
+    assertEquals("http://hls.com/mp4", streamUrl);
   }
 
   @Test
@@ -245,8 +242,7 @@ public class BackendHelperTest extends RobolectricTest {
     assertEquals("Title", video.getTitle());
     assertEquals(Video.NOT_SET, video.getDescription());
     assertEquals("http://image.com", video.getImageUrl());
-    assertEquals("http://links.com", video.getLinksUrl());
-    assertEquals(Video.NOT_SET, video.getUrl());
+    assertEquals("http://manifest.com", video.getManifestUrl());
   }
 
   private BackendHelper createBackendHelper(String url, int code) {

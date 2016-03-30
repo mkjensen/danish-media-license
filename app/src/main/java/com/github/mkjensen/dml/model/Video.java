@@ -49,8 +49,6 @@ public final class Video implements Parcelable {
   @SuppressWarnings("CanBeFinal")
   private Asset asset = new Asset();
 
-  private String url = NOT_SET;
-
   @NonNull
   @Override
   public String toString() {
@@ -68,8 +66,7 @@ public final class Video implements Parcelable {
     dest.writeString(title);
     dest.writeString(description);
     dest.writeString(imageUrl);
-    dest.writeString(asset.linksUrl);
-    dest.writeString(url);
+    dest.writeString(asset.manifestUrl);
   }
 
   @NonNull
@@ -109,21 +106,12 @@ public final class Video implements Parcelable {
   }
 
   @NonNull
-  public String getLinksUrl() {
-    return asset.linksUrl;
+  public String getManifestUrl() {
+    return asset.manifestUrl;
   }
 
-  public void setLinksUrl(@NonNull String linksUrl) {
-    asset.linksUrl = notNull(linksUrl);
-  }
-
-  @NonNull
-  public String getUrl() {
-    return url;
-  }
-
-  public void setUrl(@NonNull String url) {
-    this.url = notNull(url);
+  public void setManifestUrl(@NonNull String linksUrl) {
+    asset.manifestUrl = notNull(linksUrl);
   }
 
   private static final class ParcelableCreator implements Parcelable.Creator<Video> {
@@ -135,8 +123,7 @@ public final class Video implements Parcelable {
       video.title = source.readString();
       video.description = source.readString();
       video.imageUrl = source.readString();
-      video.asset.linksUrl = source.readString();
-      video.url = source.readString();
+      video.asset.manifestUrl = source.readString();
       return video;
     }
 
@@ -149,6 +136,6 @@ public final class Video implements Parcelable {
   private static final class Asset {
 
     @Json(name = "Uri")
-    String linksUrl = NOT_SET;
+    String manifestUrl = NOT_SET;
   }
 }
