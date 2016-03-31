@@ -5,16 +5,15 @@ jdk:
 
 env:
   global:
-    - ANDROID_BUILD_TOOLS_VERSION=24.0.0-rc2
     - ANDROID_SDK_VERSION=23
     - JPM_BIN=${HOME}/jpm/bin
     - JPM_HOME=${HOME}/jpm
 
 android:
   components:
-    - tools
-    - platform-tools
-    - build-tools-${ANDROID_BUILD_TOOLS_VERSION}
+    - tools-preview
+    - platform-tools-preview
+    - build-tools-24.0.0-preview
     - android-${ANDROID_SDK_VERSION}
     - extra-android-m2repository
 
