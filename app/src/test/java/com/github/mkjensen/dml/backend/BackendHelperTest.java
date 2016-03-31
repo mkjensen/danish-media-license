@@ -21,6 +21,7 @@ import static java.net.HttpURLConnection.HTTP_OK;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
+import com.github.mkjensen.dml.R;
 import com.github.mkjensen.dml.model.Category;
 import com.github.mkjensen.dml.model.Video;
 import com.github.mkjensen.dml.model.VideoManifest;
@@ -104,7 +105,8 @@ public class BackendHelperTest extends RobolectricTest {
 
     // Then
     assertNotNull(category);
-    assertEquals("Mest sete", category.getTitle());
+    assertEquals(getContext().getString(R.string.backend_category_most_viewed),
+        category.getTitle());
     List<Video> videos = category.getVideos();
     assertNotNull(videos);
     assertEquals(1, videos.size());
@@ -133,14 +135,16 @@ public class BackendHelperTest extends RobolectricTest {
   public void loadRecommendedCategory_whenHttpOk_thenReturnsCategory() throws IOException {
 
     // Given
-    BackendHelper backendHelper = createBackendHelper(RECOMMENDED_CATEGORY_URL, HTTP_OK, "category");
+    BackendHelper backendHelper =
+        createBackendHelper(RECOMMENDED_CATEGORY_URL, HTTP_OK, "category");
 
     // When
     Category category = backendHelper.loadRecommendedCategory();
 
     // Then
     assertNotNull(category);
-    assertEquals("Anbefalet", category.getTitle());
+    assertEquals(getContext().getString(R.string.backend_category_recommended),
+        category.getTitle());
     List<Video> videos = category.getVideos();
     assertNotNull(videos);
     assertEquals(1, videos.size());
