@@ -104,7 +104,7 @@ public class BackendHelperTest extends RobolectricTest {
 
     // Then
     assertNotNull(category);
-    assertEquals("Most Viewed", category.getTitle());
+    assertEquals("Mest sete", category.getTitle());
     List<Video> videos = category.getVideos();
     assertNotNull(videos);
     assertEquals(1, videos.size());
@@ -140,7 +140,7 @@ public class BackendHelperTest extends RobolectricTest {
 
     // Then
     assertNotNull(category);
-    assertEquals("Selected", category.getTitle());
+    assertEquals("Anbefalet", category.getTitle());
     List<Video> videos = category.getVideos();
     assertNotNull(videos);
     assertEquals(1, videos.size());
