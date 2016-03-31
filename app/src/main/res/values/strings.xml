@@ -23,7 +23,7 @@
     <string name="backend_api_base_url" translatable="false">https://www.dr.dk/mu-online/api/1.3/</string>
 
     <string name="backend_category_most_viewed">Most Viewed</string>
-    <string name="backend_category_selected">Selected</string>
+    <string name="backend_category_recommended">Recommended</string>
 
     <string name="ondemand_details_action_play">Play</string>
 

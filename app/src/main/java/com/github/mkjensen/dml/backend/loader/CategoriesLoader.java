@@ -23,12 +23,10 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
-import com.github.mkjensen.dml.backend.loader.BackendLoader;
 import com.github.mkjensen.dml.model.Category;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -93,15 +91,15 @@ public final class CategoriesLoader extends BackendLoader<List<Category>> {
 
   private void loadSelectedCategory(List<Category> categories) {
     try {
-      categories.add(backendHelper.loadSelectedCategory());
+      categories.add(backendHelper.loadRecommendedCategory());
     } catch (IOException ex) {
-      Log.e(TAG, "Failed to load selected category", ex);
+      Log.e(TAG, "Failed to load recommended category", ex);
     }
   }
 
   private List<Category> executeQuery() {
     try {
-      return Arrays.asList(backendHelper.search(query));
+      return Collections.singletonList(backendHelper.search(query));
     } catch (IOException ex) {
       Log.e(TAG, String.format("Failed to execute query [%s]", query), ex);
       return Collections.emptyList();

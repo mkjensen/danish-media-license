@@ -57,21 +57,33 @@ public final class BackendHelper {
   @NonNull
   public Category loadMostViewedCategory() throws IOException {
     Log.d(TAG, "loadMostViewedCategory");
-    Call<Category> call = webService.getMostViewed();
+    Call<Category> call = webService.getMostViewedCategory();
     Category category = executeCall(call);
     category.setTitle(context.getString(R.string.backend_category_most_viewed));
     return category;
   }
 
   /**
-   * Loads the category containing selected on-demand videos.
+   * Loads the category containing the recommended on-demand videos.
    */
   @NonNull
-  public Category loadSelectedCategory() throws IOException {
+  public Category loadRecommendedCategory() throws IOException {
     Log.d(TAG, "loadSelectedCategory");
-    Call<Category> call = webService.getSelected();
+    Call<Category> call = webService.getRecommendedCategory();
     Category category = executeCall(call);
-    category.setTitle(context.getString(R.string.backend_category_selected));
+    category.setTitle(context.getString(R.string.backend_category_recommended));
+    return category;
+  }
+
+  /**
+   * Executes the specified query and returns a category containing the relevant on-demand videos.
+   */
+  @NonNull
+  public Category search(@NonNull String query) throws IOException {
+    Log.d(TAG, String.format("search [%s]", query));
+    Call<Category> call = webService.search(query);
+    Category category = executeCall(call);
+    category.setTitle(query);
     return category;
   }
 
@@ -86,25 +98,13 @@ public final class BackendHelper {
   }
 
   /**
-   * Loads the manifest for the specified on-demand video.
+   * Loads the video manifest from the specified URL.
    */
   @NonNull
   public VideoManifest loadVideoManifest(@NonNull String manifestUrl) throws IOException {
     Log.d(TAG, String.format("loadVideoManifest [%s]", manifestUrl));
     Call<VideoManifest> call = webService.getVideoManifest(manifestUrl);
     return executeCall(call);
-  }
-
-  /**
-   * Executes the specified query and returns a category containing the relevant on-demand videos.
-   */
-  @NonNull
-  public Category search(@NonNull String query) throws IOException {
-    Log.d(TAG, String.format("search [%s]", query));
-    Call<Category> call = webService.search(query);
-    Category category = executeCall(call);
-    category.setTitle(query);
-    return category;
   }
 
   private static <T> T executeCall(Call<T> call) throws IOException {

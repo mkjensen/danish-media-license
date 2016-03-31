@@ -54,7 +54,7 @@ public class BackendHelperTest extends RobolectricTest {
 
   private static final String MOST_VIEWED_CATEGORY_URL = BASE_URL + "list/view/mostviewed";
 
-  private static final String SELECTED_CATEGORY_URL = BASE_URL + "list/view/selectedlist";
+  private static final String RECOMMENDED_CATEGORY_URL = BASE_URL + "list/view/selectedlist";
 
   private static final String VIDEO_URL = BASE_URL + "programcard/test";
 
@@ -118,25 +118,25 @@ public class BackendHelperTest extends RobolectricTest {
   }
 
   @Test
-  public void loadSelectedCategory_whenHttpNotFound_thenThrowsIoException() throws IOException {
+  public void loadRecommendedCategory_whenHttpNotFound_thenThrowsIoException() throws IOException {
 
     // Given
-    BackendHelper backendHelper = createBackendHelper(SELECTED_CATEGORY_URL, HTTP_NOT_FOUND);
+    BackendHelper backendHelper = createBackendHelper(RECOMMENDED_CATEGORY_URL, HTTP_NOT_FOUND);
 
     // When/Then
     thrown.expect(IOException.class);
-    Category category = backendHelper.loadSelectedCategory();
+    Category category = backendHelper.loadRecommendedCategory();
     assertNotNull(category); // Hi PMD!
   }
 
   @Test
-  public void loadSelectedCategory_whenHttpOk_thenReturnsCategory() throws IOException {
+  public void loadRecommendedCategory_whenHttpOk_thenReturnsCategory() throws IOException {
 
     // Given
-    BackendHelper backendHelper = createBackendHelper(SELECTED_CATEGORY_URL, HTTP_OK, "category");
+    BackendHelper backendHelper = createBackendHelper(RECOMMENDED_CATEGORY_URL, HTTP_OK, "category");
 
     // When
-    Category category = backendHelper.loadSelectedCategory();
+    Category category = backendHelper.loadRecommendedCategory();
 
     // Then
     assertNotNull(category);

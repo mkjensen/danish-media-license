@@ -36,13 +36,19 @@ public interface DmlWebService {
    * Returns the category containing the most viewed on-demand videos.
    */
   @GET("list/view/mostviewed")
-  Call<Category> getMostViewed();
+  Call<Category> getMostViewedCategory();
 
   /**
-   * Returns the category containing selected on-demand videos.
+   * Returns the category containing the recommended on-demand videos.
    */
   @GET("list/view/selectedlist")
-  Call<Category> getSelected();
+  Call<Category> getRecommendedCategory();
+
+  /**
+   * Returns a category with on-demand videos relevant for the specified query.
+   */
+  @GET("search/tv/programcards-with-asset/title/{query}")
+  Call<Category> search(@Path("query") String query);
 
   /**
    * Returns the on-demand video with the specified id.
@@ -55,10 +61,4 @@ public interface DmlWebService {
    */
   @GET
   Call<VideoManifest> getVideoManifest(@Url String url);
-
-  /**
-   * Returns a category with on-demand videos relevant for the specified query.
-   */
-  @GET("search/tv/programcards-with-asset/title/{query}")
-  Call<Category> search(@Path("query") String query);
 }
