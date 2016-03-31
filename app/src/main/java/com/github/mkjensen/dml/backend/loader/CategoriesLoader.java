@@ -75,9 +75,10 @@ public final class CategoriesLoader extends BackendLoader<List<Category>> {
   }
 
   private List<Category> loadCategories() {
-    List<Category> categories = new ArrayList<>(2);
-    loadMostViewedCategory(categories);
+    List<Category> categories = new ArrayList<>(3);
+    loadNewCategory(categories);
     loadSelectedCategory(categories);
+    loadMostViewedCategory(categories);
     return categories;
   }
 
@@ -86,6 +87,14 @@ public final class CategoriesLoader extends BackendLoader<List<Category>> {
       categories.add(backendHelper.loadMostViewedCategory());
     } catch (IOException ex) {
       Log.e(TAG, "Failed to load most viewed category", ex);
+    }
+  }
+
+  private void loadNewCategory(List<Category> categories) {
+    try {
+      categories.add(backendHelper.loadNewCategory());
+    } catch (IOException ex) {
+      Log.e(TAG, "Failed to load new category", ex);
     }
   }
 

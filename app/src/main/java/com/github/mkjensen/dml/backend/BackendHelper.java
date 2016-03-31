@@ -64,6 +64,18 @@ public final class BackendHelper {
   }
 
   /**
+   * Loads the category containing the new on-demand videos.
+   */
+  @NonNull
+  public Category loadNewCategory() throws IOException {
+    Log.d(TAG, "loadNewCategory");
+    Call<Category> call = webService.getNewCategory();
+    Category category = executeCall(call);
+    category.setTitle(context.getString(R.string.backend_category_new));
+    return category;
+  }
+
+  /**
    * Loads the category containing the recommended on-demand videos.
    */
   @NonNull

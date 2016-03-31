@@ -39,6 +39,12 @@ public interface DmlWebService {
   Call<Category> getMostViewedCategory();
 
   /**
+   * Returns the category containing the new on-demand videos.
+   */
+  @GET("list/view/news")
+  Call<Category> getNewCategory();
+
+  /**
    * Returns the category containing the recommended on-demand videos.
    */
   @GET("list/view/selectedlist")

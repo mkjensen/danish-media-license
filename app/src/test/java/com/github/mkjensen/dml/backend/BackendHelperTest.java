@@ -55,6 +55,8 @@ public class BackendHelperTest extends RobolectricTest {
 
   private static final String MOST_VIEWED_CATEGORY_URL = BASE_URL + "list/view/mostviewed";
 
+  private static final String NEW_CATEGORY_URL = BASE_URL + "list/view/news";
+
   private static final String RECOMMENDED_CATEGORY_URL = BASE_URL + "list/view/selectedlist";
 
   private static final String VIDEO_URL = BASE_URL + "programcard/test";
@@ -107,6 +109,42 @@ public class BackendHelperTest extends RobolectricTest {
     assertNotNull(category);
     assertEquals(getContext().getString(R.string.backend_category_most_viewed),
         category.getTitle());
+    List<Video> videos = category.getVideos();
+    assertNotNull(videos);
+    assertEquals(1, videos.size());
+    Video video = videos.get(0);
+    assertNotNull(video);
+    assertEquals("id", video.getId());
+    assertEquals("Title", video.getTitle());
+    assertEquals(Video.NOT_SET, video.getDescription());
+    assertEquals("http://image.com", video.getImageUrl());
+    assertEquals("http://manifest.com", video.getManifestUrl());
+  }
+
+  @Test
+  public void loadNewCategory_whenHttpNotFound_thenThrowsIoException() throws IOException {
+
+    // Given
+    BackendHelper backendHelper = createBackendHelper(NEW_CATEGORY_URL, HTTP_NOT_FOUND);
+
+    // When/Then
+    thrown.expect(IOException.class);
+    Category category = backendHelper.loadNewCategory();
+    assertNotNull(category); // Hi PMD!
+  }
+
+  @Test
+  public void loadNewCategory_whenHttpOk_thenReturnsCategory() throws IOException {
+
+    // Given
+    BackendHelper backendHelper = createBackendHelper(NEW_CATEGORY_URL, HTTP_OK, "category");
+
+    // When
+    Category category = backendHelper.loadNewCategory();
+
+    // Then
+    assertNotNull(category);
+    assertEquals(getContext().getString(R.string.backend_category_new), category.getTitle());
     List<Video> videos = category.getVideos();
     assertNotNull(videos);
     assertEquals(1, videos.size());
