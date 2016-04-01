@@ -21,7 +21,7 @@
     <dimen name="ondemand_browse_video_width">272dp</dimen>
     <dimen name="ondemand_browse_video_height">153dp</dimen>
 
-    <dimen name="ondemand_loading_width">100dp</dimen>
-    <dimen name="ondemand_loading_height">100dp</dimen>
+    <dimen name="util_loading_width">100dp</dimen>
+    <dimen name="util_loading_height">100dp</dimen>
 
 </resources>

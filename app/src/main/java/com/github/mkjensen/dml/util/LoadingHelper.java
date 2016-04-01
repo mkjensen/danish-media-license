@@ -97,8 +97,8 @@ public final class LoadingHelper {
       ProgressBar progressBar = new ProgressBar(context);
       if (container instanceof FrameLayout) {
         Resources resources = context.getResources();
-        int width = resources.getDimensionPixelSize(R.dimen.ondemand_loading_width);
-        int height = resources.getDimensionPixelSize(R.dimen.ondemand_loading_height);
+        int width = resources.getDimensionPixelSize(R.dimen.util_loading_width);
+        int height = resources.getDimensionPixelSize(R.dimen.util_loading_height);
         FrameLayout.LayoutParams layoutParams =
             new FrameLayout.LayoutParams(width, height, Gravity.CENTER);
         progressBar.setLayoutParams(layoutParams);
