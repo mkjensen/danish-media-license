@@ -18,6 +18,7 @@ package com.github.mkjensen.dml.ondemand;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v17.leanback.widget.SpeechRecognitionCallback;
 import android.util.Log;
 
@@ -35,7 +36,7 @@ public final class SearchActivity extends OnDemandActivity {
   private SearchFragment fragment;
 
   @Override
-  public void onCreate(Bundle savedInstanceState) {
+  protected void onCreate(@Nullable Bundle savedInstanceState) {
     Log.d(TAG, "onCreate");
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_ondemand_search);

@@ -17,6 +17,7 @@
 package com.github.mkjensen.dml.ondemand;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.github.mkjensen.dml.R;
@@ -31,7 +32,7 @@ public final class DetailsActivity extends OnDemandActivity {
   private static final String TAG = "DetailsActivity";
 
   @Override
-  public void onCreate(Bundle savedInstanceState) {
+  protected void onCreate(@Nullable Bundle savedInstanceState) {
     Log.d(TAG, "onCreate");
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_ondemand_details);
