@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+  ~ Material design icons, https://github.com/google/material-design-icons
+  ~
+  ~ We have made these icons available for you to incorporate them into your products under the
+  ~ Creative Common Attribution 4.0 International License (CC-BY 4.0). Feel free to remix and
+  ~ re-share these icons and documentation in your products. We'd love attribution in your app's
+  ~ about screen, but it's not required. The only thing we ask is that you not re-sell the icons
+  ~ themselves.
+  -->
+
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportHeight="24.0"
+    android:viewportWidth="24.0">
+    <path
+        android:fillColor="#FF000000"
+        android:pathData="M4,6L2,6v14c0,1.1 0.9,2 2,2h14v-2L4,20L4,6zM20,2L8,2c-1.1,0 -2,0.9 -2,2v12c0,1.1 0.9,2 2,2h12c1.1,0 2,-0.9 2,-2L22,4c0,-1.1 -0.9,-2 -2,-2zM12,14.5v-9l6,4.5 -6,4.5z" />
+</vector>

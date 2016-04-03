@@ -23,9 +23,9 @@ import static com.github.mkjensen.dml.ondemand.OnDemandListeners.createOnSearchC
 import android.os.Bundle;
 import android.support.v17.leanback.app.BrowseSupportFragment;
 import android.support.v17.leanback.widget.ArrayObjectAdapter;
-import android.support.v17.leanback.widget.HeaderItem;
 import android.support.v17.leanback.widget.ListRow;
 import android.support.v17.leanback.widget.ListRowPresenter;
+import android.support.v17.leanback.widget.SinglePresenterSelector;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
@@ -34,7 +34,9 @@ import android.util.Log;
 import com.github.mkjensen.dml.R;
 import com.github.mkjensen.dml.backend.loader.CategoriesLoader;
 import com.github.mkjensen.dml.model.Category;
+import com.github.mkjensen.dml.model.IconHeaderItem;
 import com.github.mkjensen.dml.model.SettingsItem;
+import com.github.mkjensen.dml.presenter.IconHeaderItemPresenter;
 import com.github.mkjensen.dml.presenter.SettingsItemPresenter;
 import com.github.mkjensen.dml.presenter.VideoPresenter;
 import com.github.mkjensen.dml.util.LoadingHelper;
@@ -65,6 +67,7 @@ public final class BrowseFragment extends BrowseSupportFragment
     rows = new ArrayObjectAdapter(new ListRowPresenter());
     setAdapter(rows);
     setTitle(getString(R.string.app_name));
+    setHeaderPresenterSelector(new SinglePresenterSelector(new IconHeaderItemPresenter()));
     enableRowScaling(false);
   }
 
@@ -103,14 +106,16 @@ public final class BrowseFragment extends BrowseSupportFragment
   }
 
   private ListRow createCategoryRow(Category category) {
-    HeaderItem header = new HeaderItem(category.getTitle());
+    IconHeaderItem header = new IconHeaderItem(category.getTitle(),
+        R.drawable.ic_video_library_black_24dp);
     ArrayObjectAdapter adapter = new ArrayObjectAdapter(new VideoPresenter());
     adapter.addAll(0, category.getVideos());
     return new ListRow(header, adapter);
   }
 
   private void createSettingsRow() {
-    HeaderItem header = new HeaderItem(getString(R.string.ondemand_settings));
+    IconHeaderItem header = new IconHeaderItem(getString(R.string.ondemand_settings),
+        R.drawable.ic_settings_black_24dp);
     ArrayObjectAdapter items = new ArrayObjectAdapter(new SettingsItemPresenter());
     items.add(new SettingsItem(R.string.ondemand_settings_about,
         R.drawable.ic_info_outline_black_24dp));
