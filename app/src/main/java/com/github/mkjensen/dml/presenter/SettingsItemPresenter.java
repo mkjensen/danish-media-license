@@ -19,8 +19,10 @@ package com.github.mkjensen.dml.presenter;
 import android.content.Context;
 import android.support.v17.leanback.widget.ImageCardView;
 import android.support.v17.leanback.widget.Presenter;
+import android.view.ContextThemeWrapper;
 import android.view.ViewGroup;
 
+import com.github.mkjensen.dml.R;
 import com.github.mkjensen.dml.model.SettingsItem;
 
 /**
@@ -35,7 +37,8 @@ public final class SettingsItemPresenter extends Presenter {
   }
 
   private static ImageCardView createView(ViewGroup parent) {
-    ImageCardView view = new ImageCardView(parent.getContext());
+    ImageCardView view = new ImageCardView(
+        new ContextThemeWrapper(parent.getContext(), R.style.Theme_Browse_Settings));
     view.setFocusable(true);
     view.setFocusableInTouchMode(true);
     view.setInfoVisibility(ImageCardView.CARD_REGION_VISIBLE_ALWAYS);

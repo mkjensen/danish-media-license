@@ -16,7 +16,6 @@
 
 package com.github.mkjensen.dml.presenter;
 
-import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.support.v17.leanback.widget.ImageCardView;
 import android.support.v17.leanback.widget.Presenter;
@@ -41,14 +40,10 @@ public final class VideoPresenter extends Presenter {
   }
 
   private static ImageCardView createView(ViewGroup parent) {
-    Resources resources = parent.getResources();
-    int width = resources.getDimensionPixelSize(R.dimen.ondemand_browse_video_width);
-    int height = resources.getDimensionPixelSize(R.dimen.ondemand_browse_video_height);
     ImageCardView view = new ImageCardView(parent.getContext());
     view.setFocusable(true);
     view.setFocusableInTouchMode(true);
     view.setInfoVisibility(ImageCardView.CARD_REGION_VISIBLE_ALWAYS);
-    view.setMainImageDimensions(width, height);
     return view;
   }
 

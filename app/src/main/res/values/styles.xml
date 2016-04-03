@@ -18,22 +18,31 @@
 
 <resources>
 
-    <style name="Browse" parent="Theme.Leanback.Browse">
-        <item name="imageCardViewImageStyle">@style/ImageCardView.ImageStyle</item>
+    <style name="Theme.Browse" parent="Theme.Leanback.Browse">
+        <item name="imageCardViewImageStyle">@style/Widget.ImageCardView.ImageStyle</item>
     </style>
 
-    <style name="ImageCardView.ImageStyle" parent="Widget.Leanback.ImageCardView.ImageStyle">
-        <item name="android:layout_width">136dp</item>
-        <item name="android:layout_height">136dp</item>
+    <style name="Theme.Browse.Settings" parent="Theme.Browse">
+        <item name="imageCardViewImageStyle">@style/Widget.ImageCardView.ImageStyle.Settings</item>
+    </style>
+
+    <style name="Theme.GuidedStep" parent="Theme.Leanback.GuidedStep">
+        <item name="guidanceIconStyle">@style/Widget.GuidanceIconStyle</item>
+    </style>
+
+    <style name="Widget.ImageCardView.ImageStyle" parent="Widget.Leanback.ImageCardView.ImageStyle">
+        <item name="android:layout_width">272dp</item>
+        <item name="android:layout_height">153dp</item>
+    </style>
+
+    <style name="Widget.ImageCardView.ImageStyle.Settings" parent="Widget.Leanback.ImageCardView.ImageStyle">
+        <item name="android:layout_width">132dp</item>
+        <item name="android:layout_height">132dp</item>
         <item name="android:padding">20dp</item>
         <item name="android:tint">@color/lb_basic_card_title_text_color</item>
     </style>
 
-    <style name="GuidedStep" parent="Theme.Leanback.GuidedStep">
-        <item name="guidanceIconStyle">@style/GuidanceIconStyle</item>
-    </style>
-
-    <style name="GuidanceIconStyle" parent="Widget.Leanback.GuidanceIconStyle">
+    <style name="Widget.GuidanceIconStyle" parent="Widget.Leanback.GuidanceIconStyle">
         <item name="android:layout_width">75dp</item>
         <item name="android:layout_height">75dp</item>
         <item name="android:tint">@color/lb_basic_card_title_text_color</item>

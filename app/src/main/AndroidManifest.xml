@@ -48,7 +48,7 @@
 
         <activity
             android:name=".ondemand.BrowseActivity"
-            android:theme="@style/Browse">
+            android:theme="@style/Theme.Browse">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -63,11 +63,13 @@
 
         <activity android:name=".ondemand.PlaybackActivity" />
 
-        <activity android:name=".ondemand.SearchActivity" />
+        <activity
+            android:name=".ondemand.SearchActivity"
+            android:theme="@style/Theme.Browse" />
 
         <activity
             android:name=".ondemand.SettingsActivity"
-            android:theme="@style/GuidedStep" />
+            android:theme="@style/Theme.GuidedStep" />
 
     </application>
 
