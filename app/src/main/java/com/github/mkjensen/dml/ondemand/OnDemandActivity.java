@@ -56,9 +56,7 @@ abstract class OnDemandActivity extends FragmentActivity {
   }
 
   private void clearBackground() {
-    if (oldBackground == null) {
-      oldBackground = BackgroundHelper.getBackground(this);
-    }
+    oldBackground = BackgroundHelper.getBackground(this);
     BackgroundHelper.clearBackground(this);
   }
 
@@ -75,6 +73,8 @@ abstract class OnDemandActivity extends FragmentActivity {
     if (oldBackground != null) {
       BackgroundHelper.setBackground(this, oldBackground);
       oldBackground = null;
+    } else {
+      BackgroundHelper.clearBackground(this);
     }
   }
 }
