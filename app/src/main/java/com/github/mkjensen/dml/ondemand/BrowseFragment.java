@@ -34,6 +34,8 @@ import android.util.Log;
 import com.github.mkjensen.dml.R;
 import com.github.mkjensen.dml.backend.loader.CategoriesLoader;
 import com.github.mkjensen.dml.model.Category;
+import com.github.mkjensen.dml.model.SettingsItem;
+import com.github.mkjensen.dml.presenter.SettingsItemPresenter;
 import com.github.mkjensen.dml.presenter.VideoPresenter;
 import com.github.mkjensen.dml.util.LoadingHelper;
 
@@ -90,12 +92,14 @@ public final class BrowseFragment extends BrowseSupportFragment
     rows.clear();
     if (data == null) {
       Log.w(TAG, "No data returned by loader");
+      createSettingsRow();
       return;
     }
     for (Category category : data) {
       ListRow categoryRow = createCategoryRow(category);
       rows.add(categoryRow);
     }
+    createSettingsRow();
   }
 
   private ListRow createCategoryRow(Category category) {
@@ -103,6 +107,14 @@ public final class BrowseFragment extends BrowseSupportFragment
     ArrayObjectAdapter adapter = new ArrayObjectAdapter(new VideoPresenter());
     adapter.addAll(0, category.getVideos());
     return new ListRow(header, adapter);
+  }
+
+  private void createSettingsRow() {
+    HeaderItem header = new HeaderItem(getString(R.string.ondemand_settings));
+    ArrayObjectAdapter items = new ArrayObjectAdapter(new SettingsItemPresenter());
+    items.add(new SettingsItem(R.string.ondemand_settings_about,
+        R.drawable.ic_info_outline_black_24dp));
+    rows.add(new ListRow(header, items));
   }
 
   @Override

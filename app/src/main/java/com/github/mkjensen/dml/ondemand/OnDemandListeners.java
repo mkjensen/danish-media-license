@@ -28,6 +28,7 @@ import android.support.v17.leanback.widget.RowPresenter;
 import android.util.Log;
 import android.view.View;
 
+import com.github.mkjensen.dml.model.SettingsItem;
 import com.github.mkjensen.dml.model.Video;
 import com.github.mkjensen.dml.util.BackgroundHelper;
 
@@ -51,6 +52,9 @@ final class OnDemandListeners {
           Video video = (Video) item;
           Intent intent = new Intent(activity, DetailsActivity.class);
           intent.putExtra(DetailsActivity.VIDEO_ID, video.getId());
+          activity.startActivity(intent);
+        } else if (item instanceof SettingsItem) {
+          Intent intent = new Intent(activity, SettingsActivity.class);
           activity.startActivity(intent);
         } else {
           Log.w(TAG, "Unhandled item: " + item);
