@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.github.mkjensen.dml.ondemand;
+package com.github.mkjensen.dml.ondemand.settings;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -24,7 +24,7 @@ import android.support.v4.app.FragmentActivity;
 /**
  * Host activity for {@link AboutFragment}.
  */
-public final class SettingsActivity extends FragmentActivity {
+public final class AboutActivity extends FragmentActivity {
 
   @Override
   protected void onCreate(@Nullable Bundle savedInstanceState) {

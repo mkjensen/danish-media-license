@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.github.mkjensen.dml.ondemand;
+package com.github.mkjensen.dml.ondemand.settings;
 
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;

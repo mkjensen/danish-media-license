@@ -68,7 +68,7 @@
             android:theme="@style/Theme.Browse" />
 
         <activity
-            android:name=".ondemand.SettingsActivity"
+            android:name=".ondemand.settings.AboutActivity"
             android:theme="@style/Theme.GuidedStep" />
 
     </application>

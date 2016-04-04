@@ -30,6 +30,7 @@ import android.view.View;
 
 import com.github.mkjensen.dml.model.SettingsItem;
 import com.github.mkjensen.dml.model.Video;
+import com.github.mkjensen.dml.ondemand.settings.AboutActivity;
 import com.github.mkjensen.dml.util.BackgroundHelper;
 
 /**
@@ -54,7 +55,7 @@ final class OnDemandListeners {
           intent.putExtra(DetailsActivity.VIDEO_ID, video.getId());
           activity.startActivity(intent);
         } else if (item instanceof SettingsItem) {
-          Intent intent = new Intent(activity, SettingsActivity.class);
+          Intent intent = new Intent(activity, AboutActivity.class);
           activity.startActivity(intent);
         } else {
           Log.w(TAG, "Unhandled item: " + item);
