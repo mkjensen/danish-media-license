@@ -20,6 +20,7 @@ import static com.github.mkjensen.dml.util.Preconditions.notNull;
 
 import android.app.Application;
 import android.content.Context;
+import android.support.annotation.Nullable;
 
 import com.facebook.stetho.okhttp3.StethoInterceptor;
 import com.github.mkjensen.dml.BuildConfig;
@@ -74,7 +75,7 @@ public final class BackendModule {
 
   @Provides
   @Singleton
-  List<Interceptor> networkInterceptors(StethoInterceptor stethoInterceptor) {
+  List<Interceptor> networkInterceptors(@Nullable StethoInterceptor stethoInterceptor) {
     List<Interceptor> interceptors = new ArrayList<>(1);
     if (stethoInterceptor != null) {
       interceptors.add(stethoInterceptor);
@@ -103,6 +104,7 @@ public final class BackendModule {
         .build();
   }
 
+  @Nullable
   @Provides
   @Singleton
   StethoInterceptor stethoInterceptor() {

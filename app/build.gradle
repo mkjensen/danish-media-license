@@ -40,6 +40,18 @@ android {
     versionCode 1
     versionName "1.0"
   }
+
+  signingConfigs {
+    release {
+      if (project.hasProperty('SIGNING_KEY_ALIAS')) {
+        keyAlias SIGNING_KEY_ALIAS
+        keyPassword SIGNING_KEY_PASSWORD
+        storeFile file(SIGNING_STORE_FILE)
+        storePassword SIGNING_STORE_PASSWORD
+      }
+    }
+  }
+
   buildTypes {
     debug {
       testCoverageEnabled = true
@@ -47,8 +59,10 @@ android {
     release {
       minifyEnabled false
       proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+      signingConfig signingConfigs.release
     }
   }
+
   lintOptions {
     abortOnError false
     lintConfig rootProject.file('config/lint.xml')
