@@ -42,7 +42,9 @@ public final class AboutFragment extends GuidedStepSupportFragment {
 
   private static final String DESCRIPTION = null;
 
-  private static final long LICENSES_ID = 0;
+  private static final long CONTENT_ID = 0;
+
+  private static final long THIRD_PARTY_ID = 1;
 
   @NonNull
   @Override
@@ -56,9 +58,14 @@ public final class AboutFragment extends GuidedStepSupportFragment {
   @Override
   public void onCreateActions(@NonNull List<GuidedAction> actions, Bundle savedInstanceState) {
     actions.add(new GuidedAction.Builder(getContext())
-        .id(LICENSES_ID)
-        .title(R.string.ondemand_settings_about_licenses)
-        .description(R.string.ondemand_settings_about_licenses_description)
+        .id(CONTENT_ID)
+        .title(R.string.ondemand_settings_about_content)
+        .description(R.string.ondemand_settings_about_content_description)
+        .build());
+    actions.add(new GuidedAction.Builder(getContext())
+        .id(THIRD_PARTY_ID)
+        .title(R.string.ondemand_settings_about_thirdparty)
+        .description(R.string.ondemand_settings_about_thirdparty_description)
         .build());
     actions.add(new GuidedAction.Builder(getContext())
         .infoOnly(true)
@@ -69,8 +76,11 @@ public final class AboutFragment extends GuidedStepSupportFragment {
 
   @Override
   public void onGuidedActionClicked(GuidedAction action) {
-    if (action.getId() == LICENSES_ID) {
-      LicensesHelper.showLicenses(getActivity().getSupportFragmentManager());
+    long actionId = action.getId();
+    if (actionId == CONTENT_ID) {
+      LicensesHelper.showContentLicenses(getActivity().getSupportFragmentManager());
+    } else if (actionId == THIRD_PARTY_ID) {
+      LicensesHelper.showThirdPartyLicenses(getActivity().getSupportFragmentManager());
     } else {
       Log.w(TAG, "Unhandled action: " + action);
     }

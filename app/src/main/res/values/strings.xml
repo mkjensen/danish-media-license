@@ -30,8 +30,10 @@
 
     <string name="ondemand_settings">Indstillinger</string>
     <string name="ondemand_settings_about">Om</string>
-    <string name="ondemand_settings_about_licenses">Open source licenser</string>
-    <string name="ondemand_settings_about_licenses_description">Information om tredjepartslicenser</string>
+    <string name="ondemand_settings_about_content">Indholdslicenser</string>
+    <string name="ondemand_settings_about_content_description">Betingelser for tilgælgeligt indhold</string>
+    <string name="ondemand_settings_about_thirdparty">Tredjepartslicenser</string>
+    <string name="ondemand_settings_about_thirdparty_description">Betingelser for anvendte tredjepartsværktøjer</string>
     <string name="ondemand_settings_about_version">Version</string>
 
 </resources>
