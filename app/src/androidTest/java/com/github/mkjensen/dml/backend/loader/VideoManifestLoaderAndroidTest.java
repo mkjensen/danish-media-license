@@ -19,19 +19,28 @@ package com.github.mkjensen.dml.backend.loader;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-import com.github.mkjensen.dml.test.RobolectricTest;
+import android.content.Context;
+import android.support.test.InstrumentationRegistry;
 
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 /**
- * Tests for {@link VideoManifestLoader}.
+ * Instrumentation tests for {@link VideoManifestLoader}.
  */
-public class VideoManifestLoaderTest extends RobolectricTest {
+public class VideoManifestLoaderAndroidTest {
 
   @Rule
   public final ExpectedException thrown = ExpectedException.none();
+
+  private Context context;
+
+  @Before
+  public void before() {
+    context = InstrumentationRegistry.getTargetContext();
+  }
 
   @Test
   public void constructor_whenCalledWithNullQuery_thenThrowsIllegalArgumentException() {
@@ -39,7 +48,7 @@ public class VideoManifestLoaderTest extends RobolectricTest {
     // When/then
     thrown.expect(IllegalArgumentException.class);
     @SuppressWarnings("ConstantConditions")
-    VideoManifestLoader loader = new VideoManifestLoader(getContext(), null);
+    VideoManifestLoader loader = new VideoManifestLoader(context, null);
     assertNotNull(loader); // For your eyes only, PMD.
   }
 
@@ -48,7 +57,7 @@ public class VideoManifestLoaderTest extends RobolectricTest {
 
     // Given
     String manifestUrl = "test";
-    VideoManifestLoader loader = new VideoManifestLoader(getContext(), manifestUrl);
+    VideoManifestLoader loader = new VideoManifestLoader(context, manifestUrl);
 
     // When
     String actualManifestUrl = loader.getManifestUrl();

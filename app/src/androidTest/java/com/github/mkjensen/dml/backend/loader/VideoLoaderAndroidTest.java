@@ -19,19 +19,28 @@ package com.github.mkjensen.dml.backend.loader;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-import com.github.mkjensen.dml.test.RobolectricTest;
+import android.content.Context;
+import android.support.test.InstrumentationRegistry;
 
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 /**
- * Tests for {@link VideoLoader}.
+ * Instrumentation tests for {@link VideoLoader}.
  */
-public class VideoLoaderTest extends RobolectricTest {
+public class VideoLoaderAndroidTest {
 
   @Rule
   public final ExpectedException thrown = ExpectedException.none();
+
+  private Context context;
+
+  @Before
+  public void before() {
+    context = InstrumentationRegistry.getTargetContext();
+  }
 
   @Test
   public void constructor_whenCalledWithNullVideoId_thenThrowsIllegalArgumentException() {
@@ -39,7 +48,7 @@ public class VideoLoaderTest extends RobolectricTest {
     // When/then
     thrown.expect(IllegalArgumentException.class);
     @SuppressWarnings("ConstantConditions")
-    VideoLoader loader = new VideoLoader(getContext(), null);
+    VideoLoader loader = new VideoLoader(context, null);
     assertNotNull(loader); // For your eyes only, PMD.
   }
 
@@ -48,7 +57,7 @@ public class VideoLoaderTest extends RobolectricTest {
 
     // Given
     String id = "test";
-    VideoLoader loader = new VideoLoader(getContext(), id);
+    VideoLoader loader = new VideoLoader(context, id);
 
     // When
     String actualId = loader.getVideoId();

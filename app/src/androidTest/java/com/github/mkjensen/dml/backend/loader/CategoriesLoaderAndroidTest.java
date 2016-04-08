@@ -19,19 +19,28 @@ package com.github.mkjensen.dml.backend.loader;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
-import com.github.mkjensen.dml.test.RobolectricTest;
+import android.content.Context;
+import android.support.test.InstrumentationRegistry;
 
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 /**
- * Tests for {@link CategoriesLoader}.
+ * Instrumentation tests for {@link CategoriesLoader}.
  */
-public class CategoriesLoaderTest extends RobolectricTest {
+public class CategoriesLoaderAndroidTest {
 
   @Rule
   public final ExpectedException thrown = ExpectedException.none();
+
+  private Context context;
+
+  @Before
+  public void before() {
+    context = InstrumentationRegistry.getTargetContext();
+  }
 
   @Test
   public void constructorQuery_whenCalledWithNullQuery_thenThrowsIllegalArgumentException() {
@@ -39,7 +48,7 @@ public class CategoriesLoaderTest extends RobolectricTest {
     // When/then
     thrown.expect(IllegalArgumentException.class);
     @SuppressWarnings("ConstantConditions")
-    CategoriesLoader loader = new CategoriesLoader(getContext(), null);
+    CategoriesLoader loader = new CategoriesLoader(context, null);
     assertNull(loader); // For your eyes only, PMD.
   }
 
@@ -47,7 +56,7 @@ public class CategoriesLoaderTest extends RobolectricTest {
   public void getQuery_givenNonQueryLoader_whenCalled_thenReturnsNull() {
 
     // Given
-    CategoriesLoader loader = new CategoriesLoader(getContext());
+    CategoriesLoader loader = new CategoriesLoader(context);
 
     // When
     String query = loader.getQuery();
@@ -61,7 +70,7 @@ public class CategoriesLoaderTest extends RobolectricTest {
 
     // Given
     String query = "test";
-    CategoriesLoader loader = new CategoriesLoader(getContext(), query);
+    CategoriesLoader loader = new CategoriesLoader(context, query);
 
     // When
     String actualQuery = loader.getQuery();

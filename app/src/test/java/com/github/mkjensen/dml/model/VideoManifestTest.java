@@ -30,7 +30,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Tests for {@link VideoManifest}.
+ * Unit tests for {@link VideoManifest}.
  */
 public class VideoManifestTest {
 

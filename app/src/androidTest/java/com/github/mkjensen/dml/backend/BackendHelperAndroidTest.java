@@ -21,18 +21,24 @@ import static java.net.HttpURLConnection.HTTP_OK;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
+import android.content.Context;
+import android.support.test.InstrumentationRegistry;
+import android.support.test.filters.MediumTest;
+import android.support.test.runner.AndroidJUnit4;
+
 import com.github.mkjensen.dml.R;
 import com.github.mkjensen.dml.model.Category;
 import com.github.mkjensen.dml.model.Video;
 import com.github.mkjensen.dml.model.VideoManifest;
 import com.github.mkjensen.dml.test.ResourceUtils;
-import com.github.mkjensen.dml.test.RobolectricTest;
 
 import okhttp3.Call;
 
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+import org.junit.runner.RunWith;
 
 import retrofit2.Converter;
 import retrofit2.Retrofit;
@@ -42,14 +48,16 @@ import java.io.IOException;
 import java.util.List;
 
 /**
- * Tests for {@link BackendHelper}.
+ * Instrumentation tests for {@link BackendHelper}.
  */
-public class BackendHelperTest extends RobolectricTest {
-
-  private static final Converter.Factory CONVERTER_FACTORY = MoshiConverterFactory.create();
+@RunWith(AndroidJUnit4.class)
+@MediumTest
+public class BackendHelperAndroidTest {
 
   @Rule
   public final ExpectedException thrown = ExpectedException.none();
+
+  private static final Converter.Factory CONVERTER_FACTORY = MoshiConverterFactory.create();
 
   private static final String BASE_URL = "http://test.com/";
 
@@ -62,6 +70,13 @@ public class BackendHelperTest extends RobolectricTest {
   private static final String VIDEO_URL = BASE_URL + "programcard/test";
 
   private static final String SEARCH_URL = BASE_URL + "search/tv/programcards-with-asset/title/q";
+
+  private Context context;
+
+  @Before
+  public void before() {
+    context = InstrumentationRegistry.getTargetContext();
+  }
 
   @Test
   public void constructor_whenCalledWithNullContext_thenThrowsIllegalArgumentException() {
@@ -79,7 +94,7 @@ public class BackendHelperTest extends RobolectricTest {
     // When/then
     thrown.expect(IllegalArgumentException.class);
     @SuppressWarnings("ConstantConditions")
-    BackendHelper backendHelper = new BackendHelper(getContext(), null);
+    BackendHelper backendHelper = new BackendHelper(context, null);
     assertNotNull(backendHelper); // For your eyes only, PMD.
   }
 
@@ -99,15 +114,15 @@ public class BackendHelperTest extends RobolectricTest {
   public void loadMostViewedCategory_whenHttpOk_thenReturnsCategory() throws IOException {
 
     // Given
-    BackendHelper backendHelper =
-        createBackendHelper(MOST_VIEWED_CATEGORY_URL, HTTP_OK, "category");
+    BackendHelper backendHelper = createBackendHelper(MOST_VIEWED_CATEGORY_URL, HTTP_OK,
+        com.github.mkjensen.dml.test.R.raw.category);
 
     // When
     Category category = backendHelper.loadMostViewedCategory();
 
     // Then
     assertNotNull(category);
-    assertEquals(getContext().getString(R.string.backend_category_most_viewed),
+    assertEquals(context.getString(R.string.backend_category_most_viewed),
         category.getTitle());
     List<Video> videos = category.getVideos();
     assertNotNull(videos);
@@ -137,14 +152,15 @@ public class BackendHelperTest extends RobolectricTest {
   public void loadNewCategory_whenHttpOk_thenReturnsCategory() throws IOException {
 
     // Given
-    BackendHelper backendHelper = createBackendHelper(NEW_CATEGORY_URL, HTTP_OK, "category");
+    BackendHelper backendHelper = createBackendHelper(NEW_CATEGORY_URL, HTTP_OK,
+        com.github.mkjensen.dml.test.R.raw.category);
 
     // When
     Category category = backendHelper.loadNewCategory();
 
     // Then
     assertNotNull(category);
-    assertEquals(getContext().getString(R.string.backend_category_new), category.getTitle());
+    assertEquals(context.getString(R.string.backend_category_new), category.getTitle());
     List<Video> videos = category.getVideos();
     assertNotNull(videos);
     assertEquals(1, videos.size());
@@ -173,15 +189,15 @@ public class BackendHelperTest extends RobolectricTest {
   public void loadRecommendedCategory_whenHttpOk_thenReturnsCategory() throws IOException {
 
     // Given
-    BackendHelper backendHelper =
-        createBackendHelper(RECOMMENDED_CATEGORY_URL, HTTP_OK, "category");
+    BackendHelper backendHelper = createBackendHelper(RECOMMENDED_CATEGORY_URL, HTTP_OK,
+        com.github.mkjensen.dml.test.R.raw.category);
 
     // When
     Category category = backendHelper.loadRecommendedCategory();
 
     // Then
     assertNotNull(category);
-    assertEquals(getContext().getString(R.string.backend_category_recommended),
+    assertEquals(context.getString(R.string.backend_category_recommended),
         category.getTitle());
     List<Video> videos = category.getVideos();
     assertNotNull(videos);
@@ -211,7 +227,8 @@ public class BackendHelperTest extends RobolectricTest {
   public void loadVideo_whenHttpOk_thenVideosAreLoaded() throws IOException {
 
     // Given
-    BackendHelper backendHelper = createBackendHelper(VIDEO_URL, HTTP_OK, "video");
+    BackendHelper backendHelper = createBackendHelper(VIDEO_URL, HTTP_OK,
+        com.github.mkjensen.dml.test.R.raw.video);
 
     // When
     Video video = backendHelper.loadVideo("test");
@@ -243,7 +260,8 @@ public class BackendHelperTest extends RobolectricTest {
 
     // Given
     String manifestUrl = "http://manifest.com/";
-    BackendHelper backendHelper = createBackendHelper(manifestUrl, HTTP_OK, "video-manifest");
+    BackendHelper backendHelper = createBackendHelper(manifestUrl, HTTP_OK,
+        com.github.mkjensen.dml.test.R.raw.video_manifest);
 
     // When
     VideoManifest videoManifest = backendHelper.loadVideoManifest(manifestUrl);
@@ -287,7 +305,8 @@ public class BackendHelperTest extends RobolectricTest {
   public void search_whenHttpOk_thenReturnsCategory() throws IOException {
 
     // Given
-    BackendHelper backendHelper = createBackendHelper(SEARCH_URL, HTTP_OK, "search");
+    BackendHelper backendHelper = createBackendHelper(SEARCH_URL, HTTP_OK,
+        com.github.mkjensen.dml.test.R.raw.search);
 
     // When
     Category category = backendHelper.search("q");
@@ -311,18 +330,18 @@ public class BackendHelperTest extends RobolectricTest {
     return createBackendHelper(url, code, null);
   }
 
-  private BackendHelper createBackendHelper(String url, int code, String jsonResource) {
+  private BackendHelper createBackendHelper(String url, int code, Integer responseResId) {
     LocalCallFactory.Builder.ForUrlBuilder builder = LocalCallFactory.newBuilder()
         .forUrl(url)
         .code(code);
-    if (jsonResource != null) {
-      builder.responseBody(ResourceUtils.loadAsString("backend/" + jsonResource + ".json"));
+    if (responseResId != null) {
+      builder.responseBody(ResourceUtils.loadAsString(responseResId));
     }
     return createBackendHelper(builder.up().build());
   }
 
   private BackendHelper createBackendHelper(Call.Factory callFactory) {
-    return new BackendHelper(getContext(), createRetrofit(callFactory));
+    return new BackendHelper(context, createRetrofit(callFactory));
   }
 
   private static Retrofit createRetrofit(Call.Factory callFactory) {

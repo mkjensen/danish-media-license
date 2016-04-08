@@ -16,6 +16,10 @@
 
 package com.github.mkjensen.dml.test;
 
+import android.content.res.Resources;
+import android.support.annotation.RawRes;
+import android.support.test.InstrumentationRegistry;
+
 import com.github.mkjensen.dml.DmlException;
 
 import java.io.BufferedReader;
@@ -33,11 +37,10 @@ public final class ResourceUtils {
 
   /**
    * Loads a resource and converts it to a string.
-   *
-   * @param resName path to the resource to load, relative to {@code src/test/resources}
    */
-  public static String loadAsString(String resName) {
-    try (InputStream stream = ResourceUtils.class.getClassLoader().getResourceAsStream(resName)) {
+  public static String loadAsString(@RawRes int resId) {
+    Resources resources = InstrumentationRegistry.getContext().getResources();
+    try (InputStream stream = resources.openRawResource(resId)) {
       BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
       StringBuilder result = new StringBuilder(stream.available());
       String line;

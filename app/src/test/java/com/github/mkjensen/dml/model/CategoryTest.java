@@ -29,7 +29,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Tests for {@link Category}.
+ * Unit tests for {@link Category}.
  */
 public class CategoryTest {
 

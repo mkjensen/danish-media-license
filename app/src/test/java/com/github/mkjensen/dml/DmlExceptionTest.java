@@ -22,7 +22,7 @@ import static org.junit.Assert.assertNull;
 import org.junit.Test;
 
 /**
- * Tests for {@link DmlException}.
+ * Unit tests for {@link DmlException}.
  */
 public class DmlExceptionTest {
 
