@@ -30,6 +30,7 @@ import dagger.Module;
 import dagger.Provides;
 
 import okhttp3.Cache;
+import okhttp3.Call;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 
@@ -46,9 +47,9 @@ import javax.inject.Singleton;
  * Dagger module for backend services.
  */
 @Module
-public final class BackendModule {
+public class BackendModule {
 
-  private final String apiBaseUrl;
+  protected final String apiBaseUrl;
 
   public BackendModule(String apiBaseUrl) {
     this.apiBaseUrl = notNull(apiBaseUrl);
@@ -85,7 +86,7 @@ public final class BackendModule {
 
   @Provides
   @Singleton
-  OkHttpClient okHttpClient(Cache cache, List<Interceptor> networkInterceptors) {
+  Call.Factory callFactory(Cache cache, List<Interceptor> networkInterceptors) {
     OkHttpClient.Builder builder = new OkHttpClient.Builder();
     builder.cache(cache);
     for (Interceptor interceptor : networkInterceptors) {
@@ -96,11 +97,11 @@ public final class BackendModule {
 
   @Provides
   @Singleton
-  Retrofit retrofit(Converter.Factory converterFactory, OkHttpClient okHttpClient) {
+  Retrofit retrofit(Converter.Factory converterFactory, Call.Factory callFactory) {
     return new Retrofit.Builder()
         .addConverterFactory(converterFactory)
         .baseUrl(apiBaseUrl)
-        .client(okHttpClient)
+        .callFactory(callFactory)
         .build();
   }
 

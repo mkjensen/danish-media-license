@@ -24,14 +24,14 @@ import com.bumptech.glide.integration.okhttp3.OkHttpUrlLoader;
 import com.bumptech.glide.load.model.GlideUrl;
 import com.github.mkjensen.dml.DmlApplication;
 
-import okhttp3.OkHttpClient;
+import okhttp3.Call;
 
 import java.io.InputStream;
 
 import javax.inject.Inject;
 
 /**
- * Extension of {@link OkHttpGlideModule} that supplies the {@link OkHttpClient} via injection.
+ * Extension of {@link OkHttpGlideModule} that supplies the {@link Call.Factory} via injection.
  *
  * <p>Note that this class must be configured for use via the Android manifest file. Also note that
  * {@link OkHttpGlideModule} must be excluded to avoid conflicts.
@@ -50,7 +50,7 @@ import javax.inject.Inject;
 public final class DmlOkHttpGlideModule extends OkHttpGlideModule {
 
   @Inject
-  OkHttpClient okHttpClient;
+  Call.Factory callFactory;
 
   public DmlOkHttpGlideModule() {
     DmlApplication.getInstance().getBackendComponent().inject(this);
@@ -58,6 +58,6 @@ public final class DmlOkHttpGlideModule extends OkHttpGlideModule {
 
   @Override
   public void registerComponents(Context context, Glide glide) {
-    glide.register(GlideUrl.class, InputStream.class, new OkHttpUrlLoader.Factory(okHttpClient));
+    glide.register(GlideUrl.class, InputStream.class, new OkHttpUrlLoader.Factory(callFactory));
   }
 }

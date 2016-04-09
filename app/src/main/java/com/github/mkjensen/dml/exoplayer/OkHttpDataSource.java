@@ -26,8 +26,8 @@ import com.google.android.exoplayer.util.Predicate;
 import com.github.mkjensen.dml.DmlApplication;
 
 import okhttp3.CacheControl;
+import okhttp3.Call;
 import okhttp3.HttpUrl;
-import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
@@ -44,7 +44,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import javax.inject.Inject;
 
 /**
- * An {@link HttpDataSource} that delegates to Square's {@link OkHttpClient}.
+ * An {@link HttpDataSource} that delegates to Square's {@link Call.Factory}.
  *
  * @see <a href="https://goo.gl/m9KY6I">ExoPlayer OkHttpDataSource</a>
  */
@@ -53,7 +53,7 @@ public final class OkHttpDataSource implements HttpDataSource {
   private static final AtomicReference<byte[]> skipBufferReference = new AtomicReference<>();
 
   @Inject
-  OkHttpClient okHttpClient;
+  Call.Factory callFactory;
 
   private final String userAgent;
   private final Predicate<String> contentTypePredicate;
@@ -108,7 +108,7 @@ public final class OkHttpDataSource implements HttpDataSource {
   private OkHttpDataSource(String userAgent, Predicate<String> contentTypePredicate,
                            TransferListener listener, CacheControl cacheControl) {
     DmlApplication.getInstance().getBackendComponent().inject(this);
-    Assertions.checkNotNull(okHttpClient);
+    Assertions.checkNotNull(callFactory);
     this.userAgent = Assertions.checkNotEmpty(userAgent);
     this.contentTypePredicate = contentTypePredicate;
     this.listener = listener;
@@ -157,7 +157,7 @@ public final class OkHttpDataSource implements HttpDataSource {
     this.bytesSkipped = 0;
     Request request = makeRequest(dataSpec);
     try {
-      response = okHttpClient.newCall(request).execute();
+      response = callFactory.newCall(request).execute();
       responseByteStream = response.body().byteStream();
     } catch (IOException ex) {
       throw new HttpDataSourceException("Unable to connect to " + dataSpec.uri.toString(), ex,

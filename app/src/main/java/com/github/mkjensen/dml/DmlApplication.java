@@ -33,7 +33,7 @@ import com.github.mkjensen.dml.inject.DaggerBackendComponent;
  * @see <a href="https://github.com/google/dagger">Dagger</a>
  * @see <a href="https://github.com/facebook/stetho">Stetho</a>
  */
-public final class DmlApplication extends Application {
+public class DmlApplication extends Application {
 
   private static DmlApplication application;
 
@@ -56,8 +56,12 @@ public final class DmlApplication extends Application {
   private void initDagger() {
     backendComponent = DaggerBackendComponent.builder()
         .applicationModule(new ApplicationModule(this))
-        .backendModule(new BackendModule(getString(R.string.backend_api_base_url)))
+        .backendModule(initBackendModule(getString(R.string.backend_api_base_url)))
         .build();
+  }
+
+  protected BackendModule initBackendModule(String baseApiUrl) {
+    return new BackendModule(baseApiUrl);
   }
 
   @NonNull
