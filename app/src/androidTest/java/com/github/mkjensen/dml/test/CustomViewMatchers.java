@@ -21,6 +21,8 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
 
+import android.support.annotation.IdRes;
+import android.support.annotation.StringRes;
 import android.support.test.espresso.matcher.ViewMatchers;
 import android.view.View;
 
@@ -42,7 +44,15 @@ public final class CustomViewMatchers {
    * Returns a matcher that matches a child of the specified view that has a {@link
    * android.widget.TextView} with the specified text property value.
    */
-  public static Matcher<View> withChildText(final int parentId, final String text) {
+  public static Matcher<View> withChildText(@IdRes int parentId, @StringRes int textResId) {
+    return withChildText(parentId, ResourceUtils.getString(textResId));
+  }
+
+  /**
+   * Returns a matcher that matches a child of the specified view that has a {@link
+   * android.widget.TextView} with the specified text property value.
+   */
+  public static Matcher<View> withChildText(@IdRes final int parentId, final String text) {
     return new TypeSafeMatcher<View>() {
 
       @Override

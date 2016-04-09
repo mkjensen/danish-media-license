@@ -71,6 +71,13 @@ android {
     abortOnError false
     lintConfig rootProject.file('config/lint.xml')
   }
+
+  packagingOptions {
+    // espresso-core, espresso-web, and Guava include the same files which cause a conflict.
+    // https://code.google.com/p/android/issues/detail?id=195331
+    exclude 'META-INF/maven/com.google.guava/guava/pom.properties'
+    exclude 'META-INF/maven/com.google.guava/guava/pom.xml'
+  }
 }
 
 dependencies {
@@ -82,6 +89,7 @@ dependencies {
   }
   androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2.2'
   androidTestCompile 'com.android.support.test.espresso:espresso-intents:2.2.2'
+  androidTestCompile 'com.android.support.test.espresso:espresso-web:2.2.2'
   androidTestCompile 'com.android.support.test:rules:0.5'
   androidTestCompile 'com.android.support.test:runner:0.5'
   androidTestCompile 'junit:junit:4.12'

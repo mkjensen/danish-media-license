@@ -25,8 +25,8 @@ import static android.support.test.espresso.intent.matcher.IntentMatchers.hasCom
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.github.mkjensen.dml.test.CustomViewMatchers.withChildText;
+import static com.github.mkjensen.dml.test.ResourceUtils.getString;
 
-import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.filters.MediumTest;
 import android.support.test.runner.AndroidJUnit4;
@@ -75,11 +75,10 @@ public class BrowseActivityAndroidTest {
   public void settings_whenClicked_thenSettingsAreDisplayed() {
 
     // When
-    onView(withChildText(R.id.browse_headers, getString(R.string.ondemand_settings)))
-        .perform(click());
+    onView(withChildText(R.id.browse_headers, R.string.ondemand_settings)).perform(click());
 
     // Then
-    onView(withChildText(R.id.browse_container_dock, getString(R.string.ondemand_settings_about)))
+    onView(withChildText(R.id.browse_container_dock, R.string.ondemand_settings_about))
         .check(matches(isDisplayed()));
   }
 
@@ -87,18 +86,13 @@ public class BrowseActivityAndroidTest {
   public void settingsAbout_whenClicked_thenAboutActivityIsLaunched() {
 
     // Given
-    onView(withChildText(R.id.browse_headers, getString(R.string.ondemand_settings)))
-        .perform(click());
+    onView(withChildText(R.id.browse_headers, R.string.ondemand_settings)).perform(click());
 
     // When
-    onView(withChildText(R.id.browse_container_dock, getString(R.string.ondemand_settings_about)))
+    onView(withChildText(R.id.browse_container_dock, R.string.ondemand_settings_about))
         .perform(click());
 
     // Then
     intended(hasComponent(AboutActivity.class.getCanonicalName()));
-  }
-
-  private static String getString(int resId) {
-    return InstrumentationRegistry.getTargetContext().getString(resId);
   }
 }
