@@ -17,8 +17,6 @@
 package com.github.mkjensen.dml.model;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -75,7 +73,6 @@ public class VideoTest {
     thrown.expect(IllegalArgumentException.class);
     //noinspection ConstantConditions
     video.setId(id);
-    assertNotNull(id); // Hi PMD!
   }
 
   @Test
@@ -101,7 +98,6 @@ public class VideoTest {
     thrown.expect(IllegalArgumentException.class);
     //noinspection ConstantConditions
     video.setTitle(title);
-    assertNotNull(title); // Hi PMD!
   }
 
   @Test
@@ -127,7 +123,6 @@ public class VideoTest {
     thrown.expect(IllegalArgumentException.class);
     //noinspection ConstantConditions
     video.setDescription(description);
-    assertNotNull(description); // Hi PMD!
   }
 
   @Test
@@ -153,7 +148,6 @@ public class VideoTest {
     thrown.expect(IllegalArgumentException.class);
     //noinspection ConstantConditions
     video.setImageUrl(imageUrl);
-    assertNotNull(imageUrl); // Hi PMD!
   }
 
   @Test
@@ -179,7 +173,6 @@ public class VideoTest {
     thrown.expect(IllegalArgumentException.class);
     //noinspection ConstantConditions
     video.setManifestUrl(manifestUrl);
-    assertNotNull(manifestUrl); // Hi PMD!
   }
 
   @Test
@@ -220,7 +213,6 @@ public class VideoTest {
 
     // When/then
     thrown.expect(NegativeArraySizeException.class);
-    Video[] array = Video.CREATOR.newArray(-1);
-    assertNull(array); // Make PMD happy.
+    Video.CREATOR.newArray(-1);
   }
 }

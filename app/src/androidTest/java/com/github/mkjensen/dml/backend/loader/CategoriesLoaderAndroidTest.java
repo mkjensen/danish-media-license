@@ -52,9 +52,8 @@ public class CategoriesLoaderAndroidTest {
 
     // When/then
     thrown.expect(IllegalArgumentException.class);
-    @SuppressWarnings("ConstantConditions")
-    CategoriesLoader loader = new CategoriesLoader(context, null);
-    assertNull(loader); // For your eyes only, PMD.
+    //noinspection ConstantConditions
+    new CategoriesLoader(context, null);
   }
 
   @Test

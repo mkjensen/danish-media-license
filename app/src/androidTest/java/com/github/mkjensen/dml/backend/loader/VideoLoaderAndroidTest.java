@@ -17,7 +17,6 @@
 package com.github.mkjensen.dml.backend.loader;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -52,9 +51,8 @@ public class VideoLoaderAndroidTest {
 
     // When/then
     thrown.expect(IllegalArgumentException.class);
-    @SuppressWarnings("ConstantConditions")
-    VideoLoader loader = new VideoLoader(context, null);
-    assertNotNull(loader); // For your eyes only, PMD.
+    //noinspection ConstantConditions
+    new VideoLoader(context, null);
   }
 
   @Test

@@ -17,7 +17,6 @@
 package com.github.mkjensen.dml.model;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -70,7 +69,6 @@ public class VideoManifestTest {
     thrown.expect(IllegalArgumentException.class);
     //noinspection ConstantConditions
     manifest.getUrl(protocol);
-    assertNotNull(protocol); // Hi PMD!
   }
 
   @Test
@@ -117,7 +115,6 @@ public class VideoManifestTest {
     thrown.expect(IllegalArgumentException.class);
     //noinspection ConstantConditions
     manifest.setStreams(streams);
-    assertNotNull(streams); // Hi PMD!
   }
 
   @Test
@@ -143,7 +140,6 @@ public class VideoManifestTest {
     thrown.expect(IllegalArgumentException.class);
     //noinspection ConstantConditions
     stream.setProtocol(protocol);
-    assertNotNull(protocol); // Hi PMD!
   }
 
   @Test
@@ -169,7 +165,6 @@ public class VideoManifestTest {
     thrown.expect(IllegalArgumentException.class);
     //noinspection ConstantConditions
     stream.setUrl(url);
-    assertNotNull(url); // Hi PMD!
   }
 
   @Test

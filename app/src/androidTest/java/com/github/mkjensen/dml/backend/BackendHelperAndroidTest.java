@@ -83,9 +83,8 @@ public class BackendHelperAndroidTest {
 
     // When/then
     thrown.expect(IllegalArgumentException.class);
-    @SuppressWarnings("ConstantConditions")
-    BackendHelper backendHelper = new BackendHelper(null, createRetrofit(null));
-    assertNotNull(backendHelper); // For your eyes only, PMD.
+    //noinspection ConstantConditions
+    new BackendHelper(null, createRetrofit(null));
   }
 
   @Test
@@ -93,9 +92,8 @@ public class BackendHelperAndroidTest {
 
     // When/then
     thrown.expect(IllegalArgumentException.class);
-    @SuppressWarnings("ConstantConditions")
-    BackendHelper backendHelper = new BackendHelper(context, null);
-    assertNotNull(backendHelper); // For your eyes only, PMD.
+    //noinspection ConstantConditions
+    new BackendHelper(context, null);
   }
 
   @Test
@@ -106,8 +104,7 @@ public class BackendHelperAndroidTest {
 
     // When/Then
     thrown.expect(IOException.class);
-    Category category = backendHelper.loadMostViewedCategory();
-    assertNotNull(category); // Hi PMD!
+    backendHelper.loadMostViewedCategory();
   }
 
   @Test
@@ -144,8 +141,7 @@ public class BackendHelperAndroidTest {
 
     // When/Then
     thrown.expect(IOException.class);
-    Category category = backendHelper.loadNewCategory();
-    assertNotNull(category); // Hi PMD!
+    backendHelper.loadNewCategory();
   }
 
   @Test
@@ -181,8 +177,7 @@ public class BackendHelperAndroidTest {
 
     // When/Then
     thrown.expect(IOException.class);
-    Category category = backendHelper.loadRecommendedCategory();
-    assertNotNull(category); // Hi PMD!
+    backendHelper.loadRecommendedCategory();
   }
 
   @Test
@@ -219,8 +214,7 @@ public class BackendHelperAndroidTest {
 
     // When/Then
     thrown.expect(IOException.class);
-    Video video = backendHelper.loadVideo("test");
-    assertNotNull(video); // Hi PMD!
+    backendHelper.loadVideo("test");
   }
 
   @Test
@@ -251,8 +245,7 @@ public class BackendHelperAndroidTest {
 
     // When/Then
     thrown.expect(IOException.class);
-    VideoManifest videoManifest = backendHelper.loadVideoManifest(manifestUrl);
-    assertNotNull(videoManifest); // Hi PMD!
+    backendHelper.loadVideoManifest(manifestUrl);
   }
 
   @Test
@@ -297,8 +290,7 @@ public class BackendHelperAndroidTest {
 
     // When/Then
     thrown.expect(IOException.class);
-    Category category = backendHelper.search("test");
-    assertNotNull(category); // Hi PMD!
+    backendHelper.search("test");
   }
 
   @Test

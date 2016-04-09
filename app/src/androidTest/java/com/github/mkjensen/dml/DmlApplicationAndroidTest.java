@@ -26,8 +26,7 @@ public class DmlApplicationAndroidTest extends ApplicationTestCase<DmlApplicatio
 
     // When/then
     thrown.expect(DmlException.class);
-    DmlApplication application = DmlApplication.getInstance();
-    assertNotNull(application); // Hello PMD.
+    DmlApplication.getInstance();
   }
 
   /**

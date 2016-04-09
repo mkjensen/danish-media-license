@@ -17,7 +17,6 @@
 package com.github.mkjensen.dml.model;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -61,7 +60,6 @@ public class CategoryTest {
     thrown.expect(IllegalArgumentException.class);
     //noinspection ConstantConditions
     category.setTitle(title);
-    assertNotNull(title); // Hi PMD!
   }
 
   @Test
@@ -87,7 +85,6 @@ public class CategoryTest {
     thrown.expect(IllegalArgumentException.class);
     //noinspection ConstantConditions
     category.setVideos(videos);
-    assertNotNull(videos); // Hi PMD!
   }
 
   @Test
