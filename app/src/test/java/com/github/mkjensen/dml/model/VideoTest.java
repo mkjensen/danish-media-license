@@ -183,7 +183,7 @@ public class VideoTest {
   }
 
   @Test
-  public void setManifestUrl_whenNonNullArgument_thenGetLinksUrlReturnThatArgument() {
+  public void setManifestUrl_whenNonNullArgument_thenGetManifestUrlReturnThatArgument() {
 
     // Given
     String manifestUrl = "url";

@@ -112,8 +112,8 @@ public final class Video implements Parcelable {
     return asset.manifestUrl;
   }
 
-  public void setManifestUrl(@NonNull String linksUrl) {
-    asset.manifestUrl = notNull(linksUrl);
+  public void setManifestUrl(@NonNull String manifestUrl) {
+    asset.manifestUrl = notNull(manifestUrl);
   }
 
   private static final class ParcelableCreator implements Parcelable.Creator<Video> {
