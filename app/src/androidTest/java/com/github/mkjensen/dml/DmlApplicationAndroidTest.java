@@ -1,6 +1,7 @@
 package com.github.mkjensen.dml;
 
 import android.test.ApplicationTestCase;
+import android.test.suitebuilder.annotation.MediumTest;
 
 import org.junit.Rule;
 import org.junit.rules.ExpectedException;
@@ -8,6 +9,7 @@ import org.junit.rules.ExpectedException;
 /**
  * Instrumentation tests for {@link DmlApplication}.
  */
+@MediumTest
 public class DmlApplicationAndroidTest extends ApplicationTestCase<DmlApplication> {
 
   @Rule

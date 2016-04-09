@@ -21,15 +21,20 @@ import static org.junit.Assert.assertNotNull;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
+import android.support.test.runner.AndroidJUnit4;
+import android.test.suitebuilder.annotation.MediumTest;
 
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+import org.junit.runner.RunWith;
 
 /**
  * Instrumentation tests for {@link VideoManifestLoader}.
  */
+@RunWith(AndroidJUnit4.class)
+@MediumTest
 public class VideoManifestLoaderAndroidTest {
 
   @Rule
