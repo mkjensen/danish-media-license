@@ -42,7 +42,7 @@ public class TestBackendModule extends BackendModule {
     return LocalCallFactory.newBuilder()
         .forUrl(apiBaseUrl + "list/view/news")
           .code(HttpURLConnection.HTTP_OK)
-          .responseBody(categoryJson)
+          .responseBody(ResourceUtils.loadAsString(com.github.mkjensen.dml.test.R.raw.category_new))
           .up()
         .forUrl(apiBaseUrl + "list/view/selectedlist")
           .code(HttpURLConnection.HTTP_OK)

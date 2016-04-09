@@ -177,6 +177,8 @@
             <emptyLine />
             <package name="okhttp3" withSubpackages="true" static="false" />
             <emptyLine />
+            <package name="okio" withSubpackages="true" static="false" />
+            <emptyLine />
             <package name="opennlp" withSubpackages="true" static="false" />
             <emptyLine />
             <package name="oracle" withSubpackages="true" static="false" />

@@ -18,18 +18,16 @@ package com.github.mkjensen.dml.ondemand;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition;
+import static android.support.test.espresso.action.ViewActions.pressKey;
 import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent;
-import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.github.mkjensen.dml.test.CustomViewMatchers.withChildText;
-import static com.github.mkjensen.dml.test.ResourceUtils.getString;
 
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.filters.MediumTest;
 import android.support.test.runner.AndroidJUnit4;
+import android.view.KeyEvent;
 
 import com.github.mkjensen.dml.R;
 import com.github.mkjensen.dml.ondemand.settings.AboutActivity;
@@ -49,44 +47,22 @@ public class BrowseActivityAndroidTest {
   public final IntentsTestRule<BrowseActivity> intentsRule =
       new IntentsTestRule<>(BrowseActivity.class);
 
-  private static final String[] CATEGORIES = new String[] {
-      getString(R.string.backend_category_new),
-      getString(R.string.backend_category_recommended),
-      getString(R.string.backend_category_most_viewed),
-      getString(R.string.ondemand_settings)
-  };
-
   @Test
-  public void category_whenSelected_thenIsDisplayed() {
-    for (int i = 0; i < CATEGORIES.length; i++) {
-      // First category is already selected.
-      if (i > 0) {
-
-        // When
-        onView(withId(R.id.browse_headers)).perform(actionOnItemAtPosition(i, click()));
-      }
-
-      // Then
-      onView(withChildText(R.id.browse_headers, CATEGORIES[i])).check(matches(isDisplayed()));
-    }
-  }
-
-  @Test
-  public void settings_whenClicked_thenSettingsAreDisplayed() {
+  public void search_whenClicked_thenSearchActivityIsLaunched() {
 
     // When
-    onView(withChildText(R.id.browse_headers, R.string.ondemand_settings)).perform(click());
+    onView(withId(R.id.title_orb)).perform(click());
 
     // Then
-    onView(withChildText(R.id.browse_container_dock, R.string.ondemand_settings_about))
-        .check(matches(isDisplayed()));
+    intended(hasComponent(SearchActivity.class.getCanonicalName()));
   }
 
   @Test
   public void settingsAbout_whenClicked_thenAboutActivityIsLaunched() {
 
     // Given
-    onView(withChildText(R.id.browse_headers, R.string.ondemand_settings)).perform(click());
+    onView(withChildText(R.id.browse_headers, R.string.ondemand_settings))
+        .perform(click(), pressKey(KeyEvent.KEYCODE_ENTER));
 
     // When
     onView(withChildText(R.id.browse_container_dock, R.string.ondemand_settings_about))
@@ -94,5 +70,18 @@ public class BrowseActivityAndroidTest {
 
     // Then
     intended(hasComponent(AboutActivity.class.getCanonicalName()));
+  }
+
+  @Test
+  public void video_whenClicked_thenDetailsActivityIsLaunched() {
+
+    // Given
+    onView(withChildText(R.id.browse_headers, R.string.backend_category_new)).perform(click());
+
+    // When
+    onView(withChildText(R.id.browse_container_dock, "New Title")).perform(click());
+
+    // Then
+    intended(hasComponent(DetailsActivity.class.getCanonicalName()));
   }
 }

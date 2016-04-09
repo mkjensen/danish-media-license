@@ -26,7 +26,11 @@ import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 
+import okio.Buffer;
+import okio.BufferedSource;
+
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 /**
  * Custom implementation of OkHttp's {@link Call.Factory} that avoids remote calls by enabling
@@ -168,14 +172,50 @@ public final class LocalCallFactory implements Call.Factory {
         return this;
       }
 
-      public ForUrlBuilder responseBody(ResponseBody responseBody) {
+      /**
+       * Adds a JSON response.
+       */
+      public ForUrlBuilder responseBody(String json) {
+        ResponseBody responseBody = new CloningResponseBody(json);
         builder.factory.responseBodyMap.put(url, responseBody);
         return this;
       }
 
-      public ForUrlBuilder responseBody(String json) {
-        ResponseBody responseBody = ResponseBody.create(JSON_MEDIA_TYPE, json);
-        return responseBody(responseBody);
+      private static final class CloningResponseBody extends ResponseBody {
+
+        final Buffer original;
+
+        Buffer clone;
+
+        CloningResponseBody(String json) {
+          original = new Buffer().writeString(json, StandardCharsets.UTF_8);
+        }
+
+        @Override
+        public MediaType contentType() {
+          return JSON_MEDIA_TYPE;
+        }
+
+        @Override
+        public long contentLength() {
+          return original.size();
+        }
+
+        @Override
+        public BufferedSource source() {
+          if (clone == null) {
+            clone = original.clone();
+          }
+          return clone;
+        }
+
+        @Override
+        public void close() {
+          if (clone != null) {
+            clone.close();
+            clone = null;
+          }
+        }
       }
     }
   }
