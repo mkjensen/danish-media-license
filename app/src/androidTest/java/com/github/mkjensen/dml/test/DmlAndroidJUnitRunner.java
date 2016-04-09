@@ -26,7 +26,7 @@ import com.github.mkjensen.dml.TestDmlApplication;
  * Extension of {@link AndroidJUnitRunner} that uses {@link TestDmlApplication} as the application
  * class.
  */
-public class DmlAndroidJUnitRunner extends AndroidJUnitRunner {
+public final class DmlAndroidJUnitRunner extends AndroidJUnitRunner {
 
   @Override
   public Application newApplication(ClassLoader cl, String className, Context context)
