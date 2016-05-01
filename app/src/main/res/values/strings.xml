@@ -36,4 +36,8 @@
     <string name="ondemand_settings_about_thirdparty_description">Betingelser for anvendte tredjepartsværktøjer</string>
     <string name="ondemand_settings_about_version">Version</string>
 
+    <string name="live_setup_description">Tilføj kanaler</string>
+    <string name="live_setup_ok">OK</string>
+    <string name="live_setup_cancel">Annuller</string>
+
 </resources>

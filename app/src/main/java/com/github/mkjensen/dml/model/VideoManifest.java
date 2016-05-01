@@ -61,34 +61,6 @@ public final class VideoManifest {
     this.streams = notNull(streams);
   }
 
-  public enum Protocol {
-
-    /**
-     * Represents a stream that downloads the content via HTTP.
-     */
-    @Json(name = "Download")
-    DOWNLOAD,
-
-    /**
-     * Adobe HTTP Dynamic Streaming (HDS).
-     *
-     * @see <a href="https://goo.gl/hNk8QH">Adobe HTTP Dynamic Streaming</a>
-     */
-    HDS,
-
-    /**
-     * HTTP Live Streaming (HLS).
-     *
-     * @see <a href="https://en.wikipedia.org/wiki/HTTP_Live_Streaming">HTTP Live Streaming</a>
-     */
-    HLS,
-
-    /**
-     * Represents an unknown streaming protocol.
-     */
-    UNKNOWN
-  }
-
   /**
    * An on-demand video stream.
    */

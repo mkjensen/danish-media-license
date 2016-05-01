@@ -50,12 +50,12 @@ public class VideoManifestTest {
   public void givenEmptyManifest_whenGettersCalled_thenTheyReturnNotSet() {
 
     // When/then
-    assertEquals(VideoManifest.NOT_SET, manifest.getUrl(VideoManifest.Protocol.DOWNLOAD));
-    assertEquals(VideoManifest.NOT_SET, manifest.getUrl(VideoManifest.Protocol.HDS));
-    assertEquals(VideoManifest.NOT_SET, manifest.getUrl(VideoManifest.Protocol.HLS));
-    assertEquals(VideoManifest.NOT_SET, manifest.getUrl(VideoManifest.Protocol.UNKNOWN));
+    assertEquals(VideoManifest.NOT_SET, manifest.getUrl(Protocol.DOWNLOAD));
+    assertEquals(VideoManifest.NOT_SET, manifest.getUrl(Protocol.HDS));
+    assertEquals(VideoManifest.NOT_SET, manifest.getUrl(Protocol.HLS));
+    assertEquals(VideoManifest.NOT_SET, manifest.getUrl(Protocol.UNKNOWN));
     assertEquals(Collections.emptyList(), manifest.getStreams());
-    assertEquals(VideoManifest.Protocol.UNKNOWN, stream.getProtocol());
+    assertEquals(Protocol.UNKNOWN, stream.getProtocol());
     assertEquals(VideoManifest.NOT_SET, stream.getUrl());
   }
 
@@ -63,7 +63,7 @@ public class VideoManifestTest {
   public void getUrl_whenNullArgument_thenIllegalArgumentExceptionIsThrown() {
 
     // Given
-    VideoManifest.Protocol protocol = null;
+    Protocol protocol = null;
 
     // When/then
     thrown.expect(IllegalArgumentException.class);
@@ -75,7 +75,7 @@ public class VideoManifestTest {
   public void getUrl_whenNonexistentProtocolArgument_thenGetUrlReturnsNotSet() {
 
     // Given
-    VideoManifest.Protocol protocol = VideoManifest.Protocol.HLS;
+    Protocol protocol = Protocol.HLS;
 
     // When
     String url = manifest.getUrl(protocol);
@@ -88,7 +88,7 @@ public class VideoManifestTest {
   public void getUrl_givenDifferentStreams_whenNonNullArgument_thenGetUrlReturnsCorrectValue() {
 
     // Given
-    VideoManifest.Protocol protocol = VideoManifest.Protocol.HDS;
+    Protocol protocol = Protocol.HDS;
     stream.setProtocol(protocol);
     String url = "test";
     stream.setUrl(url);
@@ -134,7 +134,7 @@ public class VideoManifestTest {
   public void setProtocol_whenNullArgument_thenIllegalArgumentExceptionIsThrown() {
 
     // Given
-    VideoManifest.Protocol protocol = null;
+    Protocol protocol = null;
 
     // When/then
     thrown.expect(IllegalArgumentException.class);
@@ -146,7 +146,7 @@ public class VideoManifestTest {
   public void setProtocol_whenNonNullArgument_thenGetProtocolReturnThatArgument() {
 
     // Given
-    VideoManifest.Protocol protocol = VideoManifest.Protocol.DOWNLOAD;
+    Protocol protocol = Protocol.DOWNLOAD;
 
     // When
     stream.setProtocol(protocol);

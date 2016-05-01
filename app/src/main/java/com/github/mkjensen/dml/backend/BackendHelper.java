@@ -24,6 +24,7 @@ import android.util.Log;
 
 import com.github.mkjensen.dml.R;
 import com.github.mkjensen.dml.model.Category;
+import com.github.mkjensen.dml.model.Channel;
 import com.github.mkjensen.dml.model.Video;
 import com.github.mkjensen.dml.model.VideoManifest;
 
@@ -32,6 +33,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Locale;
 
 /**
@@ -116,6 +118,16 @@ public final class BackendHelper {
   public VideoManifest loadVideoManifest(@NonNull String manifestUrl) throws IOException {
     Log.d(TAG, String.format("loadVideoManifest [%s]", manifestUrl));
     Call<VideoManifest> call = webService.getVideoManifest(manifestUrl);
+    return executeCall(call);
+  }
+
+  /**
+   * Loads live channels.
+   */
+  @NonNull
+  public List<Channel> loadChannels() throws IOException {
+    Log.d(TAG, "loadChannels");
+    Call<List<Channel>> call = webService.getChannels();
     return executeCall(call);
   }
 

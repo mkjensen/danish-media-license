@@ -17,6 +17,7 @@
 package com.github.mkjensen.dml.backend;
 
 import com.github.mkjensen.dml.model.Category;
+import com.github.mkjensen.dml.model.Channel;
 import com.github.mkjensen.dml.model.Video;
 import com.github.mkjensen.dml.model.VideoManifest;
 
@@ -24,6 +25,8 @@ import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
 import retrofit2.http.Url;
+
+import java.util.List;
 
 /**
  * Web service methods for use with Retrofit.
@@ -67,4 +70,10 @@ public interface DmlWebService {
    */
   @GET
   Call<VideoManifest> getVideoManifest(@Url String url);
+
+  /**
+   * Returns live channels.
+   */
+  @GET("channel/all-active-dr-tv-channels")
+  Call<List<Channel>> getChannels();
 }

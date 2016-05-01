@@ -65,6 +65,7 @@ import com.github.mkjensen.dml.R;
 import com.github.mkjensen.dml.backend.loader.VideoManifestLoader;
 import com.github.mkjensen.dml.exoplayer.DemoPlayer;
 import com.github.mkjensen.dml.exoplayer.HlsRendererBuilder;
+import com.github.mkjensen.dml.model.Protocol;
 import com.github.mkjensen.dml.model.Video;
 import com.github.mkjensen.dml.model.VideoManifest;
 import com.github.mkjensen.dml.util.LoadingHelper;
@@ -400,7 +401,7 @@ public final class PlaybackFragment extends PlaybackOverlaySupportFragment {
         // https://github.com/mkjensen/danish-media-license/issues/29.
         return;
       }
-      String streamUrl = videoManifest.getUrl(VideoManifest.Protocol.HLS);
+      String streamUrl = videoManifest.getUrl(Protocol.HLS);
       HlsRendererBuilder rendererBuilder = new HlsRendererBuilder(getActivity(), TAG, streamUrl);
       player = new DemoPlayer(rendererBuilder);
       player.addListener(new DemoPlayerListener());

@@ -368,6 +368,10 @@ public class DemoPlayer implements ExoPlayer.Listener, ChunkSampleSource.EventLi
     maybeReportPlayerState();
   }
 
+  public void stop() {
+    player.stop();
+  }
+
   public void setPlayWhenReady(boolean playWhenReady) {
     player.setPlayWhenReady(playWhenReady);
   }

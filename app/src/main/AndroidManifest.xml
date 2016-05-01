@@ -28,7 +28,15 @@
         android:name="android.software.leanback"
         android:required="true" />
 
+    <uses-feature
+        android:name="android.software.live_tv"
+        android:required="false" />
+
     <uses-permission android:name="android.permission.INTERNET" />
+
+    <uses-permission android:name="com.android.providers.tv.permission.READ_EPG_DATA" />
+
+    <uses-permission android:name="com.android.providers.tv.permissions.WRITE_EPG_DATA" />
 
     <application
         android:name=".DmlApplication"
@@ -70,6 +78,28 @@
         <activity
             android:name=".ondemand.settings.AboutActivity"
             android:theme="@style/Theme.GuidedStep" />
+
+        <activity android:name=".live.SetupActivity">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+            </intent-filter>
+
+        </activity>
+
+        <service
+            android:name=".live.DmlTvInputService"
+            android:permission="android.permission.BIND_TV_INPUT">
+
+            <intent-filter>
+                <action android:name="android.media.tv.TvInputService" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.media.tv.input"
+                android:resource="@xml/tvinput" />
+
+        </service>
 
     </application>
 

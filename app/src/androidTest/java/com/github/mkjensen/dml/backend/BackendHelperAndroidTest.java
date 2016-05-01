@@ -28,6 +28,7 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.github.mkjensen.dml.R;
 import com.github.mkjensen.dml.model.Category;
+import com.github.mkjensen.dml.model.Protocol;
 import com.github.mkjensen.dml.model.Video;
 import com.github.mkjensen.dml.model.VideoManifest;
 import com.github.mkjensen.dml.test.ResourceUtils;
@@ -266,19 +267,19 @@ public class BackendHelperAndroidTest {
     assertEquals(4, streams.size());
     VideoManifest.Stream stream = streams.get(0);
     assertNotNull(stream);
-    assertEquals(VideoManifest.Protocol.DOWNLOAD, stream.getProtocol());
+    assertEquals(Protocol.DOWNLOAD, stream.getProtocol());
     assertEquals("http://download.com/mp4/2048", stream.getUrl());
     stream = streams.get(1);
     assertNotNull(stream);
-    assertEquals(VideoManifest.Protocol.DOWNLOAD, stream.getProtocol());
+    assertEquals(Protocol.DOWNLOAD, stream.getProtocol());
     assertEquals("http://download.com/mp4/1024", stream.getUrl());
     stream = streams.get(2);
     assertNotNull(stream);
-    assertEquals(VideoManifest.Protocol.HDS, stream.getProtocol());
+    assertEquals(Protocol.HDS, stream.getProtocol());
     assertEquals("http://hds.com/mp4", stream.getUrl());
     stream = streams.get(3);
     assertNotNull(stream);
-    assertEquals(VideoManifest.Protocol.HLS, stream.getProtocol());
+    assertEquals(Protocol.HLS, stream.getProtocol());
     assertEquals("http://hls.com/mp4", stream.getUrl());
   }
 
