@@ -23,7 +23,7 @@ android:
     - sys-img-${EMULATOR_ANDROID_ABI}-android-tv-${EMULATOR_ANDROID_SDK_VERSION}
 
 before_install:
-  - curl -sL http://bit.ly/jpm4j > jpm4j.jar
+  - curl -sL https://github.com/jpm4j/jpm4j.installers/raw/master/dist/biz.aQute.jpm.run.jar > jpm4j.jar
   - java -jar jpm4j.jar --home ${JPM_HOME} --bindir ${JPM_BIN} init
   - ${JPM_BIN}/jpm install com.codacy:codacy-coverage-reporter:assembly
 
