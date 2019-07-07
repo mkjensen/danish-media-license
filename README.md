@@ -1,5 +1,9 @@
 # Danish Media License
 
+## Discontinued
+
+Take a look at https://github.com/mkjensen/tv instead.
+
 [![Build Status](https://travis-ci.org/mkjensen/danish-media-license.svg?branch=master)](https://travis-ci.org/mkjensen/danish-media-license) [![Codacy Badge](https://api.codacy.com/project/badge/grade/23e8d80e9f0a44d9851f05e0a6158e19)](https://www.codacy.com/app/mkjensen/danish-media-license) [![Codacy Badge](https://api.codacy.com/project/badge/coverage/23e8d80e9f0a44d9851f05e0a6158e19)](https://www.codacy.com/app/mkjensen/danish-media-license) [![Dependency Status](https://www.versioneye.com/user/projects/56c1ce5518b271003b391410/badge.svg?style=flat)](https://www.versioneye.com/user/projects/56c1ce5518b271003b391410)
 
 Danish Media License is an app for [Android TV](https://android.com/tv) that provides access to videos available to everyone that pays the [Danish media license](https://en.wikipedia.org/wiki/Television_licence#Denmark). For more information about the media license including, but not limited to, rules and how to pay, read the [media license page](https://www.dr.dk/om-dr/licens/licens-english) maintained by the Danish Broadcasting Corporation.
